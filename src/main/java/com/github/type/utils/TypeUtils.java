@@ -6,8 +6,10 @@
 package com.github.type.utils;
 
 import com.google.common.base.Throwables;
+import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.Set;
 
 /**
  *
@@ -40,7 +42,21 @@ public class TypeUtils {
                 String [] parts = clazz.toGenericString().split(Constants.SPACE_STRING);
                 return parseClassType(parts[parts.length - 1], null, null);
             } else {
-                return TypeUtils.parseClassType(clazz.getGenericSuperclass());
+                
+                if (clazz.getGenericSuperclass().getTypeName().equals(Constants.OBJECT_CLASS)) {
+     
+                    ClassType clazzType = parseClassType(clazz.getName());
+                    if (clazz.getInterfaces().length > 0) {
+                        Set<TypeToken> tt = TypeToken.of(clazz).getTypes().interfaces();
+                        for (TypeToken type : tt) {
+                            clazzType.add(parseClassType(type.getType()));
+                        }
+                    }
+                        
+                    return clazzType;
+                } else {
+                    return parseClassType(clazz.getGenericSuperclass());
+                }       
             }
         } else {
             String [] parts = clazz.toGenericString().split(Constants.SPACE_STRING);

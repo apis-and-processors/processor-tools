@@ -47,6 +47,19 @@ public class ClassType implements Comparable<ClassType> {
         return subTypes.get(index);
     }
     
+    public ClassType firstSubTypeMatching(String regex) {
+        ClassType classType = null;
+        if (regex != null) {
+            for (int i = 0; i < subTypes.size(); i++) {
+                ClassType matcher = subTypes.get(i);
+                if (matcher.name().matches(regex)) {
+                    return matcher;
+                }
+            }
+        }
+        return classType;
+    }
+    
     public int compare(ClassType compareTo) {
         return compare(this, compareTo);
     }
