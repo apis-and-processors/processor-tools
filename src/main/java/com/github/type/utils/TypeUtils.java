@@ -28,14 +28,26 @@ public class TypeUtils {
     }
     
     public static ClassType parseClassType(Object clazz) {
-        return TypeUtils.parseClassType(clazz == null ? 
-                PrimitiveTypes.fromName(clazz).getRawClass() : 
-                clazz.getClass());
+        Class potentialClazz;
+        if (clazz != null) {
+            if (clazz instanceof Class) {
+                potentialClazz = (Class)clazz;
+                if (potentialClazz.isPrimitive()) {
+                    potentialClazz = PrimitiveTypes.fromName(potentialClazz.toGenericString()).getRawClass();
+                } 
+            } else {
+                potentialClazz = clazz.getClass();
+            }
+        } else {
+            potentialClazz = PrimitiveTypes.fromName(clazz).getRawClass();
+        }
+        
+        return parseClassType(potentialClazz);
     }
-
+    
     private static ClassType parseClassType(Class clazz) {
         if (clazz.getGenericSuperclass() != null) {
-
+            
             // check if generic string already returns type info: public class java.util.ArrayList<E>
             boolean isAlreadyGeneric = clazz.toGenericString().matches(Constants.CLASS_REGEX);
             if (isAlreadyGeneric) {
