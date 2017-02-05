@@ -56,7 +56,6 @@ public class TypeUtils {
             } else {
                 
                 if (clazz.getGenericSuperclass().getTypeName().equals(Constants.OBJECT_CLASS)) {
-     
                     ClassType clazzType = parseClassType(clazz.getName());
                     if (clazz.getInterfaces().length > 0) {
                         Set<TypeToken> tt = TypeToken.of(clazz).getTypes().interfaces();
@@ -64,7 +63,6 @@ public class TypeUtils {
                             clazzType.add(parseClassType(type.getType()));
                         }
                     }
-                        
                     return clazzType;
                 } else {
                     return parseClassType(clazz.getGenericSuperclass());

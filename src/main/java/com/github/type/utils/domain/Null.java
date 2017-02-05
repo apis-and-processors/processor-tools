@@ -9,6 +9,6 @@ package com.github.type.utils.domain;
  *
  * @author dancc
  */
-public class Null {
-    
+public enum Null {
+    INSTANCE;
 }

@@ -49,5 +49,4 @@ public enum PrimitiveTypes {
                 ? PrimitiveTypes.NULL 
                 : PrimitiveTypes.valueOf(name.toUpperCase().intern());
     }
-
 }

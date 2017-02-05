@@ -14,22 +14,22 @@ import org.testng.annotations.Test;
  */
 public class TypeUtilsTest {
     
-    class Handler3 implements Function<Object, Character>, Comparable {
+    class Handler3 implements Function<Object, Character>, Comparable<String> {
         @Override
         public Character apply(Object object) {
             return 'c';
         }
 
         @Override
-        public int compareTo(Object o) {
+        public int compareTo(String o) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
+        } // com.github.type.utils.TypeUtilsTest$Handler3<java.lang.Comparable, com.google.common.base.Function<java.lang.Object, java.lang.Character>>
     }
         
     @Test
     public void testSomeLibrary() {
         Handler3 obj = ReflectionUtils.newInstance(Handler3.class);
         ClassType clazzType = TypeUtils.parseClassType(obj);
-        System.out.println(clazzType);
+        System.out.println("END:  " + clazzType);
     }
 }

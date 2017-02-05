@@ -14,6 +14,7 @@ public enum GenericTypes {
     E("Element"),
     K("Key"),
     N("Number"),
+    R("Return"),
     T("Type"),
     V("Value");
 
