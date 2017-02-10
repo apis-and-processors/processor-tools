@@ -33,13 +33,13 @@ public class TypeUtils {
             if (clazz instanceof Class) {
                 potentialClazz = (Class)clazz;
                 if (potentialClazz.isPrimitive()) {
-                    potentialClazz = PrimitiveTypes.fromName(potentialClazz.toGenericString()).getRawClass();
+                    potentialClazz = PrimitiveTypes.from(potentialClazz.toGenericString()).getBoxedClass();
                 } 
             } else {
                 potentialClazz = clazz.getClass();
             }
         } else {
-            potentialClazz = PrimitiveTypes.fromName(clazz).getRawClass();
+            potentialClazz = PrimitiveTypes.from(clazz).getBoxedClass();
         }
         
         return parseClassType(potentialClazz);

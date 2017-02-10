@@ -11,4 +11,9 @@ package com.github.aap.type.utils.domain;
  */
 public enum Null {
     INSTANCE;
+    
+    @Override
+    public String toString() {
+        return null;
+    }
 }

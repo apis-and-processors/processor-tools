@@ -5,6 +5,7 @@
  */
 package com.github.aap.type.utils;
 
+import com.github.aap.type.utils.domain.Unknown;
 import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.base.Throwables;
 import java.lang.reflect.Constructor;
@@ -33,14 +34,20 @@ public class ReflectionUtils {
             } 
         } else {
             try {
-                Constructor noArgConstructor = beanClass.getDeclaredConstructors()[0];
-                noArgConstructor.setAccessible(true);
 
-                if (Number.class.isAssignableFrom(beanClass)) {
-                    return beanClass.cast(noArgConstructor.newInstance(0));     
-                } else {
-                    return beanClass.cast(noArgConstructor.newInstance(EMPTY_OBJECT_ARRAY));     
+                if (beanClass.isAssignableFrom(Unknown.class)) {
+                    return (T) Unknown.INSTANCE;
                 }
+                
+                PrimitiveTypes found = PrimitiveTypes.from(beanClass);
+                if (found != null) {
+                    return (T)found.getDefaultValue();
+                } else {
+                    Constructor noArgConstructor = beanClass.getDeclaredConstructors()[0];
+                    noArgConstructor.setAccessible(true);
+                    return beanClass.cast(noArgConstructor.newInstance(EMPTY_OBJECT_ARRAY));
+                }
+                
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | SecurityException | IllegalArgumentException ex) {
                 
                 // second attempt at creating generic object from class
@@ -51,5 +58,5 @@ public class ReflectionUtils {
                 }
             }     
         }
-    }   
+    }       
 }

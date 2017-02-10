@@ -5,8 +5,8 @@
  */
 package com.github.aap.type.utils;
 
+import com.github.aap.type.utils.domain.Unknown;
 import com.github.aap.type.utils.exceptions.TypeMismatchException;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import java.util.List;
 
@@ -161,7 +161,7 @@ public class ClassType implements Comparable<ClassType> {
         try {
             return Class.forName(name());
         } catch (ClassNotFoundException ex) {
-            return PrimitiveTypes.UNKNOWN.getRawClass();
+            return Unknown.INSTANCE.getClass();
         }
     }
     
