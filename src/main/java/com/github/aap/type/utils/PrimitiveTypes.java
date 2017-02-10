@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.type.utils;
+package com.github.aap.type.utils;
 
-import com.github.type.utils.domain.Null;
-import com.github.type.utils.domain.Unknown;
+import com.github.aap.type.utils.domain.Null;
+import com.github.aap.type.utils.domain.Unknown;
 
 /**
  *

@@ -5,6 +5,9 @@
  */
 package com.github.type.utils;
 
+import com.github.aap.type.utils.ClassType;
+import com.github.aap.type.utils.TypeUtils;
+import com.github.aap.type.utils.ReflectionUtils;
 import com.google.common.base.Function;
 import org.testng.annotations.Test;
 
@@ -39,7 +42,7 @@ public class TypeUtilsTest {
         
         Handler3 obj = ReflectionUtils.newInstance(Handler3.class);
         ClassType clazzType = TypeUtils.parseClassType(BEARS.class);
-        int here = clazzType.compareTo(TypeUtils.parseClassType(FISH.class));
-        System.out.println("END:  " + clazzType.subTypeAtIndex(0).toClass());
+        int here = clazzType.compareTo(TypeUtils.parseClassType(int.class));
+        System.out.println("END:  " + TypeUtils.parseClassType(int.class));
     }
 }

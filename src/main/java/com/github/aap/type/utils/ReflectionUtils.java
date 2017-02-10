@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.type.utils;
+package com.github.aap.type.utils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.base.Throwables;
