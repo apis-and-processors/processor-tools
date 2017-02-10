@@ -128,7 +128,7 @@ public class ClassType implements Comparable<ClassType> {
     }
     
     private static boolean isTypeUnknown(String possiblyUnknownType) {
-        if (!possiblyUnknownType.equals(Constants.OBJECT_CLASS)) {
+        if (!possiblyUnknownType.equals(TypeUtilsConstants.OBJECT_CLASS)) {
             try {
                 GenericTypes.valueOf(possiblyUnknownType);                
             } catch (IllegalArgumentException e) {
@@ -141,15 +141,15 @@ public class ClassType implements Comparable<ClassType> {
     private static void print(ClassType genericTypes, StringBuilder builder) {
         builder.append(genericTypes.name);
         if (genericTypes.subTypes().size() > 0) {
-            builder.append(Constants.GREATER_THAN);
+            builder.append(TypeUtilsConstants.GREATER_THAN);
             int size = genericTypes.subTypes().size();
             for(int i = 0; i < size; i++) {
                 print(genericTypes.subTypes().get(i), builder);
                 if (size > 0 && i != (size - 1)) {
-                    builder.append(Constants.COMMA_SPACE);
+                    builder.append(TypeUtilsConstants.COMMA_SPACE);
                 }
             }
-            builder.append(Constants.LESS_THAN);
+            builder.append(TypeUtilsConstants.LESS_THAN);
         }
     }
         

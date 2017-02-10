@@ -9,7 +9,7 @@ package com.github.aap.type.utils;
  *
  * @author dancc
  */
-public class Constants {
+public class TypeUtilsConstants {
     
     public static final String OBJECT_CLASS = "java.lang.Object";
 
@@ -26,7 +26,7 @@ public class Constants {
     public static final String SPACE_STRING = " ";
     public static final String NULL_STRING = "null";
 
-    private Constants() {
+    private TypeUtilsConstants() {
         throw new UnsupportedOperationException("Purposely not implemented");
     }
 }

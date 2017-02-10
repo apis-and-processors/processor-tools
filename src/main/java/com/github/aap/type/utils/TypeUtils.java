@@ -49,13 +49,13 @@ public class TypeUtils {
         if (clazz.getGenericSuperclass() != null) {
             
             // check if generic string already returns type info: public class java.util.ArrayList<E>
-            boolean isAlreadyGeneric = clazz.toGenericString().matches(Constants.CLASS_REGEX);
+            boolean isAlreadyGeneric = clazz.toGenericString().matches(TypeUtilsConstants.CLASS_REGEX);
             if (isAlreadyGeneric) {
-                String [] parts = clazz.toGenericString().split(Constants.SPACE_STRING);
+                String [] parts = clazz.toGenericString().split(TypeUtilsConstants.SPACE_STRING);
                 return parseClassType(parts[parts.length - 1], null, null);
             } else {
                 
-                if (clazz.getGenericSuperclass().getTypeName().equals(Constants.OBJECT_CLASS)) {
+                if (clazz.getGenericSuperclass().getTypeName().equals(TypeUtilsConstants.OBJECT_CLASS)) {
                     ClassType clazzType = parseClassType(clazz.getName());
                     if (clazz.getInterfaces().length > 0) {
                         Set<TypeToken> tt = TypeToken.of(clazz).getTypes().interfaces();
@@ -69,7 +69,7 @@ public class TypeUtils {
                 }       
             }
         } else {
-            String [] parts = clazz.toGenericString().split(Constants.SPACE_STRING);
+            String [] parts = clazz.toGenericString().split(TypeUtilsConstants.SPACE_STRING);
             return parseClassType(parts[parts.length - 1], null, null);
         }
     }
@@ -84,7 +84,7 @@ public class TypeUtils {
         
     private static ClassType parseClassType(String clazzAndTypes, ClassType genericTypes, StringBuilder builder) {
 
-        int index = clazzAndTypes.indexOf(Constants.GREATER_THAN);
+        int index = clazzAndTypes.indexOf(TypeUtilsConstants.GREATER_THAN);
         if (index == -1) {
             if (genericTypes != null) {
                 return new ClassType(clazzAndTypes, genericTypes);
@@ -105,14 +105,14 @@ public class TypeUtils {
             int lessThanEncountered = 0;
             for (int i = index + 1; i < chars.length -1; i++) {
                 
-                if (chars[i] != Constants.SPACE_CHAR) {
+                if (chars[i] != TypeUtilsConstants.SPACE_CHAR) {
                     builder.append(chars[i]);
                     
                     switch (chars[i]) {
-                        case Constants.GREATER_THAN_CHAR:
+                        case TypeUtilsConstants.GREATER_THAN_CHAR:
                             lessThanEncountered += 1;
                             break;
-                        case Constants.LESS_THAN_CHAR:
+                        case TypeUtilsConstants.LESS_THAN_CHAR:
                             lessThanEncountered -= 1;
                             if (i == stopPoint) {
                                 String foundType = builder.toString();  
@@ -121,7 +121,7 @@ public class TypeUtils {
                                 types.add(type);
                             }   
                             break;
-                        case Constants.COMMA_CHAR:
+                        case TypeUtilsConstants.COMMA_CHAR:
                             if (lessThanEncountered == 0) {
                                 builder.deleteCharAt(builder.length() - 1);
                                 String foundType = builder.toString();

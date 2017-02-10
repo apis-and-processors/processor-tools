@@ -63,7 +63,7 @@ public enum PrimitiveTypes {
         
     public static PrimitiveTypes from(String name) {
         PrimitiveTypes possibleType = null;
-        if (name == null || name.trim().equalsIgnoreCase(Constants.NULL_STRING)) {
+        if (name == null || name.trim().equalsIgnoreCase(TypeUtilsConstants.NULL_STRING)) {
             possibleType = PrimitiveTypes.NULL;
         } else {
 
