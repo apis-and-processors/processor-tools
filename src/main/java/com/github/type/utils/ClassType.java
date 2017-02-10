@@ -6,6 +6,7 @@
 package com.github.type.utils;
 
 import com.github.type.utils.exceptions.TypeMismatchException;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import java.util.List;
 
@@ -83,7 +84,7 @@ public class ClassType implements Comparable<ClassType> {
      * @return 
      */
     private static int compare(ClassType source, ClassType target) {      
-        if(source.name.equals(target.name)) {            
+        if(source.name.equals(target.name)) {      
             int sourceSize = source.subTypes().size();
             int targetSize = target.subTypes().size();
             if (sourceSize == targetSize) {
@@ -152,6 +153,18 @@ public class ClassType implements Comparable<ClassType> {
         }
     }
         
+    public Object toInstance() {
+        return ReflectionUtils.newInstance(toClass());
+    }
+    
+    public Class toClass() {
+        try {
+            return Class.forName(name());
+        } catch (ClassNotFoundException ex) {
+            return PrimitiveTypes.UNKNOWN.getRawClass();
+        }
+    }
+    
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

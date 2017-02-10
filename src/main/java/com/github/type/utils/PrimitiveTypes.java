@@ -6,6 +6,7 @@
 package com.github.type.utils;
 
 import com.github.type.utils.domain.Null;
+import com.github.type.utils.domain.Unknown;
 
 /**
  *
@@ -22,7 +23,8 @@ public enum PrimitiveTypes {
     DOUBLE("double", Double.class),
     BOOLEAN("boolean", Boolean.class),
     VOID("void", Void.class),
-    NULL("null", Null.class);
+    NULL("null", Null.class),
+    UNKNOWN("unknown", Unknown.class);
 
     private final String name;
     private final Class rawClass;

@@ -14,6 +14,14 @@ import org.testng.annotations.Test;
  */
 public class TypeUtilsTest {
     
+    private static interface BEARS <G, Q> {
+        
+    }
+
+    private static interface FISH <Avb, RTV> {
+        
+    }
+    
     class Handler3 implements Function<Object, Character>, Comparable<String> {
         @Override
         public Character apply(Object object) {
@@ -28,8 +36,10 @@ public class TypeUtilsTest {
         
     @Test
     public void testSomeLibrary() {
+        
         Handler3 obj = ReflectionUtils.newInstance(Handler3.class);
-        ClassType clazzType = TypeUtils.parseClassType(obj);
-        System.out.println("END:  " + clazzType);
+        ClassType clazzType = TypeUtils.parseClassType(BEARS.class);
+        int here = clazzType.compareTo(TypeUtils.parseClassType(FISH.class));
+        System.out.println("END:  " + clazzType.subTypeAtIndex(0).toClass());
     }
 }

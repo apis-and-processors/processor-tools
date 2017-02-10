@@ -6,7 +6,8 @@
 package com.github.type.utils;
 
 /**
- *
+ * Handful of OOTB java generic types used.
+ * 
  * @author dancc
  */
 public enum GenericTypes {
