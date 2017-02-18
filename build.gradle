@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal()
         jcenter()
         mavenCentral()
     }
@@ -24,6 +25,7 @@ apply from: "$rootDir/gradle/publishing.gradle"
 apply from: "$rootDir/gradle/release.gradle"
 
 repositories {
+    mavenLocal()
     jcenter()
     mavenCentral()
 }
@@ -32,7 +34,6 @@ dependencies {
     compile 'com.google.guava:guava:20.0'
 
     testCompile ('org.testng:testng:6.8.21') 
-    testCompile ('org.assertj:assertj-core:1.7.0') 
 }
 
 ext.compatibilityVersion = '1.8'
@@ -75,7 +76,3 @@ tasks.withType(Test) {
 
 check.dependsOn jacocoTestReport
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.14.1'
-    distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
-}
