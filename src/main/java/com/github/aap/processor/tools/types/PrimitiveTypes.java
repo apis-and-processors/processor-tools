@@ -17,7 +17,7 @@
 
 package com.github.aap.processor.tools.types;
 
-import com.github.aap.processor.tools.TypeUtilsConstants;
+import com.github.aap.processor.tools.utils.Constants;
 import com.github.aap.processor.tools.domain.Null;
 
 /**
@@ -90,7 +90,7 @@ public enum PrimitiveTypes {
     
     private static PrimitiveTypes from(String name) {
         PrimitiveTypes possibleType = null;
-        if (name == null || name.trim().equalsIgnoreCase(TypeUtilsConstants.NULL_STRING)) {
+        if (name == null || name.trim().equalsIgnoreCase(Constants.NULL_STRING)) {
             possibleType = PrimitiveTypes.NULL;
         } else {
 

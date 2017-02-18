@@ -17,7 +17,7 @@
 
 package com.github.aap.processor.tools.domain;
 
-import com.github.aap.processor.tools.TypeUtilsConstants;
+import com.github.aap.processor.tools.utils.Constants;
 
 /**
  * Our attempt at creating a NULL primitive which can be used for ClassType.
@@ -29,6 +29,6 @@ public enum Null {
     
     @Override
     public String toString() {
-        return TypeUtilsConstants.NULL_STRING;
+        return Constants.NULL_STRING;
     }
 }

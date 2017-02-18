@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools;
+package com.github.aap.processor.tools.utils;
 
 /**
  * Various constants used throughout library.
  * 
  * @author dancc
  */
-public class TypeUtilsConstants {
+public class Constants {
     
     public static final String OBJECT_CLASS = "java.lang.Object";
 
@@ -39,7 +39,7 @@ public class TypeUtilsConstants {
     public static final String SPACE_STRING = " ";
     public static final String NULL_STRING = "null";
 
-    private TypeUtilsConstants() {
+    private Constants() {
         throw new UnsupportedOperationException("Purposely not implemented");
     }
 }
