@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.utils;
+package com.github.aap.processor.utils.types;
 
 /**
  * Handful of OOTB java generic types used by JVM.

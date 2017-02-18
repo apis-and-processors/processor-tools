@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.utils;
+package com.github.aap.processor.utils.types;
 
+import com.github.aap.processor.utils.TypeUtilsConstants;
 import com.github.aap.processor.utils.domain.Null;
 
 /**

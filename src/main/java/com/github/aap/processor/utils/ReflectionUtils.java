@@ -17,6 +17,7 @@
 
 package com.github.aap.processor.utils;
 
+import com.github.aap.processor.utils.types.PrimitiveTypes;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.github.aap.processor.utils.domain.Unknown;

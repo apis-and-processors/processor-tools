@@ -17,8 +17,8 @@
 
 package com.github.aap.processor.utils;
 
-import com.github.aap.processor.utils.PrimitiveTypes;
-import com.github.aap.processor.utils.ClassType;
+import com.github.aap.processor.utils.types.PrimitiveTypes;
+import com.github.aap.processor.utils.domain.ClassType;
 import com.github.aap.processor.utils.TypeUtils;
 import com.github.aap.processor.utils.domain.Null;
 import com.github.aap.processor.utils.domain.Unknown;

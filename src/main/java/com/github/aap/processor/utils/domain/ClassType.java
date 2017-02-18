@@ -15,8 +15,11 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.utils;
+package com.github.aap.processor.utils.domain;
 
+import com.github.aap.processor.utils.ReflectionUtils;
+import com.github.aap.processor.utils.TypeUtilsConstants;
+import com.github.aap.processor.utils.types.GenericTypes;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.github.aap.processor.utils.domain.Unknown;

@@ -17,6 +17,8 @@
 
 package com.github.aap.processor.utils;
 
+import com.github.aap.processor.utils.domain.ClassType;
+import com.github.aap.processor.utils.types.PrimitiveTypes;
 import com.google.common.base.Throwables;
 import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Field;
