@@ -17,9 +17,9 @@
 
 package com.github.aap.processor.tools;
 
-import com.github.aap.processor.tools.types.PrimitiveTypes;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.github.aap.processor.tools.types.PrimitiveTypes;
 import com.github.aap.processor.tools.domain.Unknown;
 import com.google.common.base.Throwables;
 import java.lang.reflect.Constructor;

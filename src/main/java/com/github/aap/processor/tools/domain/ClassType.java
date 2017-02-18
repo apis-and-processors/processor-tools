@@ -17,12 +17,12 @@
 
 package com.github.aap.processor.tools.domain;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.github.aap.processor.tools.ReflectionUtils;
 import com.github.aap.processor.tools.utils.Constants;
 import com.github.aap.processor.tools.types.GenericTypes;
-import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.github.aap.processor.tools.domain.Unknown;
 import com.github.aap.processor.tools.exceptions.TypeMismatchException;
 import com.google.common.collect.Lists;
 import com.google.common.reflect.Reflection;
