@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.utils;
+package com.github.aap.processor.tools;
 
-import com.github.aap.processor.utils.types.PrimitiveTypes;
+import com.github.aap.processor.tools.types.PrimitiveTypes;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.github.aap.processor.utils.domain.Unknown;
+import com.github.aap.processor.tools.domain.Unknown;
 import com.google.common.base.Throwables;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.utils;
+package com.github.aap.processor.tools;
 
-import com.github.aap.processor.utils.domain.ClassType;
-import com.github.aap.processor.utils.types.PrimitiveTypes;
+import com.github.aap.processor.tools.domain.ClassType;
+import com.github.aap.processor.tools.types.PrimitiveTypes;
 import com.google.common.base.Throwables;
 import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Field;

@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.utils.types;
+package com.github.aap.processor.tools.types;
 
-import com.github.aap.processor.utils.TypeUtilsConstants;
-import com.github.aap.processor.utils.domain.Null;
+import com.github.aap.processor.tools.TypeUtilsConstants;
+import com.github.aap.processor.tools.domain.Null;
 
 /**
  * Java primitive types, and some of our own, along with various attributes

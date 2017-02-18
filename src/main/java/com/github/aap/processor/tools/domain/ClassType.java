@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.utils.domain;
+package com.github.aap.processor.tools.domain;
 
-import com.github.aap.processor.utils.ReflectionUtils;
-import com.github.aap.processor.utils.TypeUtilsConstants;
-import com.github.aap.processor.utils.types.GenericTypes;
+import com.github.aap.processor.tools.ReflectionUtils;
+import com.github.aap.processor.tools.TypeUtilsConstants;
+import com.github.aap.processor.tools.types.GenericTypes;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.github.aap.processor.utils.domain.Unknown;
-import com.github.aap.processor.utils.exceptions.TypeMismatchException;
+import com.github.aap.processor.tools.domain.Unknown;
+import com.github.aap.processor.tools.exceptions.TypeMismatchException;
 import com.google.common.collect.Lists;
 import com.google.common.reflect.Reflection;
 import java.util.List;

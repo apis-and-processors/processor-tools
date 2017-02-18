@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.utils;
+package com.github.aap.processor.tools;
 
-import com.github.aap.processor.utils.types.PrimitiveTypes;
-import com.github.aap.processor.utils.domain.ClassType;
-import com.github.aap.processor.utils.TypeUtils;
-import com.github.aap.processor.utils.domain.Null;
-import com.github.aap.processor.utils.domain.Unknown;
+import com.github.aap.processor.tools.types.PrimitiveTypes;
+import com.github.aap.processor.tools.domain.ClassType;
+import com.github.aap.processor.tools.TypeUtils;
+import com.github.aap.processor.tools.domain.Null;
+import com.github.aap.processor.tools.domain.Unknown;
 
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertNotNull;

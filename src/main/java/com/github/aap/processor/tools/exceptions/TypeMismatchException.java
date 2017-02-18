@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.utils.exceptions;
+package com.github.aap.processor.tools.exceptions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

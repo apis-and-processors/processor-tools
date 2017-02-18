@@ -15,20 +15,29 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.utils.domain;
-
-import com.github.aap.processor.utils.TypeUtilsConstants;
+package com.github.aap.processor.tools.types;
 
 /**
- * Our attempt at creating a NULL primitive which can be used for ClassType.
- *
+ * Handful of OOTB java generic types used by JVM.
+ * 
  * @author dancc
  */
-public enum Null {
-    INSTANCE;
+public enum GenericTypes {
+
+    E("Element"),
+    K("Key"),
+    N("Number"),
+    R("Return"),
+    T("Type"),
+    V("Value");
+
+    private final String name;
     
-    @Override
-    public String toString() {
-        return TypeUtilsConstants.NULL_STRING;
+    private GenericTypes(String name) {
+        this.name = name;
+    }
+    
+    public String getName() {
+        return this.name;
     }
 }
