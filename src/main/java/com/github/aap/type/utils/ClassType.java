@@ -1,8 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.github.aap.type.utils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -30,7 +42,7 @@ public class ClassType implements Comparable<ClassType> {
     }  
 
     /**
-     * Add a child subType to this ClassType
+     * Add a child subType to this ClassType.
      * 
      * @param classType ClassType to add as a child
      * @return this ClassType
@@ -43,7 +55,7 @@ public class ClassType implements Comparable<ClassType> {
     }
     
     /**
-     * Qualified Class name of this ClassType (i.e. java.lang.Integer)
+     * Qualified Class name of this ClassType (e.g. java.lang.Integer).
      * 
      * @return name of this ClassType
      */
@@ -52,7 +64,7 @@ public class ClassType implements Comparable<ClassType> {
     }
        
     /**
-     * Parent of this ClassType
+     * Parent of this ClassType.
      * 
      * @return parent ClassType or null if has no parent.
      */
@@ -61,7 +73,7 @@ public class ClassType implements Comparable<ClassType> {
     }
         
     /**
-     * List of child subTypes
+     * List of child subTypes.
      * 
      * @return list of child subTypes or empty list if no children.
      */
@@ -69,6 +81,12 @@ public class ClassType implements Comparable<ClassType> {
         return subTypes;    
     }
     
+    /**
+     * Get sub ClassType at specified index.
+     * 
+     * @param index
+     * @return 
+     */
     public ClassType subTypeAtIndex(int index) {
         return subTypes.get(index);
     }
@@ -93,7 +111,7 @@ public class ClassType implements Comparable<ClassType> {
     }
     
     /**
-     * Compare this ClassType to another ClassType
+     * Compare this ClassType to another ClassType.
      * 
      * -1 == source and target do not match
      * 0 == source and target match
@@ -102,7 +120,7 @@ public class ClassType implements Comparable<ClassType> {
      * 3 == source and target both have unknown Types
      * 
      * @param compareTo ClassType to compare this ClassType to
-     * @return 
+     * @return value representing the comparison
      */
     @Override
     public int compareTo(ClassType compareTo) {
@@ -171,10 +189,10 @@ public class ClassType implements Comparable<ClassType> {
     }
     
     /**
-     * Helper method to determine if the String is of a known Type or not
+     * Helper method to determine if the String is of a known Type or not.
      * 
      * @param possiblyUnknownType String representation of the Type
-     * @return  true if type is unknown false otherwise
+     * @return true if type is unknown false otherwise
      */
     private static boolean isTypeUnknown(String possiblyUnknownType) {
         if (!possiblyUnknownType.equals(TypeUtilsConstants.OBJECT_CLASS)) {
@@ -210,7 +228,7 @@ public class ClassType implements Comparable<ClassType> {
     }
         
     /**
-     * Get an instance of the backing ClassType
+     * Get an instance of the backing ClassType.
      * 
      * @return new instance from backing ClassType
      */
@@ -219,7 +237,7 @@ public class ClassType implements Comparable<ClassType> {
     }
     
     /**
-     * Get the Class of the backing ClassType
+     * Get the Class of the backing ClassType.
      * 
      * @return Class or instance of Unknown if type is generic (e.g. T or V).
      */
