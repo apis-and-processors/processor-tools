@@ -21,7 +21,7 @@ import com.github.aap.type.utils.domain.Null;
 
 /**
  * Java primitive types, and some of our own, along with various attributes
- * surrounding there use and their default values.
+ * surrounding there use.
  * 
  * @author dancc
  */
@@ -86,8 +86,8 @@ public enum PrimitiveTypes {
     public static PrimitiveTypes from(Object obj) {
         return obj == null ? PrimitiveTypes.NULL : from(obj instanceof Class ? ((Class)obj).getName() : obj.toString());
     }
-        
-    public static PrimitiveTypes from(String name) {
+    
+    private static PrimitiveTypes from(String name) {
         PrimitiveTypes possibleType = null;
         if (name == null || name.trim().equalsIgnoreCase(TypeUtilsConstants.NULL_STRING)) {
             possibleType = PrimitiveTypes.NULL;

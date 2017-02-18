@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -31,7 +32,8 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 /**
- *
+ * Various tests for invoking ReflectionUtils.
+ * 
  * @author cdancy
  */
 public class ReflectionUtilsTest {

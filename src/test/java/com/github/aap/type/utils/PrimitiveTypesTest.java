@@ -19,6 +19,7 @@ package com.github.aap.type.utils;
 
 import com.github.aap.type.utils.domain.Null;
 import com.github.aap.type.utils.domain.Unknown;
+
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -26,7 +27,8 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 /**
- *
+ * Various tests for parsing and using PrimitiveTypes.
+ * 
  * @author cdancy
  */
 public class PrimitiveTypesTest {

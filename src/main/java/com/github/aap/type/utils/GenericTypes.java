@@ -18,7 +18,7 @@
 package com.github.aap.type.utils;
 
 /**
- * Handful of OOTB java generic types used by JVM
+ * Handful of OOTB java generic types used by JVM.
  * 
  * @author dancc
  */

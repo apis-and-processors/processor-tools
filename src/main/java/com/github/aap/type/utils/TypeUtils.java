@@ -24,12 +24,14 @@ import java.lang.reflect.Type;
 import java.util.Set;
 
 /**
+ * Various static utilities aiding in the use of Types.
  *
  * @author dancc
  */
 public class TypeUtils {
    
     private static final Field[] VALUE_FIELD = new Field[1];
+    
     static {
         try {
             VALUE_FIELD[0] = String.class.getDeclaredField("value");
@@ -39,19 +41,25 @@ public class TypeUtils {
         }
     }
     
-    public static ClassType parseClassType(Object clazz) {
+    /**
+     * Turns some Type (e.g. Class, Object, etc.) into a ClassType.
+     * 
+     * @param obj arbitrary object
+     * @return ClassType
+     */
+    public static ClassType parseClassType(Object obj) {
         Class potentialClazz;
-        if (clazz != null) {
-            if (clazz instanceof Class) {
-                potentialClazz = (Class)clazz;
+        if (obj != null) {
+            if (obj instanceof Class) {
+                potentialClazz = (Class)obj;
                 if (potentialClazz.isPrimitive()) {
                     potentialClazz = PrimitiveTypes.from(potentialClazz.toGenericString()).getBoxedClass();
                 } 
             } else {
-                potentialClazz = clazz.getClass();
+                potentialClazz = obj.getClass();
             }
         } else {
-            potentialClazz = PrimitiveTypes.from(clazz).getBoxedClass();
+            potentialClazz = PrimitiveTypes.from(obj).getBoxedClass();
         }
         
         return parseClassType(potentialClazz);
@@ -115,41 +123,41 @@ public class TypeUtils {
             char[] chars = (char[]) VALUE_FIELD[0].get(clazzAndTypes);
             int stopPoint = chars.length - 2;
             int lessThanEncountered = 0;
-            for (int i = index + 1; i < chars.length -1; i++) {
+            for (int i = index + 1; i < chars.length - 1; i++) {
                 
                 if (chars[i] != TypeUtilsConstants.SPACE_CHAR) {
                     builder.append(chars[i]);
                     
                     switch (chars[i]) {
-                        case TypeUtilsConstants.GREATER_THAN_CHAR:
-                            lessThanEncountered += 1;
-                            break;
-                        case TypeUtilsConstants.LESS_THAN_CHAR:
-                            lessThanEncountered -= 1;
-                            if (i == stopPoint) {
-                                String foundType = builder.toString();  
-                                builder.setLength(0);
-                                ClassType type = parseClassType(foundType, types, builder);
-                                types.add(type);
-                            }   
-                            break;
-                        case TypeUtilsConstants.COMMA_CHAR:
-                            if (lessThanEncountered == 0) {
-                                builder.deleteCharAt(builder.length() - 1);
-                                String foundType = builder.toString();
-                                builder.setLength(0);
-                                ClassType type = parseClassType(foundType, types, builder);
-                                types.add(type);                                
-                            } 
-                            break;
-                        default:
-                            if (i == stopPoint) {
-                                String foundType = builder.toString();
-                                builder.setLength(0);
-                                ClassType type = parseClassType(foundType, types, builder);
-                                types.add(type);  
-                            } 
-                            break;
+                    case TypeUtilsConstants.GREATER_THAN_CHAR:
+                        lessThanEncountered += 1;
+                        break;
+                    case TypeUtilsConstants.LESS_THAN_CHAR:
+                        lessThanEncountered -= 1;
+                        if (i == stopPoint) {
+                            String foundType = builder.toString();  
+                            builder.setLength(0);
+                            ClassType type = parseClassType(foundType, types, builder);
+                            types.add(type);
+                        }   
+                        break;
+                    case TypeUtilsConstants.COMMA_CHAR:
+                        if (lessThanEncountered == 0) {
+                            builder.deleteCharAt(builder.length() - 1);
+                            String foundType = builder.toString();
+                            builder.setLength(0);
+                            ClassType type = parseClassType(foundType, types, builder);
+                            types.add(type);                                
+                        } 
+                        break;
+                    default:
+                        if (i == stopPoint) {
+                            String foundType = builder.toString();
+                            builder.setLength(0);
+                            ClassType type = parseClassType(foundType, types, builder);
+                            types.add(type);  
+                        } 
+                        break;
                     }
                 }                
             }            

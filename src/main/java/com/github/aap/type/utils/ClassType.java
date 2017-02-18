@@ -44,8 +44,8 @@ public class ClassType implements Comparable<ClassType> {
     /**
      * Add a child subType to this ClassType.
      * 
-     * @param classType ClassType to add as a child
-     * @return this ClassType
+     * @param classType ClassType to add as a child.
+     * @return this ClassType.
      */
     public ClassType add(ClassType classType) {
         if (classType != null) {
@@ -84,8 +84,8 @@ public class ClassType implements Comparable<ClassType> {
     /**
      * Get sub ClassType at specified index.
      * 
-     * @param index
-     * @return 
+     * @param index index of subType.
+     * @return ClassType at specified index.
      */
     public ClassType subTypeAtIndex(int index) {
         return subTypes.get(index);
@@ -101,7 +101,7 @@ public class ClassType implements Comparable<ClassType> {
         ClassType classType = null;
         if (regex != null) {
             for (int i = 0; i < subTypes.size(); i++) {
-               classType = subTypes.get(i);
+                classType = subTypes.get(i);
                 if (classType.name().matches(regex)) {
                     break;
                 }
@@ -113,14 +113,16 @@ public class ClassType implements Comparable<ClassType> {
     /**
      * Compare this ClassType to another ClassType.
      * 
+     * <p>
      * -1 == source and target do not match
      * 0 == source and target match
      * 1 == source has unknown Type
      * 2 == target has unknown Type
      * 3 == source and target both have unknown Types
+     * </p>
      * 
-     * @param compareTo ClassType to compare this ClassType to
-     * @return value representing the comparison
+     * @param compareTo ClassType to compare this ClassType to.
+     * @return value representing comparison.
      */
     @Override
     public int compareTo(ClassType compareTo) {
@@ -136,35 +138,39 @@ public class ClassType implements Comparable<ClassType> {
      * RuntimeException if 2 types are not equal and can't be massaged into 
      * one or the other (i.e. java.lang.Integer into java.lang.Object).
      * 
+     * <p>
      * 1 == source has unknown types
      * 2 == target has unknown types
      * 3 == source and target have unknown types
+     * </p>
      * 
-     * @param source ClassType to act as source
-     * @param target ClassType to act as target to compare against
-     * @return value representing the comparison
+     * @param source ClassType to act as source.
+     * @param target ClassType to act as target to compare against.
+     * @return value representing comparison.
      */
     private static int compare(ClassType source, ClassType target) {      
-        if(source.name.equals(target.name)) {      
+        if (source.name.equals(target.name)) {      
             int sourceSize = source.subTypes().size();
             int targetSize = target.subTypes().size();
             if (sourceSize == targetSize) {
                 int counter = 0;
-                for(int i = 0; i < sourceSize; i++) {
+                for (int i = 0; i < sourceSize; i++) {
                     int localCount = compare(source.subTypes().get(i), target.subTypes().get(i));
-                    switch(localCount) {
-                        case 0:
-                            break;
-                        case 1:
-                            if (counter == 0 || counter == 2) {
-                                counter ++;
-                            }
-                            break;
-                        case 2:
-                            if (counter == 0 || counter == 1) {
-                                counter ++;
-                            }
-                            break;
+                    switch (localCount) {
+                    case 0:
+                        break;
+                    case 1:
+                        if (counter == 0 || counter == 2) {
+                            counter ++;
+                        }
+                        break;
+                    case 2:
+                        if (counter == 0 || counter == 1) {
+                            counter ++;
+                        }
+                        break;
+                    default:
+                        break;
                     }
                 }
                 return counter;
@@ -177,7 +183,7 @@ public class ClassType implements Comparable<ClassType> {
         } else {
             if (isTypeUnknown(source.name)) {
                 return 1;
-            } else if(isTypeUnknown(target.name)) {
+            } else if (isTypeUnknown(target.name)) {
                 return 2;
             } else {
                 throw new TypeMismatchException("Source type '" 
@@ -217,7 +223,7 @@ public class ClassType implements Comparable<ClassType> {
         if (classType.subTypes().size() > 0) {
             builder.append(TypeUtilsConstants.GREATER_THAN);
             int size = classType.subTypes().size();
-            for(int i = 0; i < size; i++) {
+            for (int i = 0; i < size; i++) {
                 print(classType.subTypes().get(i), builder);
                 if (size > 0 && i != (size - 1)) {
                     builder.append(TypeUtilsConstants.COMMA_SPACE);
@@ -254,7 +260,7 @@ public class ClassType implements Comparable<ClassType> {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        print (this, builder);
+        print(this, builder);
         return builder.toString();
     }
 }
