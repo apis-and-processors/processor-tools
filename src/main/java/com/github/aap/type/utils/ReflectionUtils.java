@@ -17,8 +17,9 @@
 
 package com.github.aap.type.utils;
 
-import com.github.aap.type.utils.domain.Unknown;
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.github.aap.type.utils.domain.Unknown;
 import com.google.common.base.Throwables;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -39,6 +40,13 @@ public class ReflectionUtils {
     private static final Object [] EMPTY_OBJECT_ARRAY = new Object[1];
     private static final Constructor OBJECT_CONSTRUCTOR = Object.class.getDeclaredConstructors()[0];    
     
+    /**
+     * Create a new instance from some arbitrary class type.
+     * 
+     * @param <T> arbitrary type.
+     * @param clazz arbitrary class.
+     * @return new instance of arbitrary class.
+     */
     public static <T> T newInstance(Class<T> clazz) {   
         checkNotNull(clazz, "clazz cannot be null");
         if (clazz.isInterface()) {

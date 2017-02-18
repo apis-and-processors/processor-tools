@@ -18,7 +18,8 @@
 package com.github.aap.type.utils.domain;
 
 /**
- *
+ * Represents when a Type can't be identified (e.g. T, U, V).
+ * 
  * @author dancc
  */
 public enum Unknown {

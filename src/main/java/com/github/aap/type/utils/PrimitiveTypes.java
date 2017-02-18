@@ -20,7 +20,9 @@ package com.github.aap.type.utils;
 import com.github.aap.type.utils.domain.Null;
 
 /**
- *
+ * Java primitive types, and some of our own, along with various attributes
+ * surrounding there use and their default values.
+ * 
  * @author dancc
  */
 public enum PrimitiveTypes {
@@ -75,6 +77,12 @@ public enum PrimitiveTypes {
         return this.nullable;
     }
     
+    /**
+     * Get the corresponding PrimitiveType of given Object.
+     * 
+     * @param obj Object to infer PrimitiveType from.
+     * @return PrimitiveType.
+     */
     public static PrimitiveTypes from(Object obj) {
         return obj == null ? PrimitiveTypes.NULL : from(obj instanceof Class ? ((Class)obj).getName() : obj.toString());
     }

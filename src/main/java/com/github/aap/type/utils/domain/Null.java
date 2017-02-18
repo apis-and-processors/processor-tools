@@ -18,6 +18,7 @@
 package com.github.aap.type.utils.domain;
 
 /**
+ * Our attempt at creating a NULL primitive which can be used for ClassType.
  *
  * @author dancc
  */
