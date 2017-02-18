@@ -15,18 +15,20 @@
  * limitations under the License.
  */
 
-package com.github.aap.type.utils.domain;
+package com.github.aap.processor.utils.domain;
+
+import com.github.aap.processor.utils.TypeUtilsConstants;
 
 /**
- * Represents when a Type can't be identified (e.g. T, U, V).
- * 
+ * Our attempt at creating a NULL primitive which can be used for ClassType.
+ *
  * @author dancc
  */
-public enum Unknown {
+public enum Null {
     INSTANCE;
     
     @Override
     public String toString() {
-        return "";
+        return TypeUtilsConstants.NULL_STRING;
     }
 }

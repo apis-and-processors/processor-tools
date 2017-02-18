@@ -15,29 +15,31 @@
  * limitations under the License.
  */
 
-package com.github.aap.type.utils;
+package com.github.aap.processor.utils;
 
 /**
- * Handful of OOTB java generic types used by JVM.
+ * Various constants used throughout library.
  * 
  * @author dancc
  */
-public enum GenericTypes {
-
-    E("Element"),
-    K("Key"),
-    N("Number"),
-    R("Return"),
-    T("Type"),
-    V("Value");
-
-    private final String name;
+public class TypeUtilsConstants {
     
-    private GenericTypes(String name) {
-        this.name = name;
-    }
+    public static final String OBJECT_CLASS = "java.lang.Object";
+
+    public static final String GREATER_THAN = "<";
+    public static final String LESS_THAN = ">";
+    public static final String COMMA_SPACE = ", ";
     
-    public String getName() {
-        return this.name;
+    public static final char GREATER_THAN_CHAR = '<';
+    public static final char LESS_THAN_CHAR = '>';
+    public static final char COMMA_CHAR = ',';
+    public static final char SPACE_CHAR = ' '; 
+    
+    public static final String CLASS_REGEX = "^(public|private|protected) .+";
+    public static final String SPACE_STRING = " ";
+    public static final String NULL_STRING = "null";
+
+    private TypeUtilsConstants() {
+        throw new UnsupportedOperationException("Purposely not implemented");
     }
 }

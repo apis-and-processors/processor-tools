@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package com.github.aap.type.utils;
+package com.github.aap.processor.utils;
 
-import com.github.aap.type.utils.domain.Null;
+import com.github.aap.processor.utils.domain.Null;
 
 /**
  * Java primitive types, and some of our own, along with various attributes

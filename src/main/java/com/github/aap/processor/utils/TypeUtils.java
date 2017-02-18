@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.aap.type.utils;
+package com.github.aap.processor.utils;
 
 import com.google.common.base.Throwables;
 import com.google.common.reflect.TypeToken;

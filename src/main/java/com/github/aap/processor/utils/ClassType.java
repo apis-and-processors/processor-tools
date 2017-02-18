@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package com.github.aap.type.utils;
+package com.github.aap.processor.utils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.github.aap.type.utils.domain.Unknown;
-import com.github.aap.type.utils.exceptions.TypeMismatchException;
+import com.github.aap.processor.utils.domain.Unknown;
+import com.github.aap.processor.utils.exceptions.TypeMismatchException;
 import com.google.common.collect.Lists;
 import com.google.common.reflect.Reflection;
 import java.util.List;

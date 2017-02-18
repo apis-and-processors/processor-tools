@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package com.github.aap.type.utils;
+package com.github.aap.processor.utils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.github.aap.type.utils.domain.Unknown;
+import com.github.aap.processor.utils.domain.Unknown;
 import com.google.common.base.Throwables;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

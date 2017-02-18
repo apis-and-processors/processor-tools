@@ -15,9 +15,10 @@
  * limitations under the License.
  */
 
-package com.github.aap.type.utils;
+package com.github.aap.processor.utils;
 
-import com.github.aap.type.utils.domain.Null;
+import com.github.aap.processor.utils.ReflectionUtils;
+import com.github.aap.processor.utils.domain.Null;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
