@@ -14,31 +14,33 @@ import com.github.aap.type.utils.domain.Null;
 public enum PrimitiveTypes {
     
     // numbers
-    SHORT("short", (short)0, short.class, Short.class),
-    INT("int", (int)0, int.class, Integer.class),
-    LONG("long", (long)0L, long.class, Long.class),
-    FLOAT("float", (float)0.0f, float.class, Float.class),
-    DOUBLE("double", (double)0.0d, double.class, Double.class),
-    BYTE("byte", (byte)0, byte.class, Byte.class),
+    SHORT("short", (short)0, short.class, Short.class, false),
+    INT("int", (int)0, int.class, Integer.class, false),
+    LONG("long", (long)0L, long.class, Long.class, false),
+    FLOAT("float", (float)0.0f, float.class, Float.class, false),
+    DOUBLE("double", (double)0.0d, double.class, Double.class, false),
+    BYTE("byte", (byte)0, byte.class, Byte.class, false),
     
     // non-numbers
-    CHAR("char", '\u0000', char.class, Character.class),
-    BOOLEAN("boolean", false,  boolean.class, Boolean.class),
-    VOID("void", null, void.class, Void.class),
+    CHAR("char", '\u0000', char.class, Character.class, false),
+    BOOLEAN("boolean", false,  boolean.class, Boolean.class, false),
+    VOID("void", null, void.class, Void.class, true),
     
     // special custom primitives
-    NULL("null", null, Null.class, Null.class);
+    NULL("null", null, Null.class, Null.class, true);
 
     private final String name;
     private final Object defaultValue;
     private final Class primitiveClass;
     private final Class boxedClass;
+    private final boolean nullable;
     
-    private PrimitiveTypes(String name, Object defaultValue, Class primitiveClass, Class boxedClass) {
+    private PrimitiveTypes(String name, Object defaultValue, Class primitiveClass, Class boxedClass, boolean nullable) {
         this.name = name;
         this.defaultValue = defaultValue;
         this.primitiveClass = primitiveClass;
         this.boxedClass = boxedClass;
+        this.nullable = nullable;
     }
     
     public String getName() {
@@ -57,6 +59,10 @@ public enum PrimitiveTypes {
         return this.boxedClass;
     }
 
+    public boolean isNullable() {
+        return this.nullable;
+    }
+    
     public static PrimitiveTypes from(Object obj) {
         return obj == null ? PrimitiveTypes.NULL : from(obj instanceof Class ? ((Class)obj).getName() : obj.toString());
     }
