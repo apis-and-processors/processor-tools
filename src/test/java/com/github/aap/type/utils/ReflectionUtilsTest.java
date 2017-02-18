@@ -6,7 +6,14 @@
 package com.github.aap.type.utils;
 
 import com.github.aap.type.utils.domain.Null;
-import com.github.aap.type.utils.domain.Unknown;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -17,144 +24,128 @@ import org.testng.annotations.Test;
  *
  * @author cdancy
  */
-public class PrimitiveTypesTest {
+public class ReflectionUtilsTest {
 
     @Test
-    public void shortToShort() throws Exception {
+    public void initPrimitiveClasses() throws Exception {
+
+        Short shortObj = ReflectionUtils.newInstance(short.class);
+        assertNotNull(shortObj);
+        assertTrue(shortObj == 0);
         
-        ClassType clazzType = TypeUtils.parseClassType(short.class);
-        assertNotNull(clazzType);
-        assertTrue(clazzType.name().equals(PrimitiveTypes.SHORT.getBoxedClass().getName()));
-        assertTrue(clazzType.toString().equals(PrimitiveTypes.SHORT.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.SHORT.getBoxedClass()));
-        Short instance = Short.class.cast(clazzType.toInstance());
-        assertNotNull(instance);
-        assertTrue(instance == 0);
+        Integer integerObj = ReflectionUtils.newInstance(int.class);
+        assertNotNull(integerObj);
+        assertTrue(integerObj == 0);
+
+        Long longObj = ReflectionUtils.newInstance(long.class);
+        assertNotNull(longObj);
+        assertTrue(longObj == 0);
+        
+        Float floatObj = ReflectionUtils.newInstance(float.class);
+        assertNotNull(floatObj);
+        assertTrue(floatObj == 0);
+        
+        Double doubleObj = ReflectionUtils.newInstance(double.class);
+        assertNotNull(doubleObj);
+        assertTrue(doubleObj == 0);
+        
+        Byte byteObj = ReflectionUtils.newInstance(byte.class);
+        assertNotNull(byteObj);
+        assertTrue(byteObj == 0);
+        
+        Character charObj = ReflectionUtils.newInstance(char.class);
+        assertNotNull(charObj);
+        assertTrue(charObj == '\u0000');
+        
+        Boolean booleanObj = ReflectionUtils.newInstance(boolean.class);
+        assertNotNull(booleanObj);
+        assertTrue(booleanObj == false);
+        
+        Void voidObj = ReflectionUtils.newInstance(void.class);
+        assertNull(voidObj);
+        
+        Null nullObj = ReflectionUtils.newInstance(Null.class);
+        assertNull(nullObj);
     }
     
     @Test
-    public void intToInteger() throws Exception {
+    public void initBoxedPrimitiveClasses() throws Exception {
+
+        Short shortObj = ReflectionUtils.newInstance(Short.class);
+        assertNotNull(shortObj);
+        assertTrue(shortObj == 0);
         
-        ClassType clazzType = TypeUtils.parseClassType(int.class);
-        assertNotNull(clazzType);
-        assertTrue(clazzType.name().equals(PrimitiveTypes.INT.getBoxedClass().getName()));
-        assertTrue(clazzType.toString().equals(PrimitiveTypes.INT.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.INT.getBoxedClass()));
-        Integer instance = Integer.class.cast(clazzType.toInstance());
-        assertNotNull(instance);
-        assertTrue(instance == 0);
+        Integer integerObj = ReflectionUtils.newInstance(Integer.class);
+        assertNotNull(integerObj);
+        assertTrue(integerObj == 0);
+
+        Long longObj = ReflectionUtils.newInstance(Long.class);
+        assertNotNull(longObj);
+        assertTrue(longObj == 0);
+        
+        Float floatObj = ReflectionUtils.newInstance(Float.class);
+        assertNotNull(floatObj);
+        assertTrue(floatObj == 0);
+        
+        Double doubleObj = ReflectionUtils.newInstance(Double.class);
+        assertNotNull(doubleObj);
+        assertTrue(doubleObj == 0);
+        
+        Byte byteObj = ReflectionUtils.newInstance(Byte.class);
+        assertNotNull(byteObj);
+        assertTrue(byteObj == 0);
+        
+        Character charObj = ReflectionUtils.newInstance(Character.class);
+        assertNotNull(charObj);
+        assertTrue(charObj == '\u0000');
+        
+        Boolean booleanObj = ReflectionUtils.newInstance(Boolean.class);
+        assertNotNull(booleanObj);
+        assertTrue(booleanObj == false);
+        
+        Void voidObj = ReflectionUtils.newInstance(Void.class);
+        assertNull(voidObj);
+        
+        Null nullObj = ReflectionUtils.newInstance(Null.class);
+        assertNull(nullObj);
     }
     
     @Test
-    public void longToLong() throws Exception {
+    public void initDataStructureInterfaces() {
         
-        ClassType clazzType = TypeUtils.parseClassType(long.class);
-        assertNotNull(clazzType);
-        assertTrue(clazzType.name().equals(PrimitiveTypes.LONG.getBoxedClass().getName()));
-        assertTrue(clazzType.toString().equals(PrimitiveTypes.LONG.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.LONG.getBoxedClass()));
-        Long instance = Long.class.cast(clazzType.toInstance());
-        assertNotNull(instance);
-        assertTrue(instance == 0);
+        Map<String, String> map = ReflectionUtils.newInstance(Map.class);
+        assertNotNull(map);
+        map.put("hello", "world");
+        assertTrue(map.size() == 1);
+        
+        List<String> list = ReflectionUtils.newInstance(List.class);
+        assertNotNull(list);
+        list.add("hello");
+        assertTrue(list.size() == 1);
+        
+        Set<String> set = ReflectionUtils.newInstance(Set.class);
+        assertNotNull(set);
+        set.add("hello");
+        assertTrue(map.size() == 1);
     }
     
     @Test
-    public void floatToFloat() throws Exception {
+    public void initDataStructureTypes() {
         
-        ClassType clazzType = TypeUtils.parseClassType(float.class);
-        assertNotNull(clazzType);
-        assertTrue(clazzType.name().equals(PrimitiveTypes.FLOAT.getBoxedClass().getName()));
-        assertTrue(clazzType.toString().equals(PrimitiveTypes.FLOAT.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.FLOAT.getBoxedClass()));
-        Float instance = Float.class.cast(clazzType.toInstance());
-        assertNotNull(instance);
-        assertTrue(instance == 0);
-    }
-    
-    @Test
-    public void doubleToDouble() throws Exception {
+        Map<String, String> map = ReflectionUtils.newInstance(HashMap.class);
+        assertNotNull(map);
+        map.put("hello", "world");
+        assertTrue(map.size() == 1);
         
-        ClassType clazzType = TypeUtils.parseClassType(double.class);
-        assertNotNull(clazzType);
-        assertTrue(clazzType.name().equals(PrimitiveTypes.DOUBLE.getBoxedClass().getName()));
-        assertTrue(clazzType.toString().equals(PrimitiveTypes.DOUBLE.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.DOUBLE.getBoxedClass()));
-        Double instance = Double.class.cast(clazzType.toInstance());
-        assertNotNull(instance);
-        assertTrue(instance == 0);
-    }
-    
-    @Test
-    public void byteToByte() throws Exception {
+        List<String> list = ReflectionUtils.newInstance(ArrayList.class);
+        assertNotNull(list);
+        list.add("hello");
+        assertTrue(list.size() == 1);
         
-        ClassType clazzType = TypeUtils.parseClassType(byte.class);
-        assertNotNull(clazzType);
-        assertTrue(clazzType.name().equals(PrimitiveTypes.BYTE.getBoxedClass().getName()));
-        assertTrue(clazzType.toString().equals(PrimitiveTypes.BYTE.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.BYTE.getBoxedClass()));
-        Byte instance = Byte.class.cast(clazzType.toInstance());
-        assertNotNull(instance);
-        assertTrue(instance == 0);
-    }
-    
-    
-    @Test
-    public void charToCharacter() throws Exception {
+        Set<String> set = ReflectionUtils.newInstance(HashSet.class);
+        assertNotNull(set);
+        set.add("hello");
+        assertTrue(map.size() == 1);
         
-        ClassType clazzType = TypeUtils.parseClassType(char.class);
-        assertNotNull(clazzType);
-        assertTrue(clazzType.name().equals(PrimitiveTypes.CHAR.getBoxedClass().getName()));
-        assertTrue(clazzType.toString().equals(PrimitiveTypes.CHAR.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.CHAR.getBoxedClass()));
-        Character instance = Character.class.cast(clazzType.toInstance());
-        assertNotNull(instance);
-        assertTrue(instance == '\u0000');
-    }
-    
-    @Test
-    public void booleanToBoolean() throws Exception {
-        
-        ClassType clazzType = TypeUtils.parseClassType(boolean.class);
-        assertNotNull(clazzType);
-        assertTrue(clazzType.name().equals(PrimitiveTypes.BOOLEAN.getBoxedClass().getName()));
-        assertTrue(clazzType.toString().equals(PrimitiveTypes.BOOLEAN.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.BOOLEAN.getBoxedClass()));
-        Boolean instance = Boolean.class.cast(clazzType.toInstance());
-        assertNotNull(instance);
-        assertTrue(instance == false);
-    }
-    
-    @Test
-    public void voidToVoid() throws Exception {
-        
-        ClassType clazzType = TypeUtils.parseClassType(void.class);
-        assertNotNull(clazzType);
-        assertTrue(clazzType.name().equals(PrimitiveTypes.VOID.getBoxedClass().getName()));
-        assertTrue(clazzType.toString().equals(PrimitiveTypes.VOID.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.VOID.getBoxedClass()));
-        Void instance = Void.class.cast(clazzType.toInstance());
-        assertNull(instance);
-    }
-    
-    @Test
-    public void nullToNull() throws Exception {
-        
-        ClassType clazzType = TypeUtils.parseClassType(null);
-        assertNotNull(clazzType);
-        assertTrue(clazzType.name().equals(PrimitiveTypes.NULL.getBoxedClass().getName()));
-        assertTrue(clazzType.toString().equals(PrimitiveTypes.NULL.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.NULL.getBoxedClass()));
-        Null instance = Null.class.cast(clazzType.toInstance());
-        assertNull(instance);
-    }
-    
-    @Test
-    public void unknownToUnknown() throws Exception {
-        
-        ClassType clazzType = TypeUtils.parseClassType(Unknown.INSTANCE);
-        assertNotNull(clazzType);
-        Unknown instance = Unknown.class.cast(clazzType.toInstance());
-        assertNotNull(instance);
-        assertTrue(instance.toString().equals(""));
     }
 }

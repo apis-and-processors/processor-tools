@@ -5,13 +5,17 @@
  */
 package com.github.aap.type.utils;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.github.aap.type.utils.domain.Unknown;
 import com.github.aap.type.utils.exceptions.TypeMismatchException;
 import com.google.common.collect.Lists;
+import com.google.common.reflect.Reflection;
 import java.util.List;
 
 /**
- *
+ * ClassType representing some Type and potential child Type(s).
+ * 
  * @author dancc
  */
 public class ClassType implements Comparable<ClassType> {
@@ -21,10 +25,16 @@ public class ClassType implements Comparable<ClassType> {
     private final List<ClassType> subTypes = Lists.newArrayList();
 
     public ClassType(String name, ClassType parent) {
-        this.name = name;
+        this.name = checkNotNull(name, "ClassType name cannot be null");
         this.parent = parent;
     }  
 
+    /**
+     * Add a child subType to this ClassType
+     * 
+     * @param classType ClassType to add as a child
+     * @return this ClassType
+     */
     public ClassType add(ClassType classType) {
         if (classType != null) {
             subTypes.add(classType);
@@ -32,14 +42,29 @@ public class ClassType implements Comparable<ClassType> {
         return this;
     }
     
+    /**
+     * Qualified Class name of this ClassType (i.e. java.lang.Integer)
+     * 
+     * @return name of this ClassType
+     */
     public String name() {
         return name;
     }
        
+    /**
+     * Parent of this ClassType
+     * 
+     * @return parent ClassType or null if has no parent.
+     */
     public ClassType parent() {
         return parent;
     }
         
+    /**
+     * List of child subTypes
+     * 
+     * @return list of child subTypes or empty list if no children.
+     */
     public List<ClassType> subTypes() {
         return subTypes;    
     }
@@ -48,40 +73,58 @@ public class ClassType implements Comparable<ClassType> {
         return subTypes.get(index);
     }
     
+    /**
+     * Find first subType matching the passed regex.
+     * 
+     * @param regex the regular expression used to match.
+     * @return found ClassType or null if regex is null or none found.
+     */
     public ClassType firstSubTypeMatching(String regex) {
         ClassType classType = null;
         if (regex != null) {
             for (int i = 0; i < subTypes.size(); i++) {
-                ClassType matcher = subTypes.get(i);
-                if (matcher.name().matches(regex)) {
-                    return matcher;
+               classType = subTypes.get(i);
+                if (classType.name().matches(regex)) {
+                    break;
                 }
             }
         }
         return classType;
     }
     
-    public int compare(ClassType compareTo) {
-        return compare(this, compareTo);
-    }
-    
+    /**
+     * Compare this ClassType to another ClassType
+     * 
+     * -1 == source and target do not match
+     * 0 == source and target match
+     * 1 == source has unknown Type
+     * 2 == target has unknown Type
+     * 3 == source and target both have unknown Types
+     * 
+     * @param compareTo ClassType to compare this ClassType to
+     * @return 
+     */
     @Override
     public int compareTo(ClassType compareTo) {
         try {
             return compare(this, compareTo);
-        } catch (TypeMismatchException e) {
+        } catch (NullPointerException | TypeMismatchException e) {
             return -1;
         }
     }
     
     /**
+     * Helper method to compare 2 ClassType's against each other. Throws 
+     * RuntimeException if 2 types are not equal and can't be massaged into 
+     * one or the other (i.e. java.lang.Integer into java.lang.Object).
+     * 
      * 1 == source has unknown types
      * 2 == target has unknown types
      * 3 == source and target have unknown types
      * 
-     * @param source
-     * @param target
-     * @return 
+     * @param source ClassType to act as source
+     * @param target ClassType to act as target to compare against
+     * @return value representing the comparison
      */
     private static int compare(ClassType source, ClassType target) {      
         if(source.name.equals(target.name)) {      
@@ -127,6 +170,12 @@ public class ClassType implements Comparable<ClassType> {
         }        
     }
     
+    /**
+     * Helper method to determine if the String is of a known Type or not
+     * 
+     * @param possiblyUnknownType String representation of the Type
+     * @return  true if type is unknown false otherwise
+     */
     private static boolean isTypeUnknown(String possiblyUnknownType) {
         if (!possiblyUnknownType.equals(TypeUtilsConstants.OBJECT_CLASS)) {
             try {
@@ -138,13 +187,20 @@ public class ClassType implements Comparable<ClassType> {
         return true;
     }
     
-    private static void print(ClassType genericTypes, StringBuilder builder) {
-        builder.append(genericTypes.name);
-        if (genericTypes.subTypes().size() > 0) {
+    /**
+     * Helper method to recursively print this ClassType, and all 
+     * potential children, into a StringBuilder.
+     * 
+     * @param classType ClassType to print
+     * @param builder StringBuilder to write ClassType data into
+     */
+    private static void print(ClassType classType, StringBuilder builder) {
+        builder.append(classType.name);
+        if (classType.subTypes().size() > 0) {
             builder.append(TypeUtilsConstants.GREATER_THAN);
-            int size = genericTypes.subTypes().size();
+            int size = classType.subTypes().size();
             for(int i = 0; i < size; i++) {
-                print(genericTypes.subTypes().get(i), builder);
+                print(classType.subTypes().get(i), builder);
                 if (size > 0 && i != (size - 1)) {
                     builder.append(TypeUtilsConstants.COMMA_SPACE);
                 }
@@ -153,13 +209,25 @@ public class ClassType implements Comparable<ClassType> {
         }
     }
         
+    /**
+     * Get an instance of the backing ClassType
+     * 
+     * @return new instance from backing ClassType
+     */
     public Object toInstance() {
         return ReflectionUtils.newInstance(toClass());
     }
     
+    /**
+     * Get the Class of the backing ClassType
+     * 
+     * @return Class or instance of Unknown if type is generic (e.g. T or V).
+     */
     public Class toClass() {
         try {
-            return Class.forName(name());
+            Class clazz = Class.forName(name());
+            Reflection.initialize(clazz);
+            return clazz;
         } catch (ClassNotFoundException ex) {
             return Unknown.INSTANCE.getClass();
         }
