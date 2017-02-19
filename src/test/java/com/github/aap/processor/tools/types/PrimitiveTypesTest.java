@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools;
+package com.github.aap.processor.tools.types;
 
+import com.github.aap.processor.tools.TypeUtils;
 import com.github.aap.processor.tools.types.PrimitiveTypes;
 import com.github.aap.processor.tools.domain.ClassType;
 import com.github.aap.processor.tools.domain.Null;

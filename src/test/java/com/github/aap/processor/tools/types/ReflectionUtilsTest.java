@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools;
+package com.github.aap.processor.tools.types;
 
+import com.github.aap.processor.tools.ReflectionUtils;
 import com.github.aap.processor.tools.domain.Null;
 import java.util.ArrayList;
 import java.util.HashMap;
