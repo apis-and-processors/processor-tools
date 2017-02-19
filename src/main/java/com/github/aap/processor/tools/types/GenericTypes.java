@@ -33,7 +33,7 @@ public enum GenericTypes {
 
     private final String name;
     
-    private GenericTypes(String name) {
+    private GenericTypes(final String name) {
         this.name = name;
     }
     

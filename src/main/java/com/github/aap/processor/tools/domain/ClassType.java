@@ -39,7 +39,7 @@ public class ClassType implements Comparable<ClassType> {
     private final ClassType parent;
     private final List<ClassType> subTypes = Lists.newArrayList();
 
-    public ClassType(String name, ClassType parent) {
+    public ClassType(final String name, final ClassType parent) {
         this.name = checkNotNull(name, "ClassType name cannot be null");
         this.parent = parent;
     }  
@@ -50,7 +50,7 @@ public class ClassType implements Comparable<ClassType> {
      * @param classType ClassType to add as a child.
      * @return this ClassType.
      */
-    public ClassType add(ClassType classType) {
+    public ClassType add(final ClassType classType) {
         if (classType != null) {
             subTypes.add(classType);
         }
@@ -90,7 +90,7 @@ public class ClassType implements Comparable<ClassType> {
      * @param index index of subType.
      * @return ClassType at specified index.
      */
-    public ClassType subTypeAtIndex(int index) {
+    public ClassType subTypeAtIndex(final int index) {
         return subTypes.get(index);
     }
     
@@ -100,7 +100,7 @@ public class ClassType implements Comparable<ClassType> {
      * @param regex the regular expression used to match.
      * @return found ClassType or null if regex is null or none found.
      */
-    public ClassType firstSubTypeMatching(String regex) {
+    public ClassType firstSubTypeMatching(final String regex) {
         ClassType classType = null;
         if (regex != null) {
             for (int i = 0; i < subTypes.size(); i++) {
@@ -128,7 +128,7 @@ public class ClassType implements Comparable<ClassType> {
      * @return value representing comparison.
      */
     @Override
-    public int compareTo(ClassType compareTo) {
+    public int compareTo(final ClassType compareTo) {
         try {
             return compare(this, compareTo);
         } catch (NullPointerException | TypeMismatchException e) {
@@ -151,14 +151,14 @@ public class ClassType implements Comparable<ClassType> {
      * @param target ClassType to act as target to compare against.
      * @return value representing comparison.
      */
-    private static int compare(ClassType source, ClassType target) {      
+    private static int compare(final ClassType source, final ClassType target) {      
         if (source.name.equals(target.name)) {      
-            int sourceSize = source.subTypes().size();
-            int targetSize = target.subTypes().size();
+            final int sourceSize = source.subTypes().size();
+            final int targetSize = target.subTypes().size();
             if (sourceSize == targetSize) {
                 int counter = 0;
                 for (int i = 0; i < sourceSize; i++) {
-                    int localCount = compare(source.subTypes().get(i), target.subTypes().get(i));
+                    final int localCount = compare(source.subTypes().get(i), target.subTypes().get(i));
                     switch (localCount) {
                     case 0:
                         break;
@@ -203,7 +203,7 @@ public class ClassType implements Comparable<ClassType> {
      * @param possiblyUnknownType String representation of the Type
      * @return true if type is unknown false otherwise
      */
-    private static boolean isTypeUnknown(String possiblyUnknownType) {
+    private static boolean isTypeUnknown(final  String possiblyUnknownType) {
         if (!possiblyUnknownType.equals(Constants.OBJECT_CLASS)) {
             try {
                 GenericTypes.valueOf(possiblyUnknownType);                
@@ -221,11 +221,11 @@ public class ClassType implements Comparable<ClassType> {
      * @param classType ClassType to print
      * @param builder StringBuilder to write ClassType data into
      */
-    private static void print(ClassType classType, StringBuilder builder) {
+    private static void print(final ClassType classType, final StringBuilder builder) {
         builder.append(classType.name);
         if (classType.subTypes().size() > 0) {
             builder.append(Constants.GREATER_THAN);
-            int size = classType.subTypes().size();
+            final int size = classType.subTypes().size();
             for (int i = 0; i < size; i++) {
                 print(classType.subTypes().get(i), builder);
                 if (size > 0 && i != (size - 1)) {
@@ -252,7 +252,7 @@ public class ClassType implements Comparable<ClassType> {
      */
     public Class toClass() {
         try {
-            Class clazz = Class.forName(name());
+            final Class clazz = Class.forName(name());
             Reflection.initialize(clazz);
             return clazz;
         } catch (ClassNotFoundException ex) {
@@ -262,7 +262,7 @@ public class ClassType implements Comparable<ClassType> {
     
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         print(this, builder);
         return builder.toString();
     }

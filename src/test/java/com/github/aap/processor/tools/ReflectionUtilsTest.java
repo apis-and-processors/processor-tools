@@ -17,7 +17,6 @@
 
 package com.github.aap.processor.tools;
 
-import com.github.aap.processor.tools.ReflectionUtils;
 import com.github.aap.processor.tools.domain.Null;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,122 +41,122 @@ public class ReflectionUtilsTest {
     @Test
     public void initPrimitiveClasses() throws Exception {
 
-        Short shortObj = ReflectionUtils.newInstance(short.class);
+        final Short shortObj = ReflectionUtils.newInstance(short.class);
         assertNotNull(shortObj);
         assertTrue(shortObj == 0);
         
-        Integer integerObj = ReflectionUtils.newInstance(int.class);
+        final Integer integerObj = ReflectionUtils.newInstance(int.class);
         assertNotNull(integerObj);
         assertTrue(integerObj == 0);
 
-        Long longObj = ReflectionUtils.newInstance(long.class);
+        final Long longObj = ReflectionUtils.newInstance(long.class);
         assertNotNull(longObj);
         assertTrue(longObj == 0);
         
-        Float floatObj = ReflectionUtils.newInstance(float.class);
+        final Float floatObj = ReflectionUtils.newInstance(float.class);
         assertNotNull(floatObj);
         assertTrue(floatObj == 0);
         
-        Double doubleObj = ReflectionUtils.newInstance(double.class);
+        final Double doubleObj = ReflectionUtils.newInstance(double.class);
         assertNotNull(doubleObj);
         assertTrue(doubleObj == 0);
         
-        Byte byteObj = ReflectionUtils.newInstance(byte.class);
+        final Byte byteObj = ReflectionUtils.newInstance(byte.class);
         assertNotNull(byteObj);
         assertTrue(byteObj == 0);
         
-        Character charObj = ReflectionUtils.newInstance(char.class);
+        final Character charObj = ReflectionUtils.newInstance(char.class);
         assertNotNull(charObj);
         assertTrue(charObj == '\u0000');
         
-        Boolean booleanObj = ReflectionUtils.newInstance(boolean.class);
+        final Boolean booleanObj = ReflectionUtils.newInstance(boolean.class);
         assertNotNull(booleanObj);
         assertTrue(booleanObj == false);
         
-        Void voidObj = ReflectionUtils.newInstance(void.class);
+        final Void voidObj = ReflectionUtils.newInstance(void.class);
         assertNull(voidObj);
         
-        Null nullObj = ReflectionUtils.newInstance(Null.class);
+        final Null nullObj = ReflectionUtils.newInstance(Null.class);
         assertNull(nullObj);
     }
     
     @Test
     public void initBoxedPrimitiveClasses() throws Exception {
 
-        Short shortObj = ReflectionUtils.newInstance(Short.class);
+        final Short shortObj = ReflectionUtils.newInstance(Short.class);
         assertNotNull(shortObj);
         assertTrue(shortObj == 0);
         
-        Integer integerObj = ReflectionUtils.newInstance(Integer.class);
+        final Integer integerObj = ReflectionUtils.newInstance(Integer.class);
         assertNotNull(integerObj);
         assertTrue(integerObj == 0);
 
-        Long longObj = ReflectionUtils.newInstance(Long.class);
+        final Long longObj = ReflectionUtils.newInstance(Long.class);
         assertNotNull(longObj);
         assertTrue(longObj == 0);
         
-        Float floatObj = ReflectionUtils.newInstance(Float.class);
+        final Float floatObj = ReflectionUtils.newInstance(Float.class);
         assertNotNull(floatObj);
         assertTrue(floatObj == 0);
         
-        Double doubleObj = ReflectionUtils.newInstance(Double.class);
+        final Double doubleObj = ReflectionUtils.newInstance(Double.class);
         assertNotNull(doubleObj);
         assertTrue(doubleObj == 0);
         
-        Byte byteObj = ReflectionUtils.newInstance(Byte.class);
+        final Byte byteObj = ReflectionUtils.newInstance(Byte.class);
         assertNotNull(byteObj);
         assertTrue(byteObj == 0);
         
-        Character charObj = ReflectionUtils.newInstance(Character.class);
+        final Character charObj = ReflectionUtils.newInstance(Character.class);
         assertNotNull(charObj);
         assertTrue(charObj == '\u0000');
         
-        Boolean booleanObj = ReflectionUtils.newInstance(Boolean.class);
+        final Boolean booleanObj = ReflectionUtils.newInstance(Boolean.class);
         assertNotNull(booleanObj);
         assertTrue(booleanObj == false);
         
-        Void voidObj = ReflectionUtils.newInstance(Void.class);
+        final Void voidObj = ReflectionUtils.newInstance(Void.class);
         assertNull(voidObj);
         
-        Null nullObj = ReflectionUtils.newInstance(Null.class);
+        final Null nullObj = ReflectionUtils.newInstance(Null.class);
         assertNull(nullObj);
     }
     
     @Test
     public void initDataStructureInterfaces() {
         
-        Map<String, String> map = ReflectionUtils.newInstance(Map.class);
+        final Map<String, String> map = ReflectionUtils.newInstance(Map.class);
         assertNotNull(map);
-        map.put("hello", "world");
+        map.put("hello1", "world1");
         assertTrue(map.size() == 1);
         
-        List<String> list = ReflectionUtils.newInstance(List.class);
+        final List<String> list = ReflectionUtils.newInstance(List.class);
         assertNotNull(list);
-        list.add("hello");
+        list.add("hello2");
         assertTrue(list.size() == 1);
         
-        Set<String> set = ReflectionUtils.newInstance(Set.class);
+        final Set<String> set = ReflectionUtils.newInstance(Set.class);
         assertNotNull(set);
-        set.add("hello");
+        set.add("hello3");
         assertTrue(map.size() == 1);
     }
     
     @Test
     public void initDataStructureTypes() {
         
-        Map<String, String> map = ReflectionUtils.newInstance(HashMap.class);
+        final Map<String, String> map = ReflectionUtils.newInstance(HashMap.class);
         assertNotNull(map);
-        map.put("hello", "world");
+        map.put("hello4", "world2");
         assertTrue(map.size() == 1);
         
-        List<String> list = ReflectionUtils.newInstance(ArrayList.class);
+        final List<String> list = ReflectionUtils.newInstance(ArrayList.class);
         assertNotNull(list);
-        list.add("hello");
+        list.add("hello5");
         assertTrue(list.size() == 1);
         
-        Set<String> set = ReflectionUtils.newInstance(HashSet.class);
+        final Set<String> set = ReflectionUtils.newInstance(HashSet.class);
         assertNotNull(set);
-        set.add("hello");
+        set.add("hello6");
         assertTrue(map.size() == 1);
         
     }

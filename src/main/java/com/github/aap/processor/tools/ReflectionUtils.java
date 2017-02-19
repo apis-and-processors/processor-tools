@@ -48,7 +48,7 @@ public class ReflectionUtils {
      * @param clazz arbitrary class.
      * @return new instance of arbitrary class.
      */
-    public static <T> T newInstance(Class<T> clazz) {   
+    public static <T> T newInstance(final Class<T> clazz) {   
         checkNotNull(clazz, "clazz cannot be null");
         if (clazz.isInterface()) {
             try {
@@ -61,7 +61,7 @@ public class ReflectionUtils {
                     return (T) new HashSet();
                 }
                 
-                Constructor genericConstructor = sun.reflect.ReflectionFactory
+                final Constructor genericConstructor = sun.reflect.ReflectionFactory
                         .getReflectionFactory()
                         .newConstructorForSerialization(clazz, OBJECT_CONSTRUCTOR);
 
@@ -76,11 +76,11 @@ public class ReflectionUtils {
                     return (T) Unknown.INSTANCE;
                 }
                 
-                PrimitiveTypes found = PrimitiveTypes.from(clazz);
+                final PrimitiveTypes found = PrimitiveTypes.from(clazz);
                 if (found != null) {
                     return (T) found.getDefaultValue();
                 } else {
-                    Constructor noArgConstructor = clazz.getDeclaredConstructors()[0];
+                    final Constructor noArgConstructor = clazz.getDeclaredConstructors()[0];
                     noArgConstructor.setAccessible(true);
                     return clazz.cast(noArgConstructor.newInstance(EMPTY_OBJECT_ARRAY));
                 }

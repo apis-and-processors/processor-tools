@@ -36,7 +36,7 @@ public class TypeMismatchException extends RuntimeException {
      * @param source non-null source type.
      * @param target non-null target type.
      */
-    public TypeMismatchException(String message, String source, String target) {
+    public TypeMismatchException(final String message, final String source, final String target) {
         super(message);
         this.source = checkNotNull(source, "source cannot be null");
         this.target = checkNotNull(target, "target cannot be null");
@@ -50,7 +50,7 @@ public class TypeMismatchException extends RuntimeException {
      * @param target non-null target type.
      * @param throwable the source exception this exception came from.
      */
-    public TypeMismatchException(String message, String source, String target, Throwable throwable) {
+    public TypeMismatchException(final String message, final String source, final String target, final Throwable throwable) {
         super(message, throwable);
         this.source = checkNotNull(source, "source cannot be null");
         this.target = checkNotNull(target, "target cannot be null");
