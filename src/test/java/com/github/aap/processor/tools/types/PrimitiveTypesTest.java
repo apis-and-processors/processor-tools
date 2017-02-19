@@ -18,7 +18,6 @@
 package com.github.aap.processor.tools.types;
 
 import com.github.aap.processor.tools.TypeUtils;
-import com.github.aap.processor.tools.types.PrimitiveTypes;
 import com.github.aap.processor.tools.domain.ClassType;
 import com.github.aap.processor.tools.domain.Null;
 import com.github.aap.processor.tools.domain.Unknown;
@@ -30,7 +29,7 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 /**
- * Various tests for parsing and using PrimitiveTypes.
+ * Tests for parsing and using PrimitiveTypes.
  * 
  * @author cdancy
  */
