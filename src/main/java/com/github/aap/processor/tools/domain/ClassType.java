@@ -95,22 +95,35 @@ public class ClassType implements Comparable<ClassType> {
     }
     
     /**
-     * Find first subType matching the passed regex.
+     * Find first ClassType matching the passed regex.
      * 
      * @param regex the regular expression used to match.
      * @return found ClassType or null if regex is null or none found.
      */
-    public ClassType firstSubTypeMatching(final String regex) {
-        ClassType classType = null;
-        if (regex != null) {
-            for (int i = 0; i < subTypes.size(); i++) {
-                classType = subTypes.get(i);
-                if (classType.name().matches(regex)) {
-                    break;
+    public ClassType firstTypeMatching(final String regex) {
+        return (regex != null) ? firstTypeMatching(regex, this) : null;
+    }
+    
+    /**
+     * Inner helper method used for recursively iterating through all potential 
+     * types to find a match.
+     * 
+     * @param regex the regular expression used to match.
+     * @param classType ClassType to check it, and its children, for match.
+     * @return found ClassType or null if regex is null or none found.
+     */
+    private ClassType firstTypeMatching(final String regex, final ClassType classType) {
+        if (classType.name().matches(regex)) {
+            return classType;
+        } else {
+            for (int i = 0; i < classType.subTypes().size(); i++) {
+                final ClassType innerClassType = firstTypeMatching(regex, classType.subTypes().get(i));
+                if (innerClassType != null) {
+                    return innerClassType;
                 }
             }
-        }
-        return classType;
+            return null;
+        }        
     }
     
     /**
