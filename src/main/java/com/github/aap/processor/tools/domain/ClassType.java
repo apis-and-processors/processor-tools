@@ -21,7 +21,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.github.aap.processor.tools.ReflectionUtils;
 import com.github.aap.processor.tools.utils.Constants;
-import com.github.aap.processor.tools.types.GenericTypes;
 
 import com.github.aap.processor.tools.exceptions.TypeMismatchException;
 import com.google.common.collect.Lists;
@@ -100,8 +99,8 @@ public class ClassType implements Comparable<ClassType> {
      * @param regex the regular expression used to match.
      * @return found ClassType or null if regex is null or none found.
      */
-    public ClassType firstTypeMatching(final String regex) {
-        return (regex != null) ? firstTypeMatching(regex, this) : null;
+    public ClassType firstSubTypeMatching(final String regex) {
+        return (regex != null) ? firstSubTypeMatching(regex, this) : null;
     }
     
     /**
@@ -112,12 +111,12 @@ public class ClassType implements Comparable<ClassType> {
      * @param classType ClassType to check it, and its children, for match.
      * @return found ClassType or null if regex is null or none found.
      */
-    private ClassType firstTypeMatching(final String regex, final ClassType classType) {
+    private ClassType firstSubTypeMatching(final String regex, final ClassType classType) {
         if (classType.name().matches(regex)) {
             return classType;
         } else {
             for (int i = 0; i < classType.subTypes().size(); i++) {
-                final ClassType innerClassType = firstTypeMatching(regex, classType.subTypes().get(i));
+                final ClassType innerClassType = firstSubTypeMatching(regex, classType.subTypes().get(i));
                 if (innerClassType != null) {
                     return innerClassType;
                 }
@@ -157,15 +156,24 @@ public class ClassType implements Comparable<ClassType> {
      * <p>
      * 1 == source has unknown types
      * 2 == target has unknown types
-     * 3 == source and target have unknown types
+     * 3 == source and target have unknown types 
      * </p>
      * 
      * @param source ClassType to act as source.
      * @param target ClassType to act as target to compare against.
      * @return value representing comparison.
      */
-    private static int compare(final ClassType source, final ClassType target) {      
-        if (source.name.equals(target.name)) {      
+    private static int compare(final ClassType source, final ClassType target) { 
+        System.out.println("source=" + source + ", target=" + target);
+        if (source.name.equals(target.name)) {
+            
+            // All generic types get converted to 'java.lang.Object' thus if 
+            // we encounter one, or in this case 2 because of the match, then 
+            // return 3 as don't really know what exactly these Objects are.
+            if (source.name.equals(Constants.OBJECT_CLASS)) {
+                return 3;
+            }
+            
             final int sourceSize = source.subTypes().size();
             final int targetSize = target.subTypes().size();
             if (sourceSize == targetSize) {
@@ -181,9 +189,12 @@ public class ClassType implements Comparable<ClassType> {
                         }
                         break;
                     case 2:
-                        if (counter == 0 || counter == 1) {
-                            counter ++;
+                        if (counter < 2) {
+                            counter += 2;
                         }
+                        break;
+                    case 3:
+                        counter = 3;
                         break;
                     default:
                         break;
@@ -197,34 +208,16 @@ public class ClassType implements Comparable<ClassType> {
                         source.name, target.name); 
             }
         } else {
-            if (isTypeUnknown(source.name)) {
+            if (source.name.equals(Constants.OBJECT_CLASS)) {
                 return 1;
-            } else if (isTypeUnknown(target.name)) {
+            } else if (target.name.equals(Constants.OBJECT_CLASS)) {
                 return 2;
             } else {
                 throw new TypeMismatchException("Source type '" 
                     + source.name + "' does not match target type '" 
-                    + target.name + "'", 
-                        source.name, target.name);
+                    + target.name + "'", source.name, target.name);
             }
         }        
-    }
-    
-    /**
-     * Helper method to determine if the String is of a known Type or not.
-     * 
-     * @param possiblyUnknownType String representation of the Type
-     * @return true if type is unknown false otherwise
-     */
-    private static boolean isTypeUnknown(final  String possiblyUnknownType) {
-        if (!possiblyUnknownType.equals(Constants.OBJECT_CLASS)) {
-            try {
-                GenericTypes.valueOf(possiblyUnknownType);                
-            } catch (IllegalArgumentException e) {
-                return false;
-            }
-        }
-        return true;
     }
     
     /**

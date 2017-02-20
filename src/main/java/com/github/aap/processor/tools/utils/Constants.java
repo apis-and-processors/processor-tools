@@ -38,6 +38,8 @@ public class Constants {
     public static final String CLASS_REGEX = "^(public|private|protected) .+";
     public static final String SPACE_STRING = " ";
     public static final String NULL_STRING = "null";
+    
+    public static final int PERIOD_CHAR = (int)'.';
 
     private Constants() {
         throw new UnsupportedOperationException("Purposely not implemented");

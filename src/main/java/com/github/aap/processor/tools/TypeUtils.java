@@ -25,6 +25,7 @@ import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.Set;
+import javax.lang.model.SourceVersion;
 
 /**
  * Various static utilities aiding in the use of Types.
@@ -77,13 +78,12 @@ public class TypeUtils {
                 final String [] parts = clazz.toGenericString().split(Constants.SPACE_STRING);
                 return parseClassType(parts[parts.length - 1], null, null);
             } else {
-                
                 if (clazz.getGenericSuperclass().getTypeName().equals(Constants.OBJECT_CLASS)) {
                     final ClassType clazzType = parseClassType(clazz.getName());
                     if (clazz.getInterfaces().length > 0) {
                         final Set<TypeToken> tt = TypeToken.of(clazz).getTypes().interfaces();
                         for (final TypeToken type : tt) {
-                            clazzType.add(parseClassType(type.getType()));
+                            clazzType.add(parseClassType(type.getType().getTypeName(), clazzType, null));
                         }
                     }
                     return clazzType;
@@ -96,27 +96,29 @@ public class TypeUtils {
             return parseClassType(parts[parts.length - 1], null, null);
         }
     }
-    
-    private static ClassType parseClassType(final Type type) {
-        return TypeUtils.parseClassType(type.getTypeName());
-    }
         
     private static ClassType parseClassType(final String clazz) {
         return parseClassType(clazz, null, null);
     }
         
-    private static ClassType parseClassType(final String clazzAndTypes, final ClassType genericTypes, StringBuilder builder) {
+    private static ClassType parseClassType(final String clazzAndTypes, final ClassType parentType, StringBuilder builder) {
 
-        final int index = clazzAndTypes.indexOf(Constants.GREATER_THAN);
-        if (index == -1) {
-            if (genericTypes != null) {
-                return new ClassType(clazzAndTypes, genericTypes);
-            } else {
-                return new ClassType(clazzAndTypes, null);
+        if (SourceVersion.isName(clazzAndTypes)) {
+            if (clazzAndTypes.indexOf(Constants.PERIOD_CHAR) == -1) {
+                try {
+                    Class.forName(clazzAndTypes);
+                } catch (ClassNotFoundException cnfe) {
+                    return new ClassType(Constants.OBJECT_CLASS, parentType);
+                }
             }
         }
         
-        final ClassType types = new ClassType(clazzAndTypes.substring(0, index), (genericTypes != null ? genericTypes : null));
+        final int index = clazzAndTypes.indexOf(Constants.GREATER_THAN);
+        if (index == -1) {
+            return new ClassType(clazzAndTypes, parentType);
+        } 
+        
+        final ClassType classType = new ClassType(clazzAndTypes.substring(0, index), parentType);
         try {
                         
             if (builder == null) {
@@ -140,8 +142,8 @@ public class TypeUtils {
                         if (i == stopPoint) {
                             final String foundType = builder.toString();  
                             builder.setLength(0);
-                            final ClassType type = parseClassType(foundType, types, builder);
-                            types.add(type);
+                            final ClassType type = parseClassType(foundType, classType, builder);
+                            classType.add(type);
                         }   
                         break;
                     case Constants.COMMA_CHAR:
@@ -149,16 +151,16 @@ public class TypeUtils {
                             builder.deleteCharAt(builder.length() - 1);
                             final String foundType = builder.toString();
                             builder.setLength(0);
-                            final ClassType type = parseClassType(foundType, types, builder);
-                            types.add(type);                                
+                            final ClassType type = parseClassType(foundType, classType, builder);
+                            classType.add(type);                                
                         } 
                         break;
                     default:
                         if (i == stopPoint) {
                             final String foundType = builder.toString();
                             builder.setLength(0);
-                            final ClassType type = parseClassType(foundType, types, builder);
-                            types.add(type);  
+                            final ClassType type = parseClassType(foundType, classType, builder);
+                            classType.add(type);  
                         } 
                         break;
                     }
@@ -168,7 +170,7 @@ public class TypeUtils {
             throw Throwables.propagate(ex);
         }
 
-        return types;  
+        return classType;  
     }
     
     private TypeUtils() {
