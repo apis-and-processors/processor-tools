@@ -23,7 +23,6 @@ import com.github.aap.processor.tools.types.PrimitiveTypes;
 import com.google.common.base.Throwables;
 import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.Set;
 import javax.lang.model.SourceVersion;
 
@@ -103,13 +102,12 @@ public class TypeUtils {
         
     private static ClassType parseClassType(final String clazzAndTypes, final ClassType parentType, StringBuilder builder) {
 
-        if (SourceVersion.isName(clazzAndTypes)) {
-            if (clazzAndTypes.indexOf(Constants.PERIOD_CHAR) == -1) {
-                try {
-                    Class.forName(clazzAndTypes);
-                } catch (ClassNotFoundException cnfe) {
-                    return new ClassType(Constants.OBJECT_CLASS, parentType);
-                }
+        if (SourceVersion.isName(clazzAndTypes) 
+                && clazzAndTypes.indexOf(Constants.PERIOD_CHAR) == -1) {
+            try {
+                Class.forName(clazzAndTypes);
+            } catch (ClassNotFoundException cnfe) {
+                return new ClassType(Constants.OBJECT_CLASS, parentType);
             }
         }
         

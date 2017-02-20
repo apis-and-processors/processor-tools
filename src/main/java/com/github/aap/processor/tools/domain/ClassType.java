@@ -164,7 +164,6 @@ public class ClassType implements Comparable<ClassType> {
      * @return value representing comparison.
      */
     private static int compare(final ClassType source, final ClassType target) { 
-        System.out.println("source=" + source + ", target=" + target);
         if (source.name.equals(target.name)) {
             
             // All generic types get converted to 'java.lang.Object' thus if 
