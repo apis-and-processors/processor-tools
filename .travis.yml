@@ -28,7 +28,7 @@ after_success:
 addons:
   coverity_scan:
     project:
-      name: "apis-and-processors/type-utils"
+      name: "apis-and-processors/processor-tools"
       description: "Utilities for dealing with generics and types"
     notification_email: christoforever@gmail.com
     build_command:  ./gradlew -s -Dorg.gradle.daemon=false build
