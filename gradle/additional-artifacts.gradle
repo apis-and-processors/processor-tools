@@ -1,6 +1,5 @@
 shadowJar {
     mergeServiceFiles()
-    relocate 'com.google', 'com.github.aap.type.utils.shaded.com.google'
 }
 
 task sourcesJar(type: Jar) {
