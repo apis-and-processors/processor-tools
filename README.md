@@ -67,7 +67,7 @@ javadocs can be found via [github pages here](https://apis-and-processors.github
 
 ## Examples
 
-The [various tests] provide many examples that you can use in your own code.
+The [various tests](https://github.com/apis-and-processors/processor-tools/tree/master/src/test/java/com/github/aap/processor/tools) provide many examples that you can use in your own code.
 
 ## Components
 
