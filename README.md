@@ -48,8 +48,8 @@ The `helloWorldType` ClassType is a typical Node data structure which logically 
 
     ClassType:some.path.to.HelloWorld
         ClassType:java.util.function.Function
-	    ClassType:java.lang.Integer
-	    ClassType:java.lang.Boolean
+	        ClassType:java.lang.Integer
+	        ClassType:java.lang.Boolean
 	ClassType:java.lang.Comparable
 	    ClassType:java.lang.String
 	  
