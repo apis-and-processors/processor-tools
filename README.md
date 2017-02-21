@@ -50,8 +50,8 @@ The `helloWorldType` ClassType is a typical Node data structure which logically 
         ClassType:java.util.function.Function
 	        ClassType:java.lang.Integer
 	        ClassType:java.lang.Boolean
-	ClassType:java.lang.Comparable
-	    ClassType:java.lang.String
+	    ClassType:java.lang.Comparable
+	        ClassType:java.lang.String
 	  
 Because `ClassType` implements comparable you can compare any node to any other and the compare process will iterate between all possible nodes checking for consistency. The possible values returned from said comparison are as follows:
 
