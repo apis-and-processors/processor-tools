@@ -17,14 +17,12 @@
 
 package com.github.aap.processor.tools.domain;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.github.aap.processor.tools.ReflectionUtils;
+import com.github.aap.processor.tools.TypeUtils;
 import com.github.aap.processor.tools.utils.Constants;
 
 import com.github.aap.processor.tools.exceptions.TypeMismatchException;
-import com.google.common.collect.Lists;
-import com.google.common.reflect.Reflection;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,10 +34,10 @@ public class ClassType implements Comparable<ClassType> {
 
     private final String name;
     private final ClassType parent;
-    private final List<ClassType> subTypes = Lists.newArrayList();
+    private final List<ClassType> subTypes = new ArrayList<>();
 
     public ClassType(final String name, final ClassType parent) {
-        this.name = checkNotNull(name, "ClassType name cannot be null");
+        this.name = TypeUtils.checkNotNull(name, "ClassType name cannot be null").intern();
         this.parent = parent;
     }  
 
@@ -153,12 +151,6 @@ public class ClassType implements Comparable<ClassType> {
      * RuntimeException if 2 types are not equal and can't be massaged into 
      * one or the other (i.e. java.lang.Integer into java.lang.Object).
      * 
-     * <p>
-     * 1 == source has unknown types
-     * 2 == target has unknown types
-     * 3 == source and target have unknown types 
-     * </p>
-     * 
      * @param source ClassType to act as source.
      * @param target ClassType to act as target to compare against.
      * @return value representing comparison.
@@ -257,9 +249,7 @@ public class ClassType implements Comparable<ClassType> {
      */
     public Class toClass() {
         try {
-            final Class clazz = Class.forName(name());
-            Reflection.initialize(clazz);
-            return clazz;
+            return Class.forName(name());
         } catch (ClassNotFoundException ex) {
             return Unknown.INSTANCE.getClass();
         }

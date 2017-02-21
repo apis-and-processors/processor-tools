@@ -32,8 +32,6 @@ repositories {
 }
 
 dependencies {
-    compile 'com.google.guava:guava:20.0'
-
     testCompile ('org.testng:testng:6.8.21') 
 }
 

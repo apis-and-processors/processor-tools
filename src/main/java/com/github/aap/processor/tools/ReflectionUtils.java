@@ -17,11 +17,8 @@
 
 package com.github.aap.processor.tools;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.github.aap.processor.tools.types.PrimitiveTypes;
 import com.github.aap.processor.tools.domain.Unknown;
-import com.google.common.base.Throwables;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -49,7 +46,7 @@ public class ReflectionUtils {
      * @return new instance of arbitrary class.
      */
     public static <T> T newInstance(final Class<T> clazz) {   
-        checkNotNull(clazz, "clazz cannot be null");
+        TypeUtils.checkNotNull(clazz, "clazz cannot be null");
         if (clazz.isInterface()) {
             try {
                 
@@ -67,7 +64,7 @@ public class ReflectionUtils {
 
                 return clazz.cast(genericConstructor.newInstance()); 
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | SecurityException | IllegalArgumentException ex) {
-                throw Throwables.propagate(ex);
+                throw new RuntimeException(ex);
             } 
         } else {
             try {
@@ -90,8 +87,8 @@ public class ReflectionUtils {
                 // second attempt at creating generic object from class
                 try {
                     return clazz.newInstance();
-                } catch (Exception e) {
-                    throw Throwables.propagate(e);
+                } catch (IllegalAccessException | InstantiationException ex2) {
+                    throw new RuntimeException(ex2);
                 }
             }     
         }

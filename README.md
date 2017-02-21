@@ -18,7 +18,7 @@ Can be sourced from jcenter like so:
     
 ## Motivation
 
-In designing the [api-processor](https://github.com/apis-and-processors/api-processor) I needed a way to look at a given class and resolve all of it's potential types and then compare those types to their runtime implementations passed in by the end user. While libraries like [guava](https://github.com/google/guava) and [typetools](https://github.com/jhalterman/typetools) do type-related work, and indeed the former is used here to some extent, I required a different approach that had built in support for comparing classes with potentially N number of types.
+In designing the [api-processor](https://github.com/apis-and-processors/api-processor) I needed a way to look at a given class and resolve all of it's potential types and then compare those types to their runtime implementations passed in by the end user. While libraries like [guava](https://github.com/google/guava) and [typetools](https://github.com/jhalterman/typetools) do type-related work I required a different approach that had built in support for comparing potentially N number of types to some other class with N number of types.
 
 Futhermore I needed a way to work with primitives in a type-esque related way and to be able to convert said primitives to their boxed types and then back again with ease.
 
@@ -27,7 +27,6 @@ While the main work horse of this library is `TypeUtils` it is by no means the o
 ## Setup and How to use
 
 While this library has many tools most folks will be interested in `TypeUtils` and how to convert a given class with types to a `ClassType`. Consider the following class:
-
 
     abstract class HelloWorld implements Function<Integer, Boolean>, Comparable<String> {
         @Override
@@ -55,7 +54,7 @@ The `helloWorldType` ClassType is a typical Node data structure which logically 
 	  
 Because `ClassType` implements comparable you can compare any node to any other and the compare process will iterate between all possible nodes checking for consistency. The possible values returned from said comparison are as follows:
 
-    -1 : mismatch between any 2 nodes (i.e. java.lang.Integer does not match java.lang.Boolean)
+    -1 : mismatch between any 2 nodes (i.e. java.lang.Integer does not match java.lang.Boolean) or wrong number of child nodes
      0 : all nodes match
      1 : when source has an unknown type (e.g. java.lang.Object) when comparing to target
      2 : when target has an unknown type (e.g. java.lang.Object) when comparing to source
@@ -68,10 +67,6 @@ javadocs can be found via [github pages here](https://apis-and-processors.github
 ## Examples
 
 The [various tests](https://github.com/apis-and-processors/processor-tools/tree/master/src/test/java/com/github/aap/processor/tools) provide many examples that you can use in your own code.
-
-## Components
-
-- guava \- used in helping to parse types from objects
     
 ## Testing
 
@@ -82,3 +77,4 @@ Running tests can be done like so:
 # Additional Resources
 
 * [Guava](https://github.com/google/guava/wiki)
+* [typetools](https://github.com/jhalterman/typetools)

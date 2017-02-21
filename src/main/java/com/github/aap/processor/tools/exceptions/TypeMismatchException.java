@@ -17,7 +17,7 @@
 
 package com.github.aap.processor.tools.exceptions;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.aap.processor.tools.TypeUtils;
 
 /**
  * Thrown when comparing 2 ClassTypes and either the source or target don't match.
@@ -38,8 +38,8 @@ public class TypeMismatchException extends RuntimeException {
      */
     public TypeMismatchException(final String message, final String source, final String target) {
         super(message);
-        this.source = checkNotNull(source, "source cannot be null");
-        this.target = checkNotNull(target, "target cannot be null");
+        this.source = TypeUtils.checkNotNull(source, "source cannot be null");
+        this.target = TypeUtils.checkNotNull(target, "target cannot be null");
     }
     
     /**
@@ -52,7 +52,7 @@ public class TypeMismatchException extends RuntimeException {
      */
     public TypeMismatchException(final String message, final String source, final String target, final Throwable throwable) {
         super(message, throwable);
-        this.source = checkNotNull(source, "source cannot be null");
-        this.target = checkNotNull(target, "target cannot be null");
+        this.source = TypeUtils.checkNotNull(source, "source cannot be null");
+        this.target = TypeUtils.checkNotNull(target, "target cannot be null");
     }
 }

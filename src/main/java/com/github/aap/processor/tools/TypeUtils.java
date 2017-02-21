@@ -20,10 +20,8 @@ package com.github.aap.processor.tools;
 import com.github.aap.processor.tools.utils.Constants;
 import com.github.aap.processor.tools.domain.ClassType;
 import com.github.aap.processor.tools.types.PrimitiveTypes;
-import com.google.common.base.Throwables;
-import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Field;
-import java.util.Set;
+import java.lang.reflect.Type;
 import javax.lang.model.SourceVersion;
 
 /**
@@ -44,6 +42,27 @@ public class TypeUtils {
         }
     }
     
+    /** 
+     * Ensures that an object reference passed as a parameter to the calling method is not null.
+     * 
+     * <p>
+     * This snippet was copied directly from https://github.com/google/guava/blob/master/guava/src/com/google/common/base/Preconditions.java
+     * </p>
+     * 
+     * @param <T> the type this method takes and subsequently returns
+     * @param reference an object reference
+     * @param errorMessage the exception message to use if the check fails; will be converted to a
+     *     string using {@link String#valueOf(Object)}
+     * @return the non-null reference that was validated
+     * @throws NullPointerException if {@code reference} is null
+     */
+    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
+        if (reference == null) {
+            throw new NullPointerException(String.valueOf(errorMessage));
+        }
+        return reference;
+    }
+  
     /**
      * Turns some Type (e.g. Class, Object, etc.) into a ClassType.
      * 
@@ -80,9 +99,8 @@ public class TypeUtils {
                 if (clazz.getGenericSuperclass().getTypeName().equals(Constants.OBJECT_CLASS)) {
                     final ClassType clazzType = parseClassType(clazz.getName());
                     if (clazz.getInterfaces().length > 0) {
-                        final Set<TypeToken> tt = TypeToken.of(clazz).getTypes().interfaces();
-                        for (final TypeToken type : tt) {
-                            clazzType.add(parseClassType(type.getType().getTypeName(), clazzType, null));
+                        for (final Type possibleType : clazz.getGenericInterfaces()) {
+                            clazzType.add(parseClassType(possibleType.getTypeName(), clazzType, null));
                         }
                     }
                     return clazzType;
@@ -165,7 +183,7 @@ public class TypeUtils {
                 }                
             }            
         } catch (IllegalAccessException | IllegalArgumentException ex) {
-            throw Throwables.propagate(ex);
+            throw new RuntimeException(ex);
         }
 
         return classType;  
