@@ -5,6 +5,17 @@
 
 Utilities for dealing with generics and types
 
+## Latest release
+
+Can be sourced from jcenter like so:
+
+    <dependency>
+      <groupId>com.github.aap</groupId>
+      <artifactId>processor-tools</artifactId>
+      <version>0.0.1</version>
+      <classifier>sources|tests|javadoc|all</classifier> (Optional)
+    </dependency>
+    
 ## Motivation
 
 In designing the [api-processor](https://github.com/apis-and-processors/api-processor) I needed a way to look at a given class and resolve all of it's potential types and then compare those types to their runtime implementations passed in by the end user. While libraries like [guava](https://github.com/google/guava) and [typetools](https://github.com/jhalterman/typetools) do type-related work, and indeed the former is used here to some extent, I required a different approach that had built in support for comparing classes with potentially N number of types.
@@ -25,7 +36,7 @@ While this library has many tools most folks will be interested in `TypeUtils` a
         }
     }
 
-It implements Function with types `Integer` and `Boolean` on top of implementing Comparable with type `String`. To convert this into a `ClassType` one can do either use the class definition itself:
+It implements Function with types `Integer` and `Boolean` on top of implementing Comparable with type `String`. To convert this into a `ClassType` one can either use the class definition itself:
 
     ClassType helloWorldType = TypeUtils.parseClassType(HelloWorld.class);
 
@@ -33,18 +44,23 @@ or use an instance of HelloWorld:
 
     ClassType helloWorldType = TypeUtils.parseClassType(new SubClassOfHelloWorld());
 
-      
-## Latest release
+The `helloWorldType` ClassType is a typical Node data structure which logically looks like:
 
-Can be sourced from jcenter like so:
+    ClassType:some.path.to.HelloWorld
+        ClassType:java.util.function.Function
+	    ClassType:java.lang.Integer
+	    ClassType:java.lang.Boolean
+	ClassType:java.lang.Comparable
+	    ClassType:java.lang.String
+	  
+Because `ClassType` implements comparable you can compare any node to any other and the compare process will iterate between all possible nodes checking for consistency. The possible values returned from said comparison are as follows:
 
-    <dependency>
-      <groupId>com.github.aap</groupId>
-      <artifactId>processor-tools</artifactId>
-      <version>0.0.1</version>
-      <classifier>sources|tests|javadoc|all</classifier> (Optional)
-    </dependency>
-	
+    -1 : mismatch between any 2 nodes (i.e. java.lang.Integer does not match java.lang.Boolean)
+     0 : all nodes match
+     1 : when source has an unknown type (e.g. java.lang.Object) when comparing to target
+     2 : when target has an unknown type (e.g. java.lang.Object) when comparing to source
+     3 : when source or target both have unknown types when comparing to their counterparts
+    
 ## Documentation
 
 javadocs can be found via [github pages here](https://apis-and-processors.github.io/processor-tools/docs/javadoc/)
