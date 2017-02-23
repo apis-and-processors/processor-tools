@@ -50,7 +50,7 @@ public enum PrimitiveTypes {
     private final Class boxedClass;
     private final boolean nullable;
     
-    private PrimitiveTypes(String name, Object defaultValue, Class primitiveClass, Class boxedClass, boolean nullable) {
+    private PrimitiveTypes(final String name, final Object defaultValue, final Class primitiveClass, final Class boxedClass, final boolean nullable) {
         this.name = name;
         this.defaultValue = defaultValue;
         this.primitiveClass = primitiveClass;
@@ -84,11 +84,11 @@ public enum PrimitiveTypes {
      * @param obj Object to infer PrimitiveType from.
      * @return PrimitiveType.
      */
-    public static PrimitiveTypes from(Object obj) {
+    public static PrimitiveTypes from(final Object obj) {
         return obj == null ? PrimitiveTypes.NULL : from(obj instanceof Class ? ((Class)obj).getName() : obj.toString());
     }
     
-    private static PrimitiveTypes from(String name) {
+    private static PrimitiveTypes from(final String name) {
         PrimitiveTypes possibleType = null;
         if (name == null || name.trim().equalsIgnoreCase(Constants.NULL_STRING)) {
             possibleType = PrimitiveTypes.NULL;
@@ -102,7 +102,7 @@ public enum PrimitiveTypes {
             
             if (possibleType == null) {
                 for (int i = 0; i < PrimitiveTypes.values().length; i++) {
-                    PrimitiveTypes iteration = PrimitiveTypes.values()[i];
+                    final PrimitiveTypes iteration = PrimitiveTypes.values()[i];
                     if (name.equalsIgnoreCase(iteration.getPrimitveClass().getName()) || name.equalsIgnoreCase(iteration.getBoxedClass().getName())) {
                         possibleType = iteration;
                         break;
