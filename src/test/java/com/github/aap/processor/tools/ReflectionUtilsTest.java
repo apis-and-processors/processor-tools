@@ -1,3 +1,5 @@
+package com.github.aap.processor.tools;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -15,9 +17,8 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools.types;
 
-import com.github.aap.processor.tools.ReflectionUtils;
+
 import com.github.aap.processor.tools.domain.Null;
 import java.util.ArrayList;
 import java.util.HashMap;
