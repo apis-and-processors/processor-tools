@@ -17,6 +17,7 @@
 
 package com.github.aap.processor.tools;
 
+import com.github.aap.processor.tools.domain.Null;
 import com.github.aap.processor.tools.types.PrimitiveTypes;
 import com.github.aap.processor.tools.domain.Unknown;
 import java.lang.reflect.Constructor;
@@ -71,6 +72,8 @@ public class ReflectionUtils {
 
                 if (clazz.isAssignableFrom(Unknown.class)) {
                     return (T) Unknown.INSTANCE;
+                } else if (clazz.isAssignableFrom(Null.class)) {
+                    return (T) Null.INSTANCE;
                 }
                 
                 final PrimitiveTypes found = PrimitiveTypes.from(clazz);

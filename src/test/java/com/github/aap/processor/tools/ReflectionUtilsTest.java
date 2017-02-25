@@ -77,7 +77,7 @@ public class ReflectionUtilsTest {
         assertNull(voidObj);
         
         final Null nullObj = ReflectionUtils.newInstance(Null.class);
-        assertNull(nullObj);
+        assertNotNull(nullObj);
     }
     
     @Test
@@ -119,7 +119,7 @@ public class ReflectionUtilsTest {
         assertNull(voidObj);
         
         final Null nullObj = ReflectionUtils.newInstance(Null.class);
-        assertNull(nullObj);
+        assertNotNull(nullObj);
     }
     
     @Test

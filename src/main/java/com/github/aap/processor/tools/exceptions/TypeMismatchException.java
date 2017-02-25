@@ -28,6 +28,18 @@ public class TypeMismatchException extends RuntimeException {
     
     public final String source;
     public final String target;
+
+    /**
+     * Create TypeMismatchException.
+     * 
+     * @param message message of exception.
+     * @param source non-null source type.
+     */
+    public TypeMismatchException(final String message, final String source) {
+        super(message);
+        this.source = TypeUtils.checkNotNull(source, "source cannot be null");
+        this.target = null;
+    }
     
     /**
      * Create TypeMismatchException.

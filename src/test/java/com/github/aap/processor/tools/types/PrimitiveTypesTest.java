@@ -161,7 +161,7 @@ public class PrimitiveTypesTest {
         assertTrue(clazzType.toString().equals(PrimitiveTypes.NULL.getBoxedClass().getName()));
         assertTrue(clazzType.toClass().equals(PrimitiveTypes.NULL.getBoxedClass()));
         final Null instance = Null.class.cast(clazzType.toInstance());
-        assertNull(instance);
+        assertNotNull(instance);
     }
     
     @Test

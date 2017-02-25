@@ -18,6 +18,7 @@
 package com.github.aap.processor.tools.domain;
 
 import com.github.aap.processor.tools.TypeUtils;
+import com.github.aap.processor.tools.exceptions.TypeMismatchException;
 import com.github.aap.processor.tools.utils.Constants;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -175,5 +176,18 @@ public class ClassTypeTest {
         assertTrue(helloWorld3.firstSubTypeMatching(FUNCTION_REGEX).compareTo(helloWorld2.firstSubTypeMatching(FUNCTION_REGEX)) == 1);
         assertTrue(helloWorld2.firstSubTypeMatching(FUNCTION_REGEX).compareTo(helloWorld3.firstSubTypeMatching(FUNCTION_REGEX)) == 2);
         assertTrue(helloWorld3.firstSubTypeMatching(FUNCTION_REGEX).compareTo(helloWorld4.firstSubTypeMatching(FUNCTION_REGEX)) == 3);
+    }
+    
+    @Test (expectedExceptions = TypeMismatchException.class)
+    public void testThrowsExceptionOnCompare() {
+        final ClassType helloWorld = TypeUtils.parseClassType(HelloWorld.class);
+        final ClassType helloWorld3 = TypeUtils.parseClassType(HelloWorld3.class);
+        helloWorld.firstSubTypeMatching(COMPARABLE_REGEX).compare(helloWorld3.firstSubTypeMatching(COMPARABLE_REGEX));
+    }
+    
+    @Test (expectedExceptions = TypeMismatchException.class)
+    public void testThrowsExceptionOnCompareWithNull() {
+        final ClassType helloWorld = TypeUtils.parseClassType(HelloWorld.class);
+        helloWorld.firstSubTypeMatching(COMPARABLE_REGEX).compare(null);
     }
 }

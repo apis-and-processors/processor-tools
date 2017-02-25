@@ -122,6 +122,29 @@ public class ClassType implements Comparable<ClassType> {
             return null;
         }        
     }
+        
+    /**
+     * Compare this ClassType to another ClassType.
+     * 
+     * <p>
+     * -1 == source and target do not match
+     * 0 == source and target match
+     * 1 == source has unknown Type
+     * 2 == target has unknown Type
+     * 3 == source and target both have unknown Types
+     * </p>
+     * 
+     * @param target ClassType to compare this ClassType to.
+     * @return value representing comparison.
+     */
+    @Override
+    public int compareTo(final ClassType target) {
+        try {
+            return compare(target);
+        } catch (TypeMismatchException e) {
+            return -1;
+        }
+    }
     
     /**
      * Compare this ClassType to another ClassType.
@@ -134,15 +157,16 @@ public class ClassType implements Comparable<ClassType> {
      * 3 == source and target both have unknown Types
      * </p>
      * 
-     * @param compareTo ClassType to compare this ClassType to.
+     * @param target ClassType to compare this ClassType to.
      * @return value representing comparison.
+     * @throws TypeMismatchException if target is null or any 2 types cannot be compared
      */
-    @Override
-    public int compareTo(final ClassType compareTo) {
-        try {
-            return compare(this, compareTo);
-        } catch (NullPointerException | TypeMismatchException e) {
-            return -1;
+    public int compare(final ClassType target) {
+        if (target != null) {
+            return compare(this, target);
+        } else {
+            throw new TypeMismatchException("Source type '" + this.name() 
+                    + "' cannot be comapred to NULL target type", this.name());
         }
     }
     
