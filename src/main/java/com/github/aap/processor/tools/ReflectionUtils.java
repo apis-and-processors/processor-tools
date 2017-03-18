@@ -79,8 +79,8 @@ public class ReflectionUtils {
                 final PrimitiveTypes found = PrimitiveTypes.from(clazz);
                 if (found != null) {
                     return (T) found.getDefaultValue();
-                } else {
-                    final Constructor noArgConstructor = clazz.getDeclaredConstructors()[0];
+                } else {                    
+                    final Constructor noArgConstructor = clazz.getDeclaredConstructors()[clazz.getDeclaredConstructors().length - 1];
                     noArgConstructor.setAccessible(true);
                     return clazz.cast(noArgConstructor.newInstance(EMPTY_OBJECT_ARRAY));
                 }

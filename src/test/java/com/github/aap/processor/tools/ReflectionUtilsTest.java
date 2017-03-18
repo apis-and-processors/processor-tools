@@ -38,7 +38,24 @@ import org.testng.annotations.Test;
  */
 public class ReflectionUtilsTest {
 
-    @Test
+    private class InnerTestClass implements Comparable {
+        public void noop() {}
+
+        @Override
+        public int compareTo(final Object object) {
+            return 0;
+        }
+    }
+    
+    @Test 
+    public void createInnerClasses() {
+        final InnerTestClass int1 = new InnerTestClass();
+        assertNotNull(int1);
+        final InnerTestClass int2 = ReflectionUtils.newInstance(InnerTestClass.class);
+        assertNotNull(int2);
+    }
+    
+    @Test 
     public void initPrimitiveClasses() throws Exception {
 
         final Short shortObj = ReflectionUtils.newInstance(short.class);
@@ -80,7 +97,7 @@ public class ReflectionUtilsTest {
         assertNotNull(nullObj);
     }
     
-    @Test
+    @Test 
     public void initBoxedPrimitiveClasses() throws Exception {
 
         final Short shortObj = ReflectionUtils.newInstance(Short.class);
@@ -122,7 +139,7 @@ public class ReflectionUtilsTest {
         assertNotNull(nullObj);
     }
     
-    @Test
+    @Test 
     public void initDataStructureInterfaces() {
         
         final Map<String, String> map = ReflectionUtils.newInstance(Map.class);
@@ -141,7 +158,7 @@ public class ReflectionUtilsTest {
         assertTrue(map.size() == 1);
     }
     
-    @Test
+    @Test 
     public void initDataStructureTypes() {
         
         final Map<String, String> map = ReflectionUtils.newInstance(HashMap.class);
