@@ -217,9 +217,39 @@ public class ClassType implements Comparable<ClassType> {
                 }
                 return counter;
             } else {
-                throw new TypeMismatchException("Source type '" 
-                    + source.name + "' has " + sourceSize + " subTypes while '" 
-                    + target.name + "' has " + targetSize + " subTypes", 
+                
+                final StringBuilder subTypesMessage = new StringBuilder("Source type '")
+                        .append(source.name)
+                        .append("' has ")
+                        .append(sourceSize)
+                        .append(" subTypes ");
+                if (sourceSize > 0) {
+                    subTypesMessage.append('(');
+                    for (int index = 0; index < sourceSize; index++) {
+                        subTypesMessage.append(source.subTypes.get(index).name);
+                        if (index != sourceSize - 1) {
+                            subTypesMessage.append(", ");
+                        }
+                    }
+                    subTypesMessage.append(") while ");
+                }
+                
+                subTypesMessage.append(target.name)
+                        .append("' has ")
+                        .append(targetSize)
+                        .append(" subTypes");
+                if (targetSize > 0) {
+                    subTypesMessage.append(" (");
+                    for (int index = 0; index < targetSize; index++) {
+                        subTypesMessage.append(target.subTypes.get(index).name);
+                        if (index != targetSize - 1) {
+                            subTypesMessage.append(", ");
+                        }
+                    }
+                    subTypesMessage.append(')');
+                } 
+                
+                throw new TypeMismatchException(subTypesMessage.toString(), 
                         source.name, target.name); 
             }
         } else {
