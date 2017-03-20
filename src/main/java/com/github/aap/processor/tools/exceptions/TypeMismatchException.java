@@ -17,7 +17,8 @@
 
 package com.github.aap.processor.tools.exceptions;
 
-import com.github.aap.processor.tools.TypeUtils;
+import com.github.aap.processor.tools.ClassTypeParser;
+import static com.github.aap.processor.tools.Preconditions.checkIsNull;
 
 /**
  * Thrown when comparing 2 ClassTypes and either the source or target don't match.
@@ -37,7 +38,7 @@ public class TypeMismatchException extends RuntimeException {
      */
     public TypeMismatchException(final String message, final String source) {
         super(message);
-        this.source = TypeUtils.checkNotNull(source, "source cannot be null");
+        this.source = checkIsNull(source, "source cannot be null");
         this.target = null;
     }
     
@@ -50,8 +51,8 @@ public class TypeMismatchException extends RuntimeException {
      */
     public TypeMismatchException(final String message, final String source, final String target) {
         super(message);
-        this.source = TypeUtils.checkNotNull(source, "source cannot be null");
-        this.target = TypeUtils.checkNotNull(target, "target cannot be null");
+        this.source = checkIsNull(source, "source cannot be null");
+        this.target = checkIsNull(target, "target cannot be null");
     }
     
     /**
@@ -64,7 +65,7 @@ public class TypeMismatchException extends RuntimeException {
      */
     public TypeMismatchException(final String message, final String source, final String target, final Throwable throwable) {
         super(message, throwable);
-        this.source = TypeUtils.checkNotNull(source, "source cannot be null");
-        this.target = TypeUtils.checkNotNull(target, "target cannot be null");
+        this.source = checkIsNull(source, "source cannot be null");
+        this.target = checkIsNull(target, "target cannot be null");
     }
 }

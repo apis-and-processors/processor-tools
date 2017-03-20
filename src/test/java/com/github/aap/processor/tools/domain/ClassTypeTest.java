@@ -17,7 +17,7 @@
 
 package com.github.aap.processor.tools.domain;
 
-import com.github.aap.processor.tools.TypeUtils;
+import com.github.aap.processor.tools.ClassTypeParser;
 import com.github.aap.processor.tools.exceptions.TypeMismatchException;
 import com.github.aap.processor.tools.utils.Constants;
 import java.util.ArrayList;
@@ -76,38 +76,38 @@ public class ClassTypeTest {
         
         String fullyQualifiedName = "java.util.HashSet";
         Object instance = new HashSet<>();
-        ClassType type = TypeUtils.parseClassType(instance);
+        ClassType type = ClassTypeParser.parseClassType(instance);
         assertNotNull(type);
         assertNull(type.parent());
         assertTrue(type.name().equals(fullyQualifiedName));
         assertTrue(type.subTypes().size() == 1);
         assertTrue(type.subTypeAtIndex(0).name().equals(Constants.OBJECT_CLASS));
         assertTrue(type.subTypeAtIndex(0).parent().name().equals(fullyQualifiedName));
-        assertTrue(type.compareTo(TypeUtils.parseClassType(instance)) == 3);
+        assertTrue(type.compareTo(ClassTypeParser.parseClassType(instance)) == 3);
         
         fullyQualifiedName = "java.util.ArrayList";
         instance = new ArrayList<>();
-        type = TypeUtils.parseClassType(instance);
+        type = ClassTypeParser.parseClassType(instance);
         assertNotNull(type);
         assertNull(type.parent());
         assertTrue(type.name().equals(fullyQualifiedName));
         assertTrue(type.subTypes().size() == 1);
         assertTrue(type.subTypeAtIndex(0).name().equals(Constants.OBJECT_CLASS));
         assertTrue(type.subTypeAtIndex(0).parent().name().equals(fullyQualifiedName));
-        assertTrue(type.compareTo(TypeUtils.parseClassType(instance)) == 3);
+        assertTrue(type.compareTo(ClassTypeParser.parseClassType(instance)) == 3);
 
         fullyQualifiedName = "java.util.Properties";
         instance = new Properties();
-        type = TypeUtils.parseClassType(instance);
+        type = ClassTypeParser.parseClassType(instance);
         assertNotNull(type);
         assertNull(type.parent());
         assertTrue(type.name().equals(fullyQualifiedName));
         assertTrue(type.subTypes().isEmpty());
-        assertTrue(type.compareTo(TypeUtils.parseClassType(instance)) == 0);
+        assertTrue(type.compareTo(ClassTypeParser.parseClassType(instance)) == 0);
         
         fullyQualifiedName = "java.util.HashMap";
         instance = new HashMap<>();
-        type = TypeUtils.parseClassType(instance);
+        type = ClassTypeParser.parseClassType(instance);
         assertNotNull(type);
         assertNull(type.parent());
         assertTrue(type.name().equals(fullyQualifiedName));
@@ -116,13 +116,13 @@ public class ClassTypeTest {
         assertTrue(type.subTypeAtIndex(0).parent().name().equals(fullyQualifiedName));
         assertTrue(type.subTypeAtIndex(1).name().equals(Constants.OBJECT_CLASS));
         assertTrue(type.subTypeAtIndex(1).parent().name().equals(fullyQualifiedName));
-        assertTrue(type.compareTo(TypeUtils.parseClassType(instance)) == 3);
+        assertTrue(type.compareTo(ClassTypeParser.parseClassType(instance)) == 3);
     }
     
     @Test
     public void testDataStructuresToClassTypes() {
 
-        final ClassType helloWorld = TypeUtils.parseClassType(HelloWorld.class);
+        final ClassType helloWorld = ClassTypeParser.parseClassType(HelloWorld.class);
         assertNotNull(helloWorld);
         assertNull(helloWorld.parent());
         assertNull(helloWorld.firstSubTypeMatching(".*NonExistentType.*"));
@@ -165,10 +165,10 @@ public class ClassTypeTest {
     @Test (dependsOnMethods = "testDataStructuresToClassTypes")
     public void testDataStructuresComparison() {
         
-        final ClassType helloWorld = TypeUtils.parseClassType(HelloWorld.class);
-        final ClassType helloWorld2 = TypeUtils.parseClassType(HelloWorld2.class);
-        final ClassType helloWorld3 = TypeUtils.parseClassType(HelloWorld3.class);
-        final ClassType helloWorld4 = TypeUtils.parseClassType(HelloWorld4.class);
+        final ClassType helloWorld = ClassTypeParser.parseClassType(HelloWorld.class);
+        final ClassType helloWorld2 = ClassTypeParser.parseClassType(HelloWorld2.class);
+        final ClassType helloWorld3 = ClassTypeParser.parseClassType(HelloWorld3.class);
+        final ClassType helloWorld4 = ClassTypeParser.parseClassType(HelloWorld4.class);
 
         assertTrue(helloWorld.compareTo(helloWorld2) == -1);
         assertTrue(helloWorld.firstSubTypeMatching(COMPARABLE_REGEX).compareTo(helloWorld3.firstSubTypeMatching(COMPARABLE_REGEX)) == -1);
@@ -180,14 +180,14 @@ public class ClassTypeTest {
     
     @Test (expectedExceptions = TypeMismatchException.class)
     public void testThrowsExceptionOnCompare() {
-        final ClassType helloWorld = TypeUtils.parseClassType(HelloWorld.class);
-        final ClassType helloWorld3 = TypeUtils.parseClassType(HelloWorld3.class);
+        final ClassType helloWorld = ClassTypeParser.parseClassType(HelloWorld.class);
+        final ClassType helloWorld3 = ClassTypeParser.parseClassType(HelloWorld3.class);
         helloWorld.firstSubTypeMatching(COMPARABLE_REGEX).compare(helloWorld3.firstSubTypeMatching(COMPARABLE_REGEX));
     }
     
     @Test (expectedExceptions = TypeMismatchException.class)
     public void testThrowsExceptionOnCompareWithNull() {
-        final ClassType helloWorld = TypeUtils.parseClassType(HelloWorld.class);
+        final ClassType helloWorld = ClassTypeParser.parseClassType(HelloWorld.class);
         helloWorld.firstSubTypeMatching(COMPARABLE_REGEX).compare(null);
     }
 }

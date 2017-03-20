@@ -18,7 +18,8 @@
 package com.github.aap.processor.tools.domain;
 
 import com.github.aap.processor.tools.ReflectionUtils;
-import com.github.aap.processor.tools.TypeUtils;
+import com.github.aap.processor.tools.ClassTypeParser;
+import static com.github.aap.processor.tools.Preconditions.checkIsNull;
 import com.github.aap.processor.tools.utils.Constants;
 
 import com.github.aap.processor.tools.exceptions.TypeMismatchException;
@@ -37,7 +38,7 @@ public class ClassType implements Comparable<ClassType> {
     private final List<ClassType> subTypes = new ArrayList<>();
 
     public ClassType(final String name, final ClassType parent) {
-        this.name = TypeUtils.checkNotNull(name, "ClassType name cannot be null").intern();
+        this.name = checkIsNull(name, "ClassType name cannot be null").intern();
         this.parent = parent;
     }  
 

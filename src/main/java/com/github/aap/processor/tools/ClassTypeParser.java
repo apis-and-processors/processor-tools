@@ -29,7 +29,7 @@ import javax.lang.model.SourceVersion;
  *
  * @author dancc
  */
-public class TypeUtils {
+public class ClassTypeParser {
    
     private static final Field[] VALUE_FIELD = new Field[1];
     
@@ -41,27 +41,6 @@ public class TypeUtils {
             // ignore as we know the field exists
         }
     }
-    
-    /** 
-     * Ensures that an object reference passed as a parameter to the calling method is not null.
-     * 
-     * <p>
-     * This snippet was copied directly from https://github.com/google/guava/blob/master/guava/src/com/google/common/base/Preconditions.java
-     * </p>
-     * 
-     * @param <T> the type this method takes and subsequently returns
-     * @param reference an object reference
-     * @param errorMessage the exception message to use if the check fails; will be converted to a
-     *     string using {@link String#valueOf(Object)}
-     * @return the non-null reference that was validated
-     * @throws NullPointerException if {@code reference} is null
-     */
-    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
-        if (reference == null) {
-            throw new NullPointerException(String.valueOf(errorMessage));
-        }
-        return reference;
-    }
   
     /**
      * Turns some Type (e.g. Class, Object, etc.) into a ClassType.
@@ -69,7 +48,7 @@ public class TypeUtils {
      * @param obj arbitrary object
      * @return ClassType
      */
-    public static ClassType parseClassType(final Object obj) {
+    public static ClassType parse(final Object obj) {
         Class potentialClazz;
         if (obj != null) {
             if (obj instanceof Class) {
@@ -84,41 +63,41 @@ public class TypeUtils {
             potentialClazz = PrimitiveTypes.from(obj).getBoxedClass();
         }
         
-        return parseClassType(potentialClazz);
+        return parse(potentialClazz);
     }
     
-    private static ClassType parseClassType(final Class clazz) {
+    private static ClassType parse(final Class clazz) {
         if (clazz.getGenericSuperclass() != null) {
             
             // check if generic string already returns type info: public class java.util.ArrayList<E>
             final boolean isAlreadyGeneric = clazz.toGenericString().matches(Constants.CLASS_REGEX);
             if (isAlreadyGeneric) {
                 final String [] parts = clazz.toGenericString().split(Constants.SPACE_STRING);
-                return parseClassType(parts[parts.length - 1], null, null);
+                return parse(parts[parts.length - 1], null, null);
             } else {
                 if (clazz.getGenericSuperclass().getTypeName().equals(Constants.OBJECT_CLASS)) {
-                    final ClassType clazzType = parseClassType(clazz.getName());
+                    final ClassType clazzType = parse(clazz.getName());
                     if (clazz.getInterfaces().length > 0) {
                         for (final Type possibleType : clazz.getGenericInterfaces()) {
-                            clazzType.add(parseClassType(possibleType.getTypeName(), clazzType, null));
+                            clazzType.add(parse(possibleType.getTypeName(), clazzType, null));
                         }
                     }
                     return clazzType;
                 } else {
-                    return parseClassType(clazz.getGenericSuperclass());
+                    return parse(clazz.getGenericSuperclass());
                 }       
             }
         } else {
             final String [] parts = clazz.toGenericString().split(Constants.SPACE_STRING);
-            return parseClassType(parts[parts.length - 1], null, null);
+            return parse(parts[parts.length - 1], null, null);
         }
     }
         
-    private static ClassType parseClassType(final String clazz) {
-        return parseClassType(clazz, null, null);
+    private static ClassType parse(final String clazz) {
+        return parse(clazz, null, null);
     }
         
-    private static ClassType parseClassType(final String clazzAndTypes, final ClassType parentType, StringBuilder builder) {
+    private static ClassType parse(final String clazzAndTypes, final ClassType parentType, StringBuilder builder) {
 
         if (SourceVersion.isName(clazzAndTypes) 
                 && clazzAndTypes.indexOf(Constants.PERIOD_CHAR) == -1) {
@@ -158,7 +137,7 @@ public class TypeUtils {
                         if (i == stopPoint) {
                             final String foundType = builder.toString();  
                             builder.setLength(0);
-                            final ClassType type = parseClassType(foundType, classType, builder);
+                            final ClassType type = parse(foundType, classType, builder);
                             classType.add(type);
                         }   
                         break;
@@ -167,7 +146,7 @@ public class TypeUtils {
                             builder.deleteCharAt(builder.length() - 1);
                             final String foundType = builder.toString();
                             builder.setLength(0);
-                            final ClassType type = parseClassType(foundType, classType, builder);
+                            final ClassType type = parse(foundType, classType, builder);
                             classType.add(type);                                
                         } 
                         break;
@@ -175,7 +154,7 @@ public class TypeUtils {
                         if (i == stopPoint) {
                             final String foundType = builder.toString();
                             builder.setLength(0);
-                            final ClassType type = parseClassType(foundType, classType, builder);
+                            final ClassType type = parse(foundType, classType, builder);
                             classType.add(type);  
                         } 
                         break;
@@ -189,7 +168,7 @@ public class TypeUtils {
         return classType;  
     }
     
-    private TypeUtils() {
+    private ClassTypeParser() {
         throw new UnsupportedOperationException("Purposely not implemented");
     }
 }

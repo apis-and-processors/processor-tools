@@ -17,6 +17,7 @@
 
 package com.github.aap.processor.tools;
 
+import static com.github.aap.processor.tools.Preconditions.checkIsNull;
 import com.github.aap.processor.tools.domain.Null;
 import com.github.aap.processor.tools.types.PrimitiveTypes;
 import com.github.aap.processor.tools.domain.Unknown;
@@ -47,7 +48,7 @@ public class ReflectionUtils {
      * @return new instance of arbitrary class.
      */
     public static <T> T newInstance(final Class<T> clazz) {   
-        TypeUtils.checkNotNull(clazz, "clazz cannot be null");
+        checkIsNull(clazz, "clazz cannot be null");
         if (clazz.isInterface()) {
             try {
                 

@@ -26,7 +26,7 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 /**
- * Random tests to catch potential quirks in using TypeUtils.
+ * Random tests to catch potential quirks in using ClassTypeParser.
  * 
  * @author cdancy
  */
@@ -35,7 +35,7 @@ public class TypeUtilsTest {
     @Test
     public void testNullType() {
         
-        final ClassType instance = TypeUtils.parseClassType(null);
+        final ClassType instance = ClassTypeParser.parseClassType(null);
         assertNotNull(instance);
         assertTrue(instance.toClass() == Null.class);
         assertTrue(instance.toInstance().toString().equals("null"));
@@ -44,7 +44,7 @@ public class TypeUtilsTest {
     @Test
     public void testEmptyStringType() {
         
-        final ClassType instance = TypeUtils.parseClassType("");
+        final ClassType instance = ClassTypeParser.parseClassType("");
         assertNotNull(instance);
         assertTrue(instance.toClass() == String.class);
         assertTrue(instance.toInstance().toString().equals(""));
@@ -53,7 +53,7 @@ public class TypeUtilsTest {
     @Test
     public void testPrimitiveType() {
         
-        final ClassType instance = TypeUtils.parseClassType(123);
+        final ClassType instance = ClassTypeParser.parseClassType(123);
         assertNotNull(instance);
         assertTrue(instance.toClass() == Integer.class);
         assertTrue(instance.toInstance().toString().equals("0"));

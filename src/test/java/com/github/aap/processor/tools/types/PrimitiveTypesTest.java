@@ -17,7 +17,7 @@
 
 package com.github.aap.processor.tools.types;
 
-import com.github.aap.processor.tools.TypeUtils;
+import com.github.aap.processor.tools.ClassTypeParser;
 import com.github.aap.processor.tools.domain.ClassType;
 import com.github.aap.processor.tools.domain.Null;
 import com.github.aap.processor.tools.domain.Unknown;
@@ -38,7 +38,7 @@ public class PrimitiveTypesTest {
     @Test
     public void shortToShort() throws Exception {
         
-        final ClassType clazzType = TypeUtils.parseClassType(short.class);
+        final ClassType clazzType = ClassTypeParser.parseClassType(short.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.SHORT.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.SHORT.getBoxedClass().getName()));
@@ -51,7 +51,7 @@ public class PrimitiveTypesTest {
     @Test
     public void intToInteger() throws Exception {
         
-        final ClassType clazzType = TypeUtils.parseClassType(int.class);
+        final ClassType clazzType = ClassTypeParser.parseClassType(int.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.INT.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.INT.getBoxedClass().getName()));
@@ -64,7 +64,7 @@ public class PrimitiveTypesTest {
     @Test
     public void longToLong() throws Exception {
         
-        final ClassType clazzType = TypeUtils.parseClassType(long.class);
+        final ClassType clazzType = ClassTypeParser.parseClassType(long.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.LONG.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.LONG.getBoxedClass().getName()));
@@ -77,7 +77,7 @@ public class PrimitiveTypesTest {
     @Test
     public void floatToFloat() throws Exception {
         
-        final ClassType clazzType = TypeUtils.parseClassType(float.class);
+        final ClassType clazzType = ClassTypeParser.parseClassType(float.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.FLOAT.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.FLOAT.getBoxedClass().getName()));
@@ -90,7 +90,7 @@ public class PrimitiveTypesTest {
     @Test
     public void doubleToDouble() throws Exception {
         
-        final ClassType clazzType = TypeUtils.parseClassType(double.class);
+        final ClassType clazzType = ClassTypeParser.parseClassType(double.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.DOUBLE.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.DOUBLE.getBoxedClass().getName()));
@@ -103,7 +103,7 @@ public class PrimitiveTypesTest {
     @Test
     public void byteToByte() throws Exception {
         
-        final ClassType clazzType = TypeUtils.parseClassType(byte.class);
+        final ClassType clazzType = ClassTypeParser.parseClassType(byte.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.BYTE.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.BYTE.getBoxedClass().getName()));
@@ -117,7 +117,7 @@ public class PrimitiveTypesTest {
     @Test
     public void charToCharacter() throws Exception {
         
-        final ClassType clazzType = TypeUtils.parseClassType(char.class);
+        final ClassType clazzType = ClassTypeParser.parseClassType(char.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.CHAR.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.CHAR.getBoxedClass().getName()));
@@ -130,7 +130,7 @@ public class PrimitiveTypesTest {
     @Test
     public void booleanToBoolean() throws Exception {
         
-        final ClassType clazzType = TypeUtils.parseClassType(boolean.class);
+        final ClassType clazzType = ClassTypeParser.parseClassType(boolean.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.BOOLEAN.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.BOOLEAN.getBoxedClass().getName()));
@@ -143,7 +143,7 @@ public class PrimitiveTypesTest {
     @Test
     public void voidToVoid() throws Exception {
         
-        final ClassType clazzType = TypeUtils.parseClassType(void.class);
+        final ClassType clazzType = ClassTypeParser.parseClassType(void.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.VOID.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.VOID.getBoxedClass().getName()));
@@ -155,7 +155,7 @@ public class PrimitiveTypesTest {
     @Test
     public void nullToNull() throws Exception {
         
-        final ClassType clazzType = TypeUtils.parseClassType(null);
+        final ClassType clazzType = ClassTypeParser.parseClassType(null);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.NULL.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.NULL.getBoxedClass().getName()));
@@ -167,7 +167,7 @@ public class PrimitiveTypesTest {
     @Test
     public void unknownToUnknown() throws Exception {
         
-        final ClassType clazzType = TypeUtils.parseClassType(Unknown.INSTANCE);
+        final ClassType clazzType = ClassTypeParser.parseClassType(Unknown.INSTANCE);
         assertNotNull(clazzType);
         final Unknown instance = Unknown.class.cast(clazzType.toInstance());
         assertNotNull(instance);
