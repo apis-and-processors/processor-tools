@@ -30,12 +30,12 @@ import org.testng.annotations.Test;
  * 
  * @author cdancy
  */
-public class TypeUtilsTest {
+public class ClassTypeParserTest {
     
     @Test
     public void testNullType() {
         
-        final ClassType instance = ClassTypeParser.parseClassType(null);
+        final ClassType instance = ClassTypeParser.parse(null);
         assertNotNull(instance);
         assertTrue(instance.toClass() == Null.class);
         assertTrue(instance.toInstance().toString().equals("null"));
@@ -44,7 +44,7 @@ public class TypeUtilsTest {
     @Test
     public void testEmptyStringType() {
         
-        final ClassType instance = ClassTypeParser.parseClassType("");
+        final ClassType instance = ClassTypeParser.parse("");
         assertNotNull(instance);
         assertTrue(instance.toClass() == String.class);
         assertTrue(instance.toInstance().toString().equals(""));
@@ -53,7 +53,7 @@ public class TypeUtilsTest {
     @Test
     public void testPrimitiveType() {
         
-        final ClassType instance = ClassTypeParser.parseClassType(123);
+        final ClassType instance = ClassTypeParser.parse(123);
         assertNotNull(instance);
         assertTrue(instance.toClass() == Integer.class);
         assertTrue(instance.toInstance().toString().equals("0"));
