@@ -17,9 +17,9 @@
 
 package com.github.aap.processor.tools.domain;
 
-import com.github.aap.processor.tools.ReflectionMagic;
-import com.github.aap.processor.tools.ClassTypeParser;
 import static com.github.aap.processor.tools.Preconditions.checkIsNull;
+
+import com.github.aap.processor.tools.ReflectionMagic;
 import com.github.aap.processor.tools.utils.Constants;
 
 import com.github.aap.processor.tools.exceptions.TypeMismatchException;

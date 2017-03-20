@@ -17,7 +17,6 @@
 
 package com.github.aap.processor.tools.exceptions;
 
-import com.github.aap.processor.tools.ClassTypeParser;
 import static com.github.aap.processor.tools.Preconditions.checkIsNull;
 
 /**
