@@ -35,7 +35,7 @@ import java.util.Set;
  * 
  * @author cdancy
  */
-public class ReflectionUtils {
+public class ReflectionMagic {
     
     private static final Object [] EMPTY_OBJECT_ARRAY = new Object[1];
     private static final Constructor OBJECT_CONSTRUCTOR = Object.class.getDeclaredConstructors()[0];    
