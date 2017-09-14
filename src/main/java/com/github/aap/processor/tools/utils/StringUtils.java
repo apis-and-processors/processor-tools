@@ -29,27 +29,32 @@ import static com.github.aap.processor.tools.Preconditions.failIfNull;
 public class StringUtils {
     
     /**
-     * Count how many times subString appears within targetString.
+     * Get the first occurrence of a subString but ONLY if the subString
+     * appears more than once.
      * 
      * @param targetString String to search for occurrences of subString in.
      * @param subString String that possibly exists within targetString.
-     * @return number of times subString appears within targetString.
+     * @return index of the first occurrence of subString, otherwise -1.
      */
-    public static int countSubString(final String targetString, final String subString) {
+    public static int firstOccurence(final StringBuilder targetString, final String subString) {
         failIfNull(targetString, "targetString cannot be null".intern());
         
         int count = 0;
+        int firstOccurence = -1;
         if (subString != null) {   
             int lastIndex = 0;
             while (lastIndex != -1) {
                 lastIndex = targetString.indexOf(subString, lastIndex);
                 if (lastIndex != -1) {
+                    if (firstOccurence == -1) {
+                        firstOccurence = lastIndex;
+                    }
                     count++;
                     lastIndex += subString.length();
                 }
             }
         }
-        return count;
+        return count > 1 ? firstOccurence : -1;
     }
     
     /**
@@ -60,13 +65,25 @@ public class StringUtils {
      * @param subString String that possibly exists within targetString.
      * @return targetString with first occurrence of subString replaced.
      */
-    public static String replaceFirstSubStringIfAppearsMoreThanOnce(String targetString, final String subString) {
+    public static StringBuilder replaceFirstSubStringIfAppearsMoreThanOnce(final StringBuilder targetString, final String subString) {
         failIfNull(targetString, "targetString cannot be null".intern());
 
-        final int count = countSubString(targetString, subString);
-        if (count > 1) {
-            targetString = targetString.replaceFirst(subString, "");
+        final int index = firstOccurence(targetString, subString);
+        if (index != -1) {
+            targetString.replace(index, subString.length(), "");
         }
         return targetString;
+    }
+    
+    /**
+     * Helper method to convert a String into a StringBuilder.
+     * 
+     * @param convertToBuilder the String to convert to StringBuilder.
+     * @return instance of StringBuilder.
+     */
+    public static StringBuilder toBuilder(final String convertToBuilder) {
+        failIfNull(convertToBuilder, "convertToBuilder cannot be null".intern());
+        final StringBuilder builder = new StringBuilder(convertToBuilder);
+        return builder;
     }
 }

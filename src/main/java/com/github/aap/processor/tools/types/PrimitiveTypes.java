@@ -22,7 +22,7 @@ import com.github.aap.processor.tools.domain.Null;
 
 /**
  * Java primitive types, and some of our own, along with various attributes
- * surrounding there use.
+ * surrounding their use.
  * 
  * @author dancc
  */
@@ -89,7 +89,11 @@ public enum PrimitiveTypes {
      * @return PrimitiveType.
      */
     public static PrimitiveTypes from(final Object obj) {
-        return obj == null ? PrimitiveTypes.NULL : from(obj instanceof Class ? ((Class)obj).getName() : obj.toString());
+        return obj == null 
+                ? PrimitiveTypes.NULL 
+                : from(obj instanceof Class 
+                        ? ((Class)obj).getName() 
+                        : obj.toString());
     }
     
     private static PrimitiveTypes from(final String name) {
