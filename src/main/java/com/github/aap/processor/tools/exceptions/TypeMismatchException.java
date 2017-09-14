@@ -17,7 +17,7 @@
 
 package com.github.aap.processor.tools.exceptions;
 
-import static com.github.aap.processor.tools.Preconditions.failIfNull;
+import static com.github.aap.processor.tools.utils.Preconditions.failIfNull;
 
 /**
  * Thrown when comparing 2 ClassTypes and either the source or target don't match.

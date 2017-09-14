@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools;
+package com.github.aap.processor.tools.utils;
 
 /**
  * Preconditions based blatantly on guava-preconditions without requiring guava.

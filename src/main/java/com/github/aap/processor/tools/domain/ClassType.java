@@ -17,9 +17,9 @@
 
 package com.github.aap.processor.tools.domain;
 
-import static com.github.aap.processor.tools.Preconditions.failIfNull;
+import static com.github.aap.processor.tools.utils.Preconditions.failIfNull;
 
-import com.github.aap.processor.tools.ReflectionMagic;
+import com.github.aap.processor.tools.utils.ReflectionMagic;
 import com.github.aap.processor.tools.utils.Constants;
 
 import com.github.aap.processor.tools.exceptions.TypeMismatchException;

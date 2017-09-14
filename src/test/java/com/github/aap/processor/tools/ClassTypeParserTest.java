@@ -15,9 +15,10 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools.domain;
+package com.github.aap.processor.tools;
 
-import com.github.aap.processor.tools.ClassTypeParser;
+import com.github.aap.processor.tools.domain.ClassType;
+import com.github.aap.processor.tools.domain.Null;
 import com.github.aap.processor.tools.exceptions.TypeMismatchException;
 import com.github.aap.processor.tools.utils.Constants;
 import java.util.ArrayList;
@@ -33,11 +34,11 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 /**
- * Tests for ClassType.
+ * Tests for exercising ClassTypeParser.
  * 
  * @author cdancy
  */
-public class ClassTypeTest {
+public class ClassTypeParserTest {
     
     private static final String COMPARABLE_REGEX = ".*Comparable.*";
     private static final String FUNCTION_REGEX = ".*Function.*";

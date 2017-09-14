@@ -17,7 +17,7 @@
 
 package com.github.aap.processor.tools.utils;
 
-import static com.github.aap.processor.tools.Preconditions.failIfNull;
+import static com.github.aap.processor.tools.utils.Preconditions.failIfNull;
 
 /**
  * Random static methods aiding in string manipulation. These methods

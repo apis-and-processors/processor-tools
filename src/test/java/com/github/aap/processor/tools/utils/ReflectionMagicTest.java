@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools;
+package com.github.aap.processor.tools.utils;
 
 import com.github.aap.processor.tools.domain.Null;
 import java.util.ArrayList;

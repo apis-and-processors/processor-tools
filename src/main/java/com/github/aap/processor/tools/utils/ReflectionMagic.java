@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools;
+package com.github.aap.processor.tools.utils;
 
-import static com.github.aap.processor.tools.Preconditions.failIfNull;
+import static com.github.aap.processor.tools.utils.Preconditions.failIfNull;
 
 import com.github.aap.processor.tools.domain.Null;
 import com.github.aap.processor.tools.types.PrimitiveTypes;
