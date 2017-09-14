@@ -86,11 +86,10 @@ public class ClassTypeParser {
                     final String declaringClass = clazz.getDeclaringClass() != null ? clazz.getDeclaringClass().getName() : null;
                     String sanitizedTypeName = replaceFirstSubStringIfAppearsMoreThanOnce(genericSuperClass, declaringClass);
                     if (sanitizedTypeName.charAt(0) == '.') {
-                        sanitizedTypeName = sanitizedTypeName.substring(1);
+                        sanitizedTypeName = clazz.getName() + "$$" + sanitizedTypeName.substring(1);
                     }
                     
-                    final String fullyQualifiedName = clazz.getName() + "$$" + sanitizedTypeName;
-                    return parse(fullyQualifiedName);
+                    return parse(sanitizedTypeName);
                 }       
             }
         } else {
