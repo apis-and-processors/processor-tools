@@ -66,8 +66,6 @@ public class StringUtils {
      * @return targetString with first occurrence of subString replaced.
      */
     public static StringBuilder replaceFirstSubStringIfAppearsMoreThanOnce(final StringBuilder targetString, final String subString) {
-        failIfNull(targetString, "targetString cannot be null".intern());
-
         final int index = firstOccurence(targetString, subString);
         if (index != -1) {
             targetString.replace(index, subString.length(), "");
