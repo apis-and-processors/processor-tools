@@ -106,13 +106,14 @@ public class ClassTypeParser {
 
     private static ClassType parse(final String clazzAndTypes, final ClassType parentType, StringBuilder builder) {
 
+        // Special case to catch generally parameter types (e.g. K, V, R)
+        // but could potentially be classes as well (though that's a long shot).
+        // We make a best case effort here and say that if no `.` character
+        // exists (i.e. no package is present) then it must be a generic
+        // type and so we just return the Object class.
         if (SourceVersion.isName(clazzAndTypes) 
                 && clazzAndTypes.indexOf(Constants.PERIOD_CHAR) == -1) {
-            try {
-                Class.forName(clazzAndTypes);
-            } catch (ClassNotFoundException cnfe) {
-                return new ClassType(Constants.OBJECT_CLASS, parentType);
-            }
+            return new ClassType(Constants.OBJECT_CLASS, parentType);
         }
         
         final int index = clazzAndTypes.indexOf(Constants.GREATER_THAN);
