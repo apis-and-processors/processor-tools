@@ -27,7 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ClassType representing some Type and potential child Type(s).
+ * ClassType representing an arbitrary Object (e.g. Class, Type, etc.) 
+ * with potentially X number of child Type(s).
  * 
  * @author dancc
  */

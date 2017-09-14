@@ -89,6 +89,33 @@ public class ClassTypeTest {
         public void print(final String obj){}
     }
     
+    @Test
+    public void testNullType() {
+        
+        final ClassType instance = ClassTypeParser.parse(null);
+        assertNotNull(instance);
+        assertTrue(instance.toClass() == Null.class);
+        assertTrue(instance.toInstance().toString().equals("null"));
+    }
+    
+    @Test
+    public void testEmptyStringType() {
+        
+        final ClassType instance = ClassTypeParser.parse("");
+        assertNotNull(instance);
+        assertTrue(instance.toClass() == String.class);
+        assertTrue(instance.toInstance().toString().equals(""));
+    }
+    
+    @Test
+    public void testPrimitiveType() {
+        
+        final ClassType instance = ClassTypeParser.parse(123);
+        assertNotNull(instance);
+        assertTrue(instance.toClass() == Integer.class);
+        assertTrue(instance.toInstance().toString().equals("0"));
+    }
+    
     @Test 
     public void testJavaDataStructuresToClassTypes() {
         

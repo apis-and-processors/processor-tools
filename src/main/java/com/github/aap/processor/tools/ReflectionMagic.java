@@ -44,8 +44,8 @@ public class ReflectionMagic {
     /**
      * Create a new instance from some arbitrary class type.
      * 
-     * @param <T> arbitrary type.
-     * @param clazz arbitrary class.
+     * @param <T> arbitrary Type.
+     * @param clazz arbitrary Class.
      * @return new instance of arbitrary class.
      */
     public static <T> T newInstance(final Class<T> clazz) {

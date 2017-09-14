@@ -29,7 +29,8 @@ import java.lang.reflect.Type;
 import javax.lang.model.SourceVersion;
 
 /**
- * Various static utilities aiding in the use of Types.
+ * Parse a ClassType from a passed Object (e.g. Class, Type, etc.). This class
+ * has exactly 1 exposed entry-point `parse`.
  *
  * @author dancc
  */
@@ -47,24 +48,24 @@ public class ClassTypeParser {
     }
  
     /**
-     * Turns some Object (e.g. Class, Type, etc.) into a ClassType.
+     * Parse an instance of ClassType from some arbitrary Object (e.g. Class, Type, etc.).
      * 
-     * @param obj arbitrary object
+     * @param obj arbitrary Object
      * @return instance of ClassType
      */
-    public static ClassType parse(final Object obj) {
+    public static ClassType parse(final Object parseToClassType) {
         Class potentialClazz;
-        if (obj != null) {
-            if (obj instanceof Class) {
-                potentialClazz = (Class)obj;
+        if (parseToClassType != null) {
+            if (parseToClassType instanceof Class) {
+                potentialClazz = (Class)parseToClassType;
                 if (potentialClazz.isPrimitive()) {
                     potentialClazz = PrimitiveTypes.from(potentialClazz.toGenericString()).getBoxedClass();
                 } 
             } else {  
-                potentialClazz = obj.getClass();
+                potentialClazz = parseToClassType.getClass();
             }
         } else {
-            potentialClazz = PrimitiveTypes.from(obj).getBoxedClass();
+            potentialClazz = PrimitiveTypes.from(parseToClassType).getBoxedClass();
         }
         
         return parseClass(potentialClazz);
