@@ -29,8 +29,13 @@ import java.lang.reflect.Type;
 import javax.lang.model.SourceVersion;
 
 /**
- * Parse a ClassType from a passed Object (e.g. Class, Type, etc.). This class
- * has exactly 1 exposed entry-point `parse`.
+ * Parse a ClassType from an arbitrary Object (e.g. Class, Type, etc.). 
+ * 
+ * <p>
+ * This class has exactly 1 exposed entry-point `parse` which is static and 
+ * the work-horse of this entire project. The idea is that you can pass in 
+ * whatever you want and we'll give you back an instance of ClassType.
+ * </p>
  *
  * @author dancc
  */
@@ -50,7 +55,7 @@ public class ClassTypeParser {
     /**
      * Parse an instance of ClassType from some arbitrary Object (e.g. Class, Type, etc.).
      * 
-     * @param obj arbitrary Object
+     * @param parseToClassType arbitrary Object to parse a ClassType from.
      * @return instance of ClassType
      */
     public static ClassType parse(final Object parseToClassType) {
