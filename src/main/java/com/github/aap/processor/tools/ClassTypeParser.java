@@ -17,6 +17,8 @@
 
 package com.github.aap.processor.tools;
 
+import static com.github.aap.processor.tools.utils.StringUtils.replaceFirstSubStringIfAppearsMoreThanOnce;
+
 import com.github.aap.processor.tools.utils.Constants;
 import com.github.aap.processor.tools.domain.ClassType;
 import com.github.aap.processor.tools.types.PrimitiveTypes;
@@ -41,7 +43,7 @@ public class ClassTypeParser {
             // ignore as we know the field exists
         }
     }
-  
+ 
     /**
      * Turns some Type (e.g. Class, Object, etc.) into a ClassType.
      * 
@@ -56,7 +58,7 @@ public class ClassTypeParser {
                 if (potentialClazz.isPrimitive()) {
                     potentialClazz = PrimitiveTypes.from(potentialClazz.toGenericString()).getBoxedClass();
                 } 
-            } else {
+            } else {            
                 potentialClazz = obj.getClass();
             }
         } else {
@@ -75,28 +77,33 @@ public class ClassTypeParser {
                 final String [] parts = clazz.toGenericString().split(Constants.SPACE_STRING);
                 return parse(parts[parts.length - 1], null, null);
             } else {
+
                 if (clazz.getGenericSuperclass().getTypeName().equals(Constants.OBJECT_CLASS)) {
                     final ClassType clazzType = parse(clazz.getName());
-                    if (clazz.getInterfaces().length > 0) {
-                        for (final Type possibleType : clazz.getGenericInterfaces()) {
-                            clazzType.add(parse(possibleType.getTypeName(), clazzType, null));
-                        }
-                    }
-                    return clazzType;
+                    return attachInterfaceClassTypes(clazzType, clazz);
                 } else {
-                    return parse(clazz.getGenericSuperclass());
+                    final String genericSuperClass = clazz.getGenericSuperclass().toString();
+                    final String declaringClass = clazz.getDeclaringClass() != null ? clazz.getDeclaringClass().getName() : null;
+                    String sanitizedTypeName = replaceFirstSubStringIfAppearsMoreThanOnce(genericSuperClass, declaringClass);
+                    if (sanitizedTypeName.charAt(0) == '.') {
+                        sanitizedTypeName = sanitizedTypeName.substring(1);
+                    }
+                    
+                    final String fullyQualifiedName = clazz.getName() + "$$" + sanitizedTypeName;
+                    return parse(fullyQualifiedName);
                 }       
             }
         } else {
             final String [] parts = clazz.toGenericString().split(Constants.SPACE_STRING);
-            return parse(parts[parts.length - 1], null, null);
+            final ClassType clazzType = parse(parts[parts.length - 1], null, null);
+            return attachInterfaceClassTypes(clazzType, clazz);            
         }
     }
-        
+
     private static ClassType parse(final String clazz) {
         return parse(clazz, null, null);
     }
-        
+
     private static ClassType parse(final String clazzAndTypes, final ClassType parentType, StringBuilder builder) {
 
         if (SourceVersion.isName(clazzAndTypes) 
@@ -166,6 +173,19 @@ public class ClassTypeParser {
         }
 
         return classType;  
+    }
+    
+    private static ClassType attachInterfaceClassTypes(final ClassType clazzType, final Class clazz) {
+        for (final Type possibleType : clazz.getGenericInterfaces()) {
+            final String typeName = possibleType.getTypeName();
+            final String declaringClassName = (clazz.getDeclaringClass() != null) ? clazz.getDeclaringClass().getName() : null;
+            String sanitizedTypeName = replaceFirstSubStringIfAppearsMoreThanOnce(typeName, declaringClassName);
+            if (sanitizedTypeName.charAt(0) == '.') {
+                sanitizedTypeName = sanitizedTypeName.substring(1);
+            }
+            clazzType.add(parse(sanitizedTypeName, clazzType, null));
+        }
+        return clazzType;
     }
     
     private ClassTypeParser() {

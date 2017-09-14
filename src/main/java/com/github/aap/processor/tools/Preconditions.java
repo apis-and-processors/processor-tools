@@ -38,7 +38,7 @@ public class Preconditions {
      * @return the non-null reference that was validated
      * @throws NullPointerException if {@code reference} is null
      */
-    public static <T> T checkIsNull(final T reference, final Object errorMessage) {
+    public static <T> T failIfNull(final T reference, final Object errorMessage) {
         if (reference == null) {
             throw new NullPointerException(String.valueOf(errorMessage));
         }

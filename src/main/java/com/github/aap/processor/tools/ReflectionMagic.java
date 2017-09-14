@@ -17,7 +17,8 @@
 
 package com.github.aap.processor.tools;
 
-import static com.github.aap.processor.tools.Preconditions.checkIsNull;
+import static com.github.aap.processor.tools.Preconditions.failIfNull;
+
 import com.github.aap.processor.tools.domain.Null;
 import com.github.aap.processor.tools.types.PrimitiveTypes;
 import com.github.aap.processor.tools.domain.Unknown;
@@ -47,11 +48,11 @@ public class ReflectionMagic {
      * @param clazz arbitrary class.
      * @return new instance of arbitrary class.
      */
-    public static <T> T newInstance(final Class<T> clazz) {   
-        checkIsNull(clazz, "clazz cannot be null");
+    public static <T> T newInstance(final Class<T> clazz) {
+        failIfNull(clazz, "clazz cannot be null");
         if (clazz.isInterface()) {
             try {
-                
+
                 if (Map.class.isAssignableFrom(clazz)) {
                     return (T) new HashMap();
                 } else if (List.class.isAssignableFrom(clazz)) {

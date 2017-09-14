@@ -71,6 +71,24 @@ public class ClassTypeTest {
         }
     }
     
+    interface GenericInterface<T> {
+        void print(final T obj);
+    }
+    
+    interface ExtendingGenericInterface extends GenericInterface<String> {}
+    
+    class GenericClass<T> {
+        public void print(final T obj){}
+    }
+    
+    class TestGenericClass extends GenericClass<String> {
+        
+    }
+    
+    class TestGenericInterface implements GenericInterface<String> {
+        public void print(final String obj){}
+    }
+    
     @Test 
     public void testJavaDataStructuresToClassTypes() {
         
@@ -189,5 +207,33 @@ public class ClassTypeTest {
     public void testThrowsExceptionOnCompareWithNull() {
         final ClassType helloWorld = ClassTypeParser.parse(HelloWorld.class);
         helloWorld.firstSubTypeMatching(COMPARABLE_REGEX).compare(null);
+    }
+    
+    @Test 
+    public void testGenericClass() {
+        final ClassType classType = ClassTypeParser.parse(TestGenericClass.class);
+        assertTrue(classType.name().equalsIgnoreCase(TestGenericClass.class.getName() + "$$" + GenericClass.class.getName()));
+        assertTrue(classType.subTypes().size() == 1);
+        assertTrue(classType.subTypeAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
+    }
+    
+    @Test 
+    public void testGenericInterface() {
+        final ClassType classType = ClassTypeParser.parse(TestGenericInterface.class);
+        assertTrue(classType.name().equalsIgnoreCase(TestGenericInterface.class.getName()));
+        assertTrue(classType.subTypes().size() == 1);
+        assertTrue(classType.subTypeAtIndex(0).name().equalsIgnoreCase(GenericInterface.class.getName()));
+        assertTrue(classType.subTypeAtIndex(0).subTypes().size() == 1);
+        assertTrue(classType.subTypeAtIndex(0).subTypeAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
+    }
+    
+    @Test 
+    public void testExtendingGenericInterface() {
+        final ClassType classType = ClassTypeParser.parse(ExtendingGenericInterface.class);
+        assertTrue(classType.name().equalsIgnoreCase(ExtendingGenericInterface.class.getName()));
+        assertTrue(classType.subTypes().size() == 1);
+        assertTrue(classType.subTypeAtIndex(0).name().equalsIgnoreCase(GenericInterface.class.getName()));
+        assertTrue(classType.subTypeAtIndex(0).subTypes().size() == 1);
+        assertTrue(classType.subTypeAtIndex(0).subTypeAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
     }
 }

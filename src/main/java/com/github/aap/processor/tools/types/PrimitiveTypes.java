@@ -50,7 +50,11 @@ public enum PrimitiveTypes {
     private final Class boxedClass;
     private final boolean nullable;
     
-    private PrimitiveTypes(final String name, final Object defaultValue, final Class primitiveClass, final Class boxedClass, final boolean nullable) {
+    private PrimitiveTypes(final String name, 
+            final Object defaultValue, 
+            final Class primitiveClass, 
+            final Class boxedClass, 
+            final boolean nullable) {
         this.name = name;
         this.defaultValue = defaultValue;
         this.primitiveClass = primitiveClass;

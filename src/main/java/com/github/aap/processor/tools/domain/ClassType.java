@@ -17,7 +17,7 @@
 
 package com.github.aap.processor.tools.domain;
 
-import static com.github.aap.processor.tools.Preconditions.checkIsNull;
+import static com.github.aap.processor.tools.Preconditions.failIfNull;
 
 import com.github.aap.processor.tools.ReflectionMagic;
 import com.github.aap.processor.tools.utils.Constants;
@@ -38,7 +38,7 @@ public class ClassType implements Comparable<ClassType> {
     private final List<ClassType> subTypes = new ArrayList<>();
 
     public ClassType(final String name, final ClassType parent) {
-        this.name = checkIsNull(name, "ClassType name cannot be null").intern();
+        this.name = failIfNull(name, "ClassType name cannot be null").intern();
         this.parent = parent;
     }  
 
