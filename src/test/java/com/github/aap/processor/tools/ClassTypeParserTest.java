@@ -90,6 +90,10 @@ public class ClassTypeParserTest {
         public void print(final String obj){}
     }
     
+    class TestGenericInterfaceAndGenericClass extends GenericClass<String> implements GenericInterface<String> {
+        public void print(final String obj){}
+    }
+    
     @Test
     public void testNullType() {
         
@@ -240,8 +244,6 @@ public class ClassTypeParserTest {
     @Test 
     public void testGenericClass() {
         final ClassType classType = ClassTypeParser.parse(TestGenericClass.class);
-        System.out.println("actual=" + TestGenericClass.class.getName() + "$$" + GenericClass.class.getName());
-        System.out.println("found=" + classType.name());
         assertTrue(classType.name().equalsIgnoreCase(TestGenericClass.class.getName() + "$$" + GenericClass.class.getName()));
         assertTrue(classType.subTypes().size() == 1);
         assertTrue(classType.subTypeAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
