@@ -28,12 +28,24 @@ import java.lang.reflect.TypeVariable;
 import javax.lang.model.SourceVersion;
 
 /**
- * Parse a ClassType from an arbitrary Object (e.g. Class, Type, etc.). 
+ * Parse a ClassType from an arbitrary Object (e.g. Class, Type, etc.). A ClassType
+ * is a pseudo node data-structure representing a given class, its parent
+ * classes, and all interfaces attached therein.
  * 
  * <p>
  * This class has exactly 1 exposed entry-point `parse` which is static and 
  * the work-horse of this entire project. The idea is that you can pass in 
  * whatever you want and we'll give you back an instance of ClassType.
+ * 
+ * The algorithm involved here recursively climbs a given Classes `extend` hierarchy 
+ * looking for classes and their potential types. Furthermore, and while we're
+ * climbing the `extend` hierarchy, we recursively climb each potential classes 
+ * multiple interface hierarchy, and their potential extended interfaces, looking 
+ * for types.
+ * 
+ * Type's themselves, if not valid (i.e. not an actual java class), will be set
+ * to `java.lang.Object`.
+ * 
  * </p>
  *
  * @author dancc
@@ -71,16 +83,22 @@ public class ClassTypeParser {
      * @return instantiated ClassType.
      */
     private static ClassType parseClass(final Class clazz) {
+        
+        // 1.) init the parent ClassType
         final ClassType parentClassType = ClassType.newInstance(clazz.getName());
         for (final TypeVariable<?> varType: clazz.getTypeParameters()) {
             parentClassType.add(fromTypeName(varType.getTypeName()));
         }
+        
+        // 2.) attach any interfaces as child ClassType's
         if (clazz.getGenericInterfaces().length > 0) {
             for (final Type interfaceType : clazz.getGenericInterfaces()) {
                 parentClassType.add(parseType(interfaceType));
             }
         }
 
+        // 3.) If we have a valid generic super class then recursively
+        //     parse it until we reach null or hit an instance of type Object.
         final Class superClass = clazz.getSuperclass();
         if (superClass != null && !superClass.getName().equals(OBJECT_CLASS)) {
             final Type superType = clazz.getGenericSuperclass();
@@ -100,6 +118,10 @@ public class ClassTypeParser {
      * @return instantiated ClassType.
      */
     private static ClassType parseType(final Type type) {
+        
+        // if we have an instance of ParameterizedType chances are
+        // we'll be able to actually parse out a valid Type, otherwise
+        // we'll have to fall back to the value returned by Type.getTypeName()
         if (type instanceof ParameterizedType) {
             final ParameterizedType pType = (ParameterizedType)type;
             final Class originClass = (Class)pType.getRawType();
@@ -116,6 +138,8 @@ public class ClassTypeParser {
                 }
             }
             
+            // if this Type has a valid super class then start recursively climbing
+            // upwards checking for Type's.
             final Class superClass = originClass.getSuperclass();
             if (superClass != null && !superClass.getName().equals(OBJECT_CLASS)) {
                 final Type superType = originClass.getGenericSuperclass();
@@ -138,8 +162,14 @@ public class ClassTypeParser {
      * @return instantiated ClassType.
      */
     private static ClassType fromTypeName(final String typeName) {
-        return (SourceVersion.isName(typeName) 
-                && typeName.indexOf(PERIOD_CHAR) == -1) 
+        
+        // the idea here is that if the passed String is a reserved java name
+        // or it does NOT contain a package declaration (i.e. no periods) then
+        // we know it's truly generic and thus have NO idea what it is and so
+        // we MUST return a generic Object, otherwise use what is given and
+        // parse as per usual.
+        return (!SourceVersion.isName(typeName) 
+                || typeName.indexOf(PERIOD_CHAR) == -1) 
                 ? ClassType.newInstance(OBJECT_CLASS)
                 : ClassType.newInstance(typeName);
     }
