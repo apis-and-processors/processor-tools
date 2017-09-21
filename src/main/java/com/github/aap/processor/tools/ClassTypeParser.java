@@ -46,6 +46,10 @@ import javax.lang.model.SourceVersion;
  * Type's themselves, if not valid (i.e. not an actual java class), will be set
  * to `java.lang.Object`.
  * 
+ * It should be noted that when we encounter a type variable or argument we do NOT
+ * attempt to parse it like we would do a class or interface as this could 
+ * potentially lead to an infinite loop causing a stack overflow exception.
+ * 
  * </p>
  *
  * @author dancc
