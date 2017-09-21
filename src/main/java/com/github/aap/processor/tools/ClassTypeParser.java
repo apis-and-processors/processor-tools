@@ -17,15 +17,14 @@
 
 package com.github.aap.processor.tools;
 
-import static com.github.aap.processor.tools.utils.StringUtils.replaceFirstSubStringIfAppearsMoreThanOnce;
-import static com.github.aap.processor.tools.utils.Constants.EXTENDS_CLASS_SEPARATOR;
-import static com.github.aap.processor.tools.utils.StringUtils.toBuilder;
+import static com.github.aap.processor.tools.utils.Constants.OBJECT_CLASS;
+import static com.github.aap.processor.tools.utils.Constants.PERIOD_CHAR;
 
-import com.github.aap.processor.tools.utils.Constants;
 import com.github.aap.processor.tools.domain.ClassType;
 import com.github.aap.processor.tools.types.PrimitiveTypes;
-import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import javax.lang.model.SourceVersion;
 
 /**
@@ -40,23 +39,12 @@ import javax.lang.model.SourceVersion;
  * @author dancc
  */
 public class ClassTypeParser {
-   
-    private static final Field[] VALUE_FIELD = new Field[1];
-    
-    static {
-        try {
-            VALUE_FIELD[0] = String.class.getDeclaredField("value");
-            VALUE_FIELD[0].setAccessible(true);
-        } catch (NoSuchFieldException | SecurityException e) {
-            // ignore as we know the field exists
-        }
-    }
  
     /**
      * Parse an instance of ClassType from some arbitrary Object (e.g. Class, Type, etc.).
      * 
      * @param parseToClassType arbitrary Object to parse a ClassType from.
-     * @return instance of ClassType
+     * @return instantiated ClassType.
      */
     public static ClassType parse(final Object parseToClassType) {
         Class potentialClazz;
@@ -76,124 +64,84 @@ public class ClassTypeParser {
         return parseClass(potentialClazz);
     }
 
+    /**
+     * Parse a ClassType from a given Class object.
+     * 
+     * @param clazz arbitrary Class object.
+     * @return instantiated ClassType.
+     */
     private static ClassType parseClass(final Class clazz) {
-        if (clazz.getGenericSuperclass() != null) {
+        final ClassType parentClassType = ClassType.newInstance(clazz.getName());
+        for (final TypeVariable<?> varType: clazz.getTypeParameters()) {
+            parentClassType.add(fromTypeName(varType.getTypeName()));
+        }
+        if (clazz.getGenericInterfaces().length > 0) {
+            for (final Type interfaceType : clazz.getGenericInterfaces()) {
+                parentClassType.add(parseType(interfaceType));
+            }
+        }
+
+        final Class superClass = clazz.getSuperclass();
+        if (superClass != null && !superClass.getName().equals(OBJECT_CLASS)) {
+            final Type superType = clazz.getGenericSuperclass();
+            final ClassType childType = (superType instanceof ParameterizedType)
+                    ? parseType(superType)
+                    : parseClass(superClass);
+            parentClassType.add(childType);
+        }
+        
+        return parentClassType;
+    }
+    
+    /**
+     * Parse a ClassType from a given Type or ParameterizedType.
+     * 
+     * @param type instance of either Type or ParameterizedType.
+     * @return instantiated ClassType.
+     */
+    private static ClassType parseType(final Type type) {
+        if (type instanceof ParameterizedType) {
+            final ParameterizedType pType = (ParameterizedType)type;
+            final Class originClass = (Class)pType.getRawType();
+            final ClassType classType = ClassType.newInstance(originClass.getName());
+            for (final Type typeArg : pType.getActualTypeArguments()) {
+                classType.add(fromTypeName(typeArg.getTypeName()));
+            }
+            if (originClass.getGenericInterfaces().length > 0) {
+                for (final Type interfaceType : originClass.getGenericInterfaces()) {
+                    final ClassType childType = (interfaceType instanceof ParameterizedType)
+                            ? parseType(interfaceType)
+                            : fromTypeName(interfaceType.getTypeName());
+                    classType.add(childType);
+                }
+            }
             
-            // check if generic string already returns type info: public class java.util.ArrayList<E>
-            final boolean isAlreadyGeneric = clazz.toGenericString().matches(Constants.CLASS_REGEX);
-            if (isAlreadyGeneric) {
-                return parseGenericString(clazz);
-            } else {
-                        
-                if (clazz.getGenericSuperclass().getTypeName().equals(Constants.OBJECT_CLASS)) {
-                    return attachInterfaceClassTypes(parseParts(clazz.getName(), null, null), clazz);
-                } else {
-                    final StringBuilder builder = toBuilder(clazz.getGenericSuperclass().toString());
-                    final String declaringClass = clazz.getDeclaringClass() != null 
-                            ? clazz.getDeclaringClass().getName() 
-                            : null;
-                    replaceFirstSubStringIfAppearsMoreThanOnce(builder, declaringClass);
-                    if (builder.charAt(0) == '.') {
-                        builder.deleteCharAt(0)
-                                .insert(0, EXTENDS_CLASS_SEPARATOR)
-                                .insert(0, clazz.getName());
-                    }
-                    
-                    return parseParts(builder.toString(), null, null);
-                }       
+            final Class superClass = originClass.getSuperclass();
+            if (superClass != null && !superClass.getName().equals(OBJECT_CLASS)) {
+                final Type superType = originClass.getGenericSuperclass();
+                final ClassType childType = (superType instanceof ParameterizedType)
+                        ? parseType(superType)
+                        : parseClass(superClass);
+                classType.add(childType);
             }
+            
+            return classType;
         } else {
-            return attachInterfaceClassTypes(parseGenericString(clazz), clazz);            
+            return fromTypeName(type.getTypeName());
         }
     }
-
-    private static ClassType parseGenericString(final Class clazz) {
-        final String [] parts = clazz.toGenericString().split(Constants.SPACE_STRING);
-        return parseParts(parts[parts.length - 1], null, null);
-    }
-
-    private static ClassType parseParts(final String clazzAndTypes, final ClassType parentType, StringBuilder builder) {
-
-        // Special case to catch generally parameter types (e.g. K, V, R)
-        // but could potentially be classes as well (though that's a long shot).
-        // We make a best case effort here and say that if no `.` character
-        // exists (i.e. no package is present) then it must be a generic
-        // type and so we just return the Object class.
-        if (SourceVersion.isName(clazzAndTypes) 
-                && clazzAndTypes.indexOf(Constants.PERIOD_CHAR) == -1) {
-            return new ClassType(Constants.OBJECT_CLASS, parentType);
-        }
-        
-        final int index = clazzAndTypes.indexOf(Constants.GREATER_THAN);
-        if (index == -1) {
-            return new ClassType(clazzAndTypes, parentType);
-        } 
-        
-        final ClassType classType = new ClassType(clazzAndTypes.substring(0, index), parentType);
-        try {
-                        
-            if (builder == null) {
-                builder = new StringBuilder();
-            }
-                        
-            final char[] chars = (char[]) VALUE_FIELD[0].get(clazzAndTypes);
-            final int stopPoint = chars.length - 2;
-            int lessThanEncountered = 0;
-            for (int i = index + 1; i < chars.length - 1; i++) {
-                
-                if (chars[i] != Constants.SPACE_CHAR) {
-                    builder.append(chars[i]);
-                    
-                    switch (chars[i]) {
-                    case Constants.GREATER_THAN_CHAR:
-                        lessThanEncountered += 1;
-                        break;
-                    case Constants.LESS_THAN_CHAR:
-                        lessThanEncountered -= 1;
-                        if (i == stopPoint) {
-                            final String foundType = builder.toString();  
-                            builder.setLength(0);
-                            classType.add(parseParts(foundType, classType, builder));
-                        }   
-                        break;
-                    case Constants.COMMA_CHAR:
-                        if (lessThanEncountered == 0) {
-                            builder.deleteCharAt(builder.length() - 1);
-                            final String foundType = builder.toString();
-                            builder.setLength(0);
-                            classType.add(parseParts(foundType, classType, builder));                                
-                        } 
-                        break;
-                    default:
-                        if (i == stopPoint) {
-                            final String foundType = builder.toString();
-                            builder.setLength(0);
-                            classType.add(parseParts(foundType, classType, builder));  
-                        } 
-                        break;
-                    }
-                }                
-            }            
-        } catch (IllegalAccessException | IllegalArgumentException ex) {
-            throw new RuntimeException(ex);
-        }
-
-        return classType;  
-    }
-
-    private static ClassType attachInterfaceClassTypes(final ClassType clazzType, final Class clazz) {
-        for (final Type possibleType : clazz.getGenericInterfaces()) {
-            final StringBuilder builder = toBuilder(possibleType.getTypeName());
-            final String declaringClassName = (clazz.getDeclaringClass() != null) 
-                    ? clazz.getDeclaringClass().getName() 
-                    : null;
-            replaceFirstSubStringIfAppearsMoreThanOnce(builder, declaringClassName);
-            if (builder.charAt(0) == '.') {
-                builder.deleteCharAt(0);
-            }
-            clazzType.add(parseParts(builder.toString(), clazzType, null));
-        }
-        return clazzType;
+    
+    /**
+     * Parse a ClassType from a given string generally gotten from Type.getTypeName().
+     * 
+     * @param typeName String generally gotten from Type.getTypeName().
+     * @return instantiated ClassType.
+     */
+    private static ClassType fromTypeName(final String typeName) {
+        return (SourceVersion.isName(typeName) 
+                && typeName.indexOf(PERIOD_CHAR) == -1) 
+                ? ClassType.newInstance(OBJECT_CLASS)
+                : ClassType.newInstance(typeName);
     }
     
     private ClassTypeParser() {

@@ -28,20 +28,23 @@ import java.util.List;
 
 /**
  * ClassType representing an arbitrary Object (e.g. Class, Type, etc.) 
- * with potentially X number of child Type(s).
+ * with potentially X number of child Type(s). This data-structure closely
+ * resembles that of a typical Node.
  * 
  * @author dancc
  */
 public class ClassType implements Comparable<ClassType> {
 
     private final String name;
-    private final ClassType parent;
     private final List<ClassType> subTypes = new ArrayList<>();
 
-    public ClassType(final String name, final ClassType parent) {
+    public ClassType(final String name) {
         this.name = failIfNull(name, "ClassType name cannot be null").intern();
-        this.parent = parent;
-    }  
+    }
+    
+    public static ClassType newInstance(final String name) {
+        return new ClassType(name);
+    }
 
     /**
      * Add a child subType to this ClassType.
@@ -63,15 +66,6 @@ public class ClassType implements Comparable<ClassType> {
      */
     public String name() {
         return name;
-    }
-       
-    /**
-     * Parent of this ClassType.
-     * 
-     * @return parent ClassType or null if has no parent.
-     */
-    public ClassType parent() {
-        return parent;
     }
         
     /**

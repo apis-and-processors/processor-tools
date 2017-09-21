@@ -19,6 +19,8 @@ package com.github.aap.processor.tools.utils;
 
 import static com.github.aap.processor.tools.utils.Preconditions.failIfNull;
 
+import java.lang.reflect.Field;
+
 /**
  * Random static methods aiding in string manipulation. These methods
  * can probably be found elsewhere at the expense of importing/depending 
@@ -27,6 +29,17 @@ import static com.github.aap.processor.tools.utils.Preconditions.failIfNull;
  * @author cdancy
  */
 public class StringUtils {
+    
+    private static final Field[] VALUE_FIELD = new Field[1];
+    
+    static {
+        try {
+            VALUE_FIELD[0] = String.class.getDeclaredField("value");
+            VALUE_FIELD[0].setAccessible(true);
+        } catch (NoSuchFieldException | SecurityException e) {
+            // ignore as we know the field exists
+        }
+    }
     
     /**
      * Get the first occurrence of a subString but ONLY if the subString
