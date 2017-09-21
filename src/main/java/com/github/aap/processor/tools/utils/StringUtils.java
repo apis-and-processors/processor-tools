@@ -29,18 +29,7 @@ import java.lang.reflect.Field;
  * @author cdancy
  */
 public class StringUtils {
-    
-    private static final Field[] VALUE_FIELD = new Field[1];
-    
-    static {
-        try {
-            VALUE_FIELD[0] = String.class.getDeclaredField("value");
-            VALUE_FIELD[0].setAccessible(true);
-        } catch (NoSuchFieldException | SecurityException e) {
-            // ignore as we know the field exists
-        }
-    }
-    
+
     /**
      * Get the first occurrence of a subString but ONLY if the subString
      * appears more than once.
@@ -94,7 +83,6 @@ public class StringUtils {
      */
     public static StringBuilder toBuilder(final String convertToBuilder) {
         failIfNull(convertToBuilder, "convertToBuilder cannot be null".intern());
-        final StringBuilder builder = new StringBuilder(convertToBuilder);
-        return builder;
+        return new StringBuilder(convertToBuilder);
     }
 }
