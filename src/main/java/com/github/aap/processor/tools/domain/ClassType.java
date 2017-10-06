@@ -36,25 +36,25 @@ import java.util.List;
 public class ClassType implements Comparable<ClassType> {
 
     private final String name;
-    private final List<ClassType> subTypes = new ArrayList<>();
+    private final List<ClassType> children = new ArrayList<>();
 
     public ClassType(final String name) {
         this.name = failIfNull(name, "ClassType name cannot be null").intern();
     }
     
-    public static ClassType newInstance(final String name) {
+    public static ClassType instance(final String name) {
         return new ClassType(name);
     }
 
     /**
      * Add a child subType to this ClassType.
      * 
-     * @param classType ClassType to add as a child.
+     * @param classType ClassType to child as a child.
      * @return this ClassType.
      */
-    public ClassType add(final ClassType classType) {
+    public ClassType child(final ClassType classType) {
         if (classType != null) {
-            subTypes.add(classType);
+            children.add(classType);
         }
         return this;
     }
@@ -69,12 +69,21 @@ public class ClassType implements Comparable<ClassType> {
     }
         
     /**
-     * List of child subTypes.
+     * List of children.
      * 
-     * @return list of child subTypes or empty list if no children.
+     * @return list of child children or empty list if no children.
      */
-    public List<ClassType> subTypes() {
-        return subTypes;    
+    private List<ClassType> children() {
+        return children;    
+    }
+    
+    /**
+     * Number of children this parent ClassType currently has.
+     * 
+     * @return number of children.
+     */
+    public int childCount() {
+        return children.size();
     }
     
     /**
@@ -83,8 +92,8 @@ public class ClassType implements Comparable<ClassType> {
      * @param index index of subType.
      * @return ClassType at specified index.
      */
-    public ClassType subTypeAtIndex(final int index) {
-        return subTypes.get(index);
+    public ClassType childAtIndex(final int index) {
+        return children.get(index);
     }
     
     /**
@@ -93,7 +102,7 @@ public class ClassType implements Comparable<ClassType> {
      * @param regex the regular expression used to match.
      * @return found ClassType or null if regex is null or none found.
      */
-    public ClassType firstSubTypeMatching(final String regex) {
+    public ClassType firstChildMatching(final String regex) {
         return (regex != null) ? firstSubTypeMatching(regex, this) : null;
     }
     
@@ -109,8 +118,8 @@ public class ClassType implements Comparable<ClassType> {
         if (classType.name().matches(regex)) {
             return classType;
         } else {
-            for (int i = 0; i < classType.subTypes().size(); i++) {
-                final ClassType innerClassType = firstSubTypeMatching(regex, classType.subTypes().get(i));
+            for (int i = 0; i < classType.children().size(); i++) {
+                final ClassType innerClassType = firstSubTypeMatching(regex, classType.children().get(i));
                 if (innerClassType != null) {
                     return innerClassType;
                 }
@@ -185,12 +194,12 @@ public class ClassType implements Comparable<ClassType> {
                 return 3;
             }
             
-            final int sourceSize = source.subTypes().size();
-            final int targetSize = target.subTypes().size();
+            final int sourceSize = source.children().size();
+            final int targetSize = target.children().size();
             if (sourceSize == targetSize) {
                 int counter = 0;
                 for (int i = 0; i < sourceSize; i++) {
-                    final int localCount = compare(source.subTypes().get(i), target.subTypes().get(i));
+                    final int localCount = compare(source.children().get(i), target.children().get(i));
                     switch (localCount) {
                     case 0:
                         break;
@@ -222,12 +231,12 @@ public class ClassType implements Comparable<ClassType> {
                 if (sourceSize > 0) {
                     subTypesMessage.append('(');
                     for (int index = 0; index < sourceSize; index++) {
-                        subTypesMessage.append(source.subTypes.get(index).name);
+                        subTypesMessage.append(source.children.get(index).name);
                         if (index != sourceSize - 1) {
                             subTypesMessage.append(", ");
                         }
                     }
-                    subTypesMessage.append(") while ");
+                    subTypesMessage.append(") while '");
                 }
                 
                 subTypesMessage.append(target.name)
@@ -237,7 +246,7 @@ public class ClassType implements Comparable<ClassType> {
                 if (targetSize > 0) {
                     subTypesMessage.append(" (");
                     for (int index = 0; index < targetSize; index++) {
-                        subTypesMessage.append(target.subTypes.get(index).name);
+                        subTypesMessage.append(target.children.get(index).name);
                         if (index != targetSize - 1) {
                             subTypesMessage.append(", ");
                         }
@@ -270,11 +279,11 @@ public class ClassType implements Comparable<ClassType> {
      */
     private static void print(final ClassType classType, final StringBuilder builder) {
         builder.append(classType.name);
-        if (classType.subTypes().size() > 0) {
+        if (classType.children().size() > 0) {
             builder.append(Constants.GREATER_THAN);
-            final int size = classType.subTypes().size();
+            final int size = classType.children().size();
             for (int i = 0; i < size; i++) {
-                print(classType.subTypes().get(i), builder);
+                print(classType.children().get(i), builder);
                 if (size > 0 && i != (size - 1)) {
                     builder.append(Constants.COMMA_SPACE);
                 }
@@ -284,18 +293,18 @@ public class ClassType implements Comparable<ClassType> {
     }
         
     /**
-     * Get an instance of the backing ClassType.
+     * Get an toObject of the backing ClassType.
      * 
-     * @return new instance from backing ClassType
+     * @return new toObject from backing ClassType
      */
-    public Object toInstance() {
-        return ReflectionMagic.newInstance(toClass());
+    public Object toObject() {
+        return ReflectionMagic.instance(toClass());
     }
     
     /**
      * Get the Class of the backing ClassType.
      * 
-     * @return Class or instance of Unknown if type is generic (e.g. T or V).
+     * @return Class or toObject of Unknown if type is generic (e.g. T or V).
      */
     public Class toClass() {
         try {

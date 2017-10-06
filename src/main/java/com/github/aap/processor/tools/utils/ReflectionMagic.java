@@ -48,7 +48,7 @@ public class ReflectionMagic {
      * @param clazz arbitrary Class.
      * @return new instance of arbitrary class.
      */
-    public static <T> T newInstance(final Class<T> clazz) {
+    public static <T> T instance(final Class<T> clazz) {
         failIfNull(clazz, "clazz cannot be null");
         if (clazz.isInterface()) {
             try {

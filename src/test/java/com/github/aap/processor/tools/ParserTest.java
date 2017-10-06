@@ -38,7 +38,7 @@ import org.testng.annotations.Test;
  * 
  * @author cdancy
  */
-public class ClassTypeParserTest {
+public class ParserTest {
     
     private static final String COMPARABLE_REGEX = ".*Comparable.*";
     private static final String FUNCTION_REGEX = ".*Function.*";
@@ -93,10 +93,14 @@ public class ClassTypeParserTest {
     }
     
     class TestGenericInterface implements GenericInterface<String> {
+        
+        @Override
         public void bears(final String obj){}
     }
     
     class TestMultipleImplements implements GenericInterface<String>, Comparable<String> {
+        
+        @Override
         public void bears(final String obj){}
 
         @Override
@@ -115,7 +119,7 @@ public class ClassTypeParserTest {
         final ClassType instance = ClassTypeParser.parse(null);
         assertNotNull(instance);
         assertTrue(instance.toClass() == Null.class);
-        assertTrue(instance.toInstance().toString().equals("null"));
+        assertTrue(instance.toObject().toString().equals("null"));
     }
     
     @Test
@@ -124,7 +128,7 @@ public class ClassTypeParserTest {
         final ClassType instance = ClassTypeParser.parse("");
         assertNotNull(instance);
         assertTrue(instance.toClass() == String.class);
-        assertTrue(instance.toInstance().toString().equals(""));
+        assertTrue(instance.toObject().toString().equals(""));
     }
     
     @Test
@@ -133,7 +137,7 @@ public class ClassTypeParserTest {
         final ClassType instance = ClassTypeParser.parse(123);
         assertNotNull(instance);
         assertTrue(instance.toClass() == Integer.class);
-        assertTrue(instance.toInstance().toString().equals("0"));
+        assertTrue(instance.toObject().toString().equals("0"));
     }
     
     @Test 
@@ -144,8 +148,8 @@ public class ClassTypeParserTest {
         ClassType type = ClassTypeParser.parse(instance);
         assertNotNull(type);
         assertTrue(type.name().equals(fullyQualifiedName));
-        assertTrue(type.subTypes().size() == 5);
-        assertTrue(type.subTypeAtIndex(0).name().equals(Constants.OBJECT_CLASS));
+        assertTrue(type.childCount() == 5);
+        assertTrue(type.childAtIndex(0).name().equals(Constants.OBJECT_CLASS));
         assertTrue(type.compareTo(ClassTypeParser.parse(instance)) == 3);
         
         fullyQualifiedName = "java.util.ArrayList";
@@ -153,8 +157,8 @@ public class ClassTypeParserTest {
         type = ClassTypeParser.parse(instance);
         assertNotNull(type);
         assertTrue(type.name().equals(fullyQualifiedName));
-        assertTrue(type.subTypes().size() == 6);
-        assertTrue(type.subTypeAtIndex(0).name().equals(Constants.OBJECT_CLASS));
+        assertTrue(type.childCount() == 6);
+        assertTrue(type.childAtIndex(0).name().equals(Constants.OBJECT_CLASS));
         assertTrue(type.compareTo(ClassTypeParser.parse(instance)) == 3);
 
         fullyQualifiedName = "java.util.Properties";
@@ -162,7 +166,7 @@ public class ClassTypeParserTest {
         type = ClassTypeParser.parse(instance);
         assertNotNull(type);
         assertTrue(type.name().equals(fullyQualifiedName));
-        assertTrue(type.subTypes().size() == 1);
+        assertTrue(type.childCount() == 1);
         assertTrue(type.compareTo(ClassTypeParser.parse(instance)) == 3);
         
         fullyQualifiedName = "java.util.HashMap";
@@ -170,9 +174,9 @@ public class ClassTypeParserTest {
         type = ClassTypeParser.parse(instance);
         assertNotNull(type);
         assertTrue(type.name().equals(fullyQualifiedName));
-        assertTrue(type.subTypes().size() == 6);
-        assertTrue(type.subTypeAtIndex(0).name().equals(Constants.OBJECT_CLASS));
-        assertTrue(type.subTypeAtIndex(1).name().equals(Constants.OBJECT_CLASS));
+        assertTrue(type.childCount() == 6);
+        assertTrue(type.childAtIndex(0).name().equals(Constants.OBJECT_CLASS));
+        assertTrue(type.childAtIndex(1).name().equals(Constants.OBJECT_CLASS));
         assertTrue(type.compareTo(ClassTypeParser.parse(instance)) == 3);
     }
     
@@ -181,31 +185,31 @@ public class ClassTypeParserTest {
 
         final ClassType helloWorld = ClassTypeParser.parse(HelloWorld.class);
         assertNotNull(helloWorld);
-        assertNull(helloWorld.firstSubTypeMatching(".*NonExistentType.*"));
+        assertNull(helloWorld.firstChildMatching(".*NonExistentType.*"));
         assertTrue(helloWorld.name().equals(HelloWorld.class.getName()));
-        assertTrue(helloWorld.subTypes().size() == 2);
+        assertTrue(helloWorld.childCount() == 2);
         
-        final ClassType functionType = helloWorld.firstSubTypeMatching(FUNCTION_REGEX);
+        final ClassType functionType = helloWorld.firstChildMatching(FUNCTION_REGEX);
         assertNotNull(functionType);
-        assertNull(functionType.firstSubTypeMatching(".*NonExistentType.*"));
-        assertTrue(functionType.subTypes().size() == 2);
+        assertNull(functionType.firstChildMatching(".*NonExistentType.*"));
+        assertTrue(functionType.childCount() == 2);
         
-        final ClassType functionTypeBoolean = functionType.firstSubTypeMatching(".*Boolean.*");
+        final ClassType functionTypeBoolean = functionType.firstChildMatching(".*Boolean.*");
         assertNotNull(functionTypeBoolean);
-        assertTrue(functionTypeBoolean.subTypes().isEmpty());
+        assertTrue(functionTypeBoolean.childCount() == 0);
         
-        final ClassType functionTypeInteger = functionType.firstSubTypeMatching(".*Integer.*");
+        final ClassType functionTypeInteger = functionType.firstChildMatching(".*Integer.*");
         assertNotNull(functionTypeInteger);
-        assertTrue(functionTypeInteger.subTypes().isEmpty());
+        assertTrue(functionTypeInteger.childCount() == 0);
         
-        final ClassType comparableType = helloWorld.firstSubTypeMatching(COMPARABLE_REGEX);
+        final ClassType comparableType = helloWorld.firstChildMatching(COMPARABLE_REGEX);
         assertNotNull(comparableType);
-        assertNull(helloWorld.firstSubTypeMatching(".*NonExistentType.*"));
-        assertTrue(comparableType.subTypes().size() == 1);
+        assertNull(helloWorld.firstChildMatching(".*NonExistentType.*"));
+        assertTrue(comparableType.childCount() == 1);
         
-        final ClassType comparableTypeString = comparableType.firstSubTypeMatching(".*String.*");
+        final ClassType comparableTypeString = comparableType.firstChildMatching(".*String.*");
         assertNotNull(comparableTypeString);
-        assertTrue(comparableTypeString.subTypes().isEmpty());
+        assertTrue(comparableTypeString.childCount() == 0);
     }
     
     @Test (dependsOnMethods = "testDataStructuresToClassTypes")
@@ -217,68 +221,68 @@ public class ClassTypeParserTest {
         final ClassType helloWorld4 = ClassTypeParser.parse(HelloWorld4.class);
 
         assertTrue(helloWorld.compareTo(helloWorld2) == -1);
-        assertTrue(helloWorld.firstSubTypeMatching(COMPARABLE_REGEX).compareTo(helloWorld3.firstSubTypeMatching(COMPARABLE_REGEX)) == -1);
-        assertTrue(helloWorld.firstSubTypeMatching(COMPARABLE_REGEX).compareTo(helloWorld2.firstSubTypeMatching(COMPARABLE_REGEX)) == 0);
-        assertTrue(helloWorld3.firstSubTypeMatching(FUNCTION_REGEX).compareTo(helloWorld2.firstSubTypeMatching(FUNCTION_REGEX)) == 1);
-        assertTrue(helloWorld2.firstSubTypeMatching(FUNCTION_REGEX).compareTo(helloWorld3.firstSubTypeMatching(FUNCTION_REGEX)) == 2);
-        assertTrue(helloWorld3.firstSubTypeMatching(FUNCTION_REGEX).compareTo(helloWorld4.firstSubTypeMatching(FUNCTION_REGEX)) == 3);
+        assertTrue(helloWorld.firstChildMatching(COMPARABLE_REGEX).compareTo(helloWorld3.firstChildMatching(COMPARABLE_REGEX)) == -1);
+        assertTrue(helloWorld.firstChildMatching(COMPARABLE_REGEX).compareTo(helloWorld2.firstChildMatching(COMPARABLE_REGEX)) == 0);
+        assertTrue(helloWorld3.firstChildMatching(FUNCTION_REGEX).compareTo(helloWorld2.firstChildMatching(FUNCTION_REGEX)) == 1);
+        assertTrue(helloWorld2.firstChildMatching(FUNCTION_REGEX).compareTo(helloWorld3.firstChildMatching(FUNCTION_REGEX)) == 2);
+        assertTrue(helloWorld3.firstChildMatching(FUNCTION_REGEX).compareTo(helloWorld4.firstChildMatching(FUNCTION_REGEX)) == 3);
     }
     
     @Test (expectedExceptions = TypeMismatchException.class)
     public void testThrowsExceptionOnCompare() {
         final ClassType helloWorld = ClassTypeParser.parse(HelloWorld.class);
         final ClassType helloWorld3 = ClassTypeParser.parse(HelloWorld3.class);
-        helloWorld.firstSubTypeMatching(COMPARABLE_REGEX).compare(helloWorld3.firstSubTypeMatching(COMPARABLE_REGEX));
+        helloWorld.firstChildMatching(COMPARABLE_REGEX).compare(helloWorld3.firstChildMatching(COMPARABLE_REGEX));
     }
     
     @Test (expectedExceptions = TypeMismatchException.class)
     public void testThrowsExceptionOnCompareWithNull() {
         final ClassType helloWorld = ClassTypeParser.parse(HelloWorld.class);
-        helloWorld.firstSubTypeMatching(COMPARABLE_REGEX).compare(null);
+        helloWorld.firstChildMatching(COMPARABLE_REGEX).compare(null);
     }
     
     @Test 
     public void testGeneric() {
         final ClassType classType = ClassTypeParser.parse(GenericClass.class);
         assertTrue(classType.name().equalsIgnoreCase(GenericClass.class.getName()));
-        assertTrue(classType.subTypes().size() == 1);
-        assertTrue(classType.subTypeAtIndex(0).name().equalsIgnoreCase(Object.class.getName()));
+        assertTrue(classType.childCount() == 1);
+        assertTrue(classType.childAtIndex(0).name().equalsIgnoreCase(Object.class.getName()));
     }
     
     @Test
     public void testMultipleExtends() {
         final ClassType classType = ClassTypeParser.parse(TestMultipleExtends.class);
         assertTrue(classType.name().equalsIgnoreCase(TestMultipleExtends.class.getName()));
-        assertTrue(classType.subTypes().size() == 1);
-        assertTrue(classType.subTypeAtIndex(0).name().equalsIgnoreCase(SecondGenericClass.class.getName()));
-        assertTrue(classType.subTypeAtIndex(0).subTypes().size() == 3);
-        assertTrue(classType.subTypeAtIndex(0).subTypeAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
-        assertTrue(classType.subTypeAtIndex(0).subTypeAtIndex(1).name().equalsIgnoreCase(Integer.class.getName()));
-        assertTrue(classType.subTypeAtIndex(0).subTypeAtIndex(2).name().equalsIgnoreCase(GenericClass.class.getName()));
+        assertTrue(classType.childCount() == 1);
+        assertTrue(classType.childAtIndex(0).name().equalsIgnoreCase(SecondGenericClass.class.getName()));
+        assertTrue(classType.childAtIndex(0).childCount() == 3);
+        assertTrue(classType.childAtIndex(0).childAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
+        assertTrue(classType.childAtIndex(0).childAtIndex(1).name().equalsIgnoreCase(Integer.class.getName()));
+        assertTrue(classType.childAtIndex(0).childAtIndex(2).name().equalsIgnoreCase(GenericClass.class.getName()));
     }
     
     @Test
     public void testMultipleImplements() {
         final ClassType classType = ClassTypeParser.parse(TestMultipleImplements.class);
         assertTrue(classType.name().equalsIgnoreCase(TestMultipleImplements.class.getName()));
-        assertTrue(classType.subTypes().size() == 2);
-        assertTrue(classType.subTypeAtIndex(0).name().equalsIgnoreCase(GenericInterface.class.getName()));
-        assertTrue(classType.subTypeAtIndex(0).subTypes().size() == 1);
-        assertTrue(classType.subTypeAtIndex(0).subTypeAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
-        assertTrue(classType.subTypeAtIndex(1).name().equalsIgnoreCase(Comparable.class.getName()));
-        assertTrue(classType.subTypeAtIndex(1).subTypes().size() == 1);
-        assertTrue(classType.subTypeAtIndex(1).subTypeAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
+        assertTrue(classType.childCount() == 2);
+        assertTrue(classType.childAtIndex(0).name().equalsIgnoreCase(GenericInterface.class.getName()));
+        assertTrue(classType.childAtIndex(0).childCount() == 1);
+        assertTrue(classType.childAtIndex(0).childAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
+        assertTrue(classType.childAtIndex(1).name().equalsIgnoreCase(Comparable.class.getName()));
+        assertTrue(classType.childAtIndex(1).childCount() == 1);
+        assertTrue(classType.childAtIndex(1).childAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
     }
     
     @Test
     public void testExtendingGenericInterface() {
         final ClassType classType = ClassTypeParser.parse(ExtendingGenericInterface.class);
         assertTrue(classType.name().equalsIgnoreCase(ExtendingGenericInterface.class.getName()));
-        assertTrue(classType.subTypes().size() == 2);
-        assertTrue(classType.subTypeAtIndex(0).name().equalsIgnoreCase(Object.class.getName()));
-        assertTrue(classType.subTypeAtIndex(0).subTypes().size() == 0);
-        assertTrue(classType.subTypeAtIndex(1).name().equalsIgnoreCase(GenericInterface.class.getName()));
-        assertTrue(classType.subTypeAtIndex(1).subTypes().size() == 1);
-        assertTrue(classType.subTypeAtIndex(1).subTypeAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
+        assertTrue(classType.childCount() == 2);
+        assertTrue(classType.childAtIndex(0).name().equalsIgnoreCase(Object.class.getName()));
+        assertTrue(classType.childAtIndex(0).childCount() == 0);
+        assertTrue(classType.childAtIndex(1).name().equalsIgnoreCase(GenericInterface.class.getName()));
+        assertTrue(classType.childAtIndex(1).childCount() == 1);
+        assertTrue(classType.childAtIndex(1).childAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
     }
 }

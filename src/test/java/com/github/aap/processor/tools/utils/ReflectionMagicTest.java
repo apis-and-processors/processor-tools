@@ -51,108 +51,108 @@ public class ReflectionMagicTest {
     public void createInnerClasses() {
         final InnerTestClass int1 = new InnerTestClass();
         assertNotNull(int1);
-        final InnerTestClass int2 = ReflectionMagic.newInstance(InnerTestClass.class);
+        final InnerTestClass int2 = ReflectionMagic.instance(InnerTestClass.class);
         assertNotNull(int2);
     }
     
     @Test 
     public void initPrimitiveClasses() throws Exception {
 
-        final Short shortObj = ReflectionMagic.newInstance(short.class);
+        final Short shortObj = ReflectionMagic.instance(short.class);
         assertNotNull(shortObj);
         assertTrue(shortObj == 0);
         
-        final Integer integerObj = ReflectionMagic.newInstance(int.class);
+        final Integer integerObj = ReflectionMagic.instance(int.class);
         assertNotNull(integerObj);
         assertTrue(integerObj == 0);
 
-        final Long longObj = ReflectionMagic.newInstance(long.class);
+        final Long longObj = ReflectionMagic.instance(long.class);
         assertNotNull(longObj);
         assertTrue(longObj == 0);
         
-        final Float floatObj = ReflectionMagic.newInstance(float.class);
+        final Float floatObj = ReflectionMagic.instance(float.class);
         assertNotNull(floatObj);
         assertTrue(floatObj == 0);
         
-        final Double doubleObj = ReflectionMagic.newInstance(double.class);
+        final Double doubleObj = ReflectionMagic.instance(double.class);
         assertNotNull(doubleObj);
         assertTrue(doubleObj == 0);
         
-        final Byte byteObj = ReflectionMagic.newInstance(byte.class);
+        final Byte byteObj = ReflectionMagic.instance(byte.class);
         assertNotNull(byteObj);
         assertTrue(byteObj == 0);
         
-        final Character charObj = ReflectionMagic.newInstance(char.class);
+        final Character charObj = ReflectionMagic.instance(char.class);
         assertNotNull(charObj);
         assertTrue(charObj == '\u0000');
         
-        final Boolean booleanObj = ReflectionMagic.newInstance(boolean.class);
+        final Boolean booleanObj = ReflectionMagic.instance(boolean.class);
         assertNotNull(booleanObj);
         assertTrue(booleanObj == false);
         
-        final Void voidObj = ReflectionMagic.newInstance(void.class);
+        final Void voidObj = ReflectionMagic.instance(void.class);
         assertNull(voidObj);
         
-        final Null nullObj = ReflectionMagic.newInstance(Null.class);
+        final Null nullObj = ReflectionMagic.instance(Null.class);
         assertNotNull(nullObj);
     }
     
     @Test 
     public void initBoxedPrimitiveClasses() throws Exception {
 
-        final Short shortObj = ReflectionMagic.newInstance(Short.class);
+        final Short shortObj = ReflectionMagic.instance(Short.class);
         assertNotNull(shortObj);
         assertTrue(shortObj == 0);
         
-        final Integer integerObj = ReflectionMagic.newInstance(Integer.class);
+        final Integer integerObj = ReflectionMagic.instance(Integer.class);
         assertNotNull(integerObj);
         assertTrue(integerObj == 0);
 
-        final Long longObj = ReflectionMagic.newInstance(Long.class);
+        final Long longObj = ReflectionMagic.instance(Long.class);
         assertNotNull(longObj);
         assertTrue(longObj == 0);
         
-        final Float floatObj = ReflectionMagic.newInstance(Float.class);
+        final Float floatObj = ReflectionMagic.instance(Float.class);
         assertNotNull(floatObj);
         assertTrue(floatObj == 0);
         
-        final Double doubleObj = ReflectionMagic.newInstance(Double.class);
+        final Double doubleObj = ReflectionMagic.instance(Double.class);
         assertNotNull(doubleObj);
         assertTrue(doubleObj == 0);
         
-        final Byte byteObj = ReflectionMagic.newInstance(Byte.class);
+        final Byte byteObj = ReflectionMagic.instance(Byte.class);
         assertNotNull(byteObj);
         assertTrue(byteObj == 0);
         
-        final Character charObj = ReflectionMagic.newInstance(Character.class);
+        final Character charObj = ReflectionMagic.instance(Character.class);
         assertNotNull(charObj);
         assertTrue(charObj == '\u0000');
         
-        final Boolean booleanObj = ReflectionMagic.newInstance(Boolean.class);
+        final Boolean booleanObj = ReflectionMagic.instance(Boolean.class);
         assertNotNull(booleanObj);
         assertTrue(booleanObj == false);
         
-        final Void voidObj = ReflectionMagic.newInstance(Void.class);
+        final Void voidObj = ReflectionMagic.instance(Void.class);
         assertNull(voidObj);
         
-        final Null nullObj = ReflectionMagic.newInstance(Null.class);
+        final Null nullObj = ReflectionMagic.instance(Null.class);
         assertNotNull(nullObj);
     }
     
     @Test 
     public void initDataStructureInterfaces() {
         
-        final Map<String, String> map = ReflectionMagic.newInstance(Map.class);
+        final Map<String, String> map = ReflectionMagic.instance(Map.class);
         assertNotNull(map);
         map.put("hello1", "world1");
         assertTrue(map.size() == 1);
         
-        final List<String> list = ReflectionMagic.newInstance(List.class);
+        final List<String> list = ReflectionMagic.instance(List.class);
         assertNotNull(list);
         list.add("hello2");
         assertTrue(list.size() == 1);
         
-        final Set<String> set = ReflectionMagic.newInstance(Set.class);
+        final Set<String> set = ReflectionMagic.instance(Set.class);
         assertNotNull(set);
         set.add("hello3");
         assertTrue(map.size() == 1);
@@ -161,17 +161,17 @@ public class ReflectionMagicTest {
     @Test 
     public void initDataStructureTypes() {
         
-        final Map<String, String> map = ReflectionMagic.newInstance(HashMap.class);
+        final Map<String, String> map = ReflectionMagic.instance(HashMap.class);
         assertNotNull(map);
         map.put("hello4", "world2");
         assertTrue(map.size() == 1);
         
-        final List<String> list = ReflectionMagic.newInstance(ArrayList.class);
+        final List<String> list = ReflectionMagic.instance(ArrayList.class);
         assertNotNull(list);
         list.add("hello5");
         assertTrue(list.size() == 1);
         
-        final Set<String> set = ReflectionMagic.newInstance(HashSet.class);
+        final Set<String> set = ReflectionMagic.instance(HashSet.class);
         assertNotNull(set);
         set.add("hello6");
         assertTrue(map.size() == 1);

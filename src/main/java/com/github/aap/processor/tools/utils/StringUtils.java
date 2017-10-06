@@ -19,12 +19,8 @@ package com.github.aap.processor.tools.utils;
 
 import static com.github.aap.processor.tools.utils.Preconditions.failIfNull;
 
-import java.lang.reflect.Field;
-
 /**
- * Random static methods aiding in string manipulation. These methods
- * can probably be found elsewhere at the expense of importing/depending 
- * on external libraries.
+ * Static utility methods aiding in string manipulation.
  * 
  * @author cdancy
  */
@@ -40,10 +36,10 @@ public class StringUtils {
      */
     public static int firstOccurence(final StringBuilder targetString, final String subString) {
         failIfNull(targetString, "targetString cannot be null".intern());
-        
+
         int count = 0;
         int firstOccurence = -1;
-        if (subString != null) {   
+        if (subString != null) {
             int lastIndex = 0;
             while (lastIndex != -1) {
                 lastIndex = targetString.indexOf(subString, lastIndex);
@@ -73,16 +69,5 @@ public class StringUtils {
             targetString.replace(index, subString.length(), "");
         }
         return targetString;
-    }
-    
-    /**
-     * Helper method to convert a String into a StringBuilder.
-     * 
-     * @param convertToBuilder the String to convert to StringBuilder.
-     * @return instance of StringBuilder.
-     */
-    public static StringBuilder toBuilder(final String convertToBuilder) {
-        failIfNull(convertToBuilder, "convertToBuilder cannot be null".intern());
-        return new StringBuilder(convertToBuilder);
     }
 }
