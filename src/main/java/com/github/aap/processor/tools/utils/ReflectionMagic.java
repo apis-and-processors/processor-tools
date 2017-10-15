@@ -37,13 +37,13 @@ import java.util.Set;
  * @author cdancy
  */
 public class ReflectionMagic {
-    
+
     private static final Object [] EMPTY_OBJECT_ARRAY = new Object[1];
-    private static final Constructor OBJECT_CONSTRUCTOR = Object.class.getDeclaredConstructors()[0];    
-    
+    private static final Constructor OBJECT_CONSTRUCTOR = Object.class.getDeclaredConstructors()[0];
+
     /**
      * Create a new instance from some arbitrary class type.
-     * 
+     *
      * @param <T> arbitrary Type.
      * @param clazz arbitrary Class.
      * @return new instance of arbitrary class.
@@ -60,15 +60,15 @@ public class ReflectionMagic {
                 } else if (Set.class.isAssignableFrom(clazz)) {
                     return (T) new HashSet();
                 }
-                
+
                 final Constructor genericConstructor = sun.reflect.ReflectionFactory
                         .getReflectionFactory()
                         .newConstructorForSerialization(clazz, OBJECT_CONSTRUCTOR);
 
-                return clazz.cast(genericConstructor.newInstance()); 
+                return clazz.cast(genericConstructor.newInstance());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | SecurityException | IllegalArgumentException ex) {
                 throw new RuntimeException(ex);
-            } 
+            }
         } else {
             try {
 
@@ -77,25 +77,25 @@ public class ReflectionMagic {
                 } else if (clazz.isAssignableFrom(Null.class)) {
                     return (T) Null.INSTANCE;
                 }
-                
+
                 final PrimitiveTypes found = PrimitiveTypes.from(clazz);
                 if (found != null) {
                     return (T) found.getDefaultValue();
-                } else {                    
+                } else {
                     final Constructor noArgConstructor = clazz.getDeclaredConstructors()[clazz.getDeclaredConstructors().length - 1];
                     noArgConstructor.setAccessible(true);
                     return clazz.cast(noArgConstructor.newInstance(EMPTY_OBJECT_ARRAY));
                 }
-                
+
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | SecurityException | IllegalArgumentException ex) {
-                
+
                 // second attempt at creating generic object from class
                 try {
                     return clazz.newInstance();
                 } catch (IllegalAccessException | InstantiationException ex2) {
                     throw new RuntimeException(ex2);
                 }
-            }     
+            }
         }
-    }       
+    }
 }

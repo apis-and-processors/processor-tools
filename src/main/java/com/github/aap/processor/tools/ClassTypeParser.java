@@ -33,17 +33,17 @@ import javax.lang.model.SourceVersion;
  * classes, and all interfaces attached therein on top of Type's applied to either.
  * 
  * <p>
- The algorithm involved here recursively climbs a given Classes `extend` hierarchy 
+ The algorithm involved here recursively climbs a given Classes `extend` hierarchy
  looking for classes and their potential types. Furthermore, and while we're
- climbing the `extend` hierarchy, we recursively climb each potential classes 
- multiple interface hierarchy, and their potential extended interfaces, looking 
+ climbing the `extend` hierarchy, we recursively climb each potential classes
+ multiple interface hierarchy, and their potential extended interfaces, looking
  for types as well.
- 
+
  Type's themselves, if not valid (i.e. not an actual java class), will be set
  to `java.lang.Object`.
- 
+
  This ClassTypeParser has been heavily optimized to be as fast as possible with the least
- amount of comparisons required for a given `parse` whilst taking into account 
+ amount of comparisons required for a given `parse` whilst taking into account
  potential options the user may have requested. Please take heed when attempting
  to optimize and/or refactor this code due to what one might consider convoluted
  and/or overly complicated. Because classes can have N number of Type's we take
@@ -54,7 +54,7 @@ import javax.lang.model.SourceVersion;
  * @author dancc
  */
 public class ClassTypeParser {
-    
+
     /**
      * Parse a ClassType from some arbitrary Object (e.g. Class, Type, etc.).
      * 
@@ -64,7 +64,7 @@ public class ClassTypeParser {
     public static ClassType parse(final Object parseToClassType) {
         return parseObject(parseToClassType, ClassTypeParserOptions.DEFAULT_PARSER_OPTIONS);
     }
-    
+
     /**
      * Parse a ClassType from some arbitrary Object (e.g. Class, Type, etc.) whilst
  supplying optional ClassTypeParserOptions (can be null).
@@ -73,10 +73,10 @@ public class ClassTypeParser {
      * @param options non-null ClassTypeParserOptions the user may have optionally requested.
      * @return instantiated ClassType.
      */
-    public static ClassType parse(final Object parseToClassType, final ClassTypeParserOptions options) {        
+    public static ClassType parse(final Object parseToClassType, final ClassTypeParserOptions options) {
         return parseObject(parseToClassType, options != null ? options : ClassTypeParserOptions.DEFAULT_PARSER_OPTIONS);
     }
-    
+
     /**
      * Parse a ClassType from some arbitrary Object (e.g. Class, Type, etc.) whilst
  supplying optional ClassTypeParserOptions (can be null). This is the internal version
@@ -87,23 +87,23 @@ public class ClassTypeParser {
      * @param options non-null ClassTypeParserOptions the user may have optionally requested.
      * @return instantiated ClassType.
      */
-    private static ClassType parseObject(final Object parseToClassType, 
+    private static ClassType parseObject(final Object parseToClassType,
             final ClassTypeParserOptions options) {
-        
+
         Class potentialClazz;
         if (parseToClassType != null) {
             if (parseToClassType instanceof Class) {
                 potentialClazz = (Class)parseToClassType;
                 if (potentialClazz.isPrimitive()) {
                     potentialClazz = PrimitiveTypes.from(potentialClazz.toGenericString()).getBoxedClass();
-                } 
-            } else {  
+                }
+            } else {
                 potentialClazz = parseToClassType.getClass();
             }
         } else {
             potentialClazz = PrimitiveTypes.from(parseToClassType).getBoxedClass();
         }
-        
+
         return parseClass(potentialClazz, options);
     }
 
@@ -125,7 +125,7 @@ public class ClassTypeParser {
                 final String typeName = childVariable.getTypeName();
                 if (!typeName.matches(options.classParamRegex)) {
                     final ClassType child = parseString(typeName);
-                    parent.child(child);   
+                    parent.child(child);
                 }
             }
         } else {
@@ -134,15 +134,15 @@ public class ClassTypeParser {
                 parent.child(child);
             }
         }
-        
+
         // 2.) attach any interfaces and superclasses, recursively,
         //     as child ClassType's.
         parseInterfaces(clazz, parent, options);
         parseSuperClass(clazz, parent, options);
-        
+
         return parent;
     }
-    
+
     /**
      * Parse a ClassType from a given String generally gotten from Type.getTypeName().
      * 
@@ -150,23 +150,23 @@ public class ClassTypeParser {
      * @return instantiated ClassType.
      */
     private static ClassType parseString(final String typeName) {
-        
+
         // the idea here is that if the passed String is a reserved java name
         // or it does NOT contain a package declaration (i.e. no periods) then
         // we know it's truly generic and thus have NO idea what it is and so
         // we MUST return a generic Object, otherwise use what is given and
         // parse as per usual.
-        return (!SourceVersion.isName(typeName) 
-                || typeName.indexOf(PERIOD_CHAR) == -1) 
+        return (!SourceVersion.isName(typeName)
+                || typeName.indexOf(PERIOD_CHAR) == -1)
                 ? ClassType.instance(OBJECT_CLASS)
                 : ClassType.instance(typeName);
     }
-    
+
     /**
      * Parse a ClassType from the passed Classes (e.g. `clazz`) super-class. If the passed
      * class has no super-class then this call amounts to a no-op. If applicable we will
      * optionally ignore super-classes should they match a given regex.
-     * 
+     *
      * @param clazz the Class from whose super-classes we will parse ClassType's from and insert as children.
      * @param parent the parent ClassType we will insert potential child ClassType's into.
      * @param options non-null ClassTypeParserOptions the user may have optionally requested.
@@ -176,7 +176,7 @@ public class ClassTypeParser {
             final ClassTypeParserOptions options) {
 
         final Class superClass = clazz.getSuperclass();
-        if (superClass != null 
+        if (superClass != null
                 && !superClass.getName().equals(OBJECT_CLASS)
                 && (options.classRegex == null
                 || !superClass.getName().matches(options.classRegex))) {
@@ -185,22 +185,22 @@ public class ClassTypeParser {
             final ClassType child = (superType instanceof ParameterizedType)
                     ? parseParameterizedType((ParameterizedType)superType, options)
                     : parseClass(superClass, options);
-            
+
             parent.child(child);
         }
     }
-    
+
     /**
      * Parse a ClassType from the passed Classes (e.g. `clazz`) interfaces. If the passed
      * class has no interfaces then this call amounts to a no-op. If applicable we will
      * optionally ignore interfaces should they match a given regex.
-     * 
+     *
      * @param clazz the Class from whose interfaces we will parse ClassType's from and insert as children.
      * @param parent the parent ClassType we will insert potential child ClassType's into.
      * @param options non-null ClassTypeParserOptions the user may have optionally requested.
      */
-    private static void parseInterfaces(final Class clazz, 
-            final ClassType parent, 
+    private static void parseInterfaces(final Class clazz,
+            final ClassType parent,
             final ClassTypeParserOptions options) {
 
         // we're iterating over all interfaces and checking whether or not
@@ -233,24 +233,24 @@ public class ClassTypeParser {
                         parent.child(child);
                     } else {
                         final ClassType child = parseString(childInterface.getTypeName());
-                        parent.child(child);                       
+                        parent.child(child);
                     }
                 }
             }
         }
     }
-    
+
     /**
      * Parse a ClassType from a given ParameterizedType. If the passed
      * ParameterizedType has no type/args then this call amounts to a no-op.
-     * If applicable we will optionally ignore param/arg Type's should they 
+     * If applicable we will optionally ignore param/arg Type's should they
      * match a given regex.
-     * 
+     *
      * @param type the ParameterizedType to parse a ClassType from.
      * @param options non-null ClassTypeParserOptions the user may have optionally requested.
      * @return instantiated ClassType.
      */
-    private static ClassType parseParameterizedType(final ParameterizedType type, 
+    private static ClassType parseParameterizedType(final ParameterizedType type,
             final ClassTypeParserOptions options) {
 
         final ParameterizedType pType = (ParameterizedType)type;

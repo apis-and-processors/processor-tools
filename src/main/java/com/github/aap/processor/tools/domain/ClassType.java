@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ClassType representing an arbitrary Object (e.g. Class, Type, etc.) 
+ * ClassType representing an arbitrary Object (e.g. Class, Type, etc.)
  * with potentially X number of child Type(s). This data-structure closely
  * resembles that of a typical Node.
  * 
@@ -41,7 +41,7 @@ public class ClassType implements Comparable<ClassType> {
     public ClassType(final String name) {
         this.name = failIfNull(name, "ClassType name cannot be null").intern();
     }
-    
+
     public static ClassType instance(final String name) {
         return new ClassType(name);
     }
@@ -58,7 +58,7 @@ public class ClassType implements Comparable<ClassType> {
         }
         return this;
     }
-    
+
     /**
      * Qualified Class name of this ClassType (e.g. java.lang.Integer).
      * 
@@ -67,16 +67,16 @@ public class ClassType implements Comparable<ClassType> {
     public String name() {
         return name;
     }
-        
+
     /**
      * List of children.
      * 
      * @return list of child children or empty list if no children.
      */
     private List<ClassType> children() {
-        return children;    
+        return children;
     }
-    
+
     /**
      * Number of children this parent ClassType currently has.
      * 
@@ -85,7 +85,7 @@ public class ClassType implements Comparable<ClassType> {
     public int childCount() {
         return children.size();
     }
-    
+
     /**
      * Get sub ClassType at specified index.
      * 
@@ -95,7 +95,7 @@ public class ClassType implements Comparable<ClassType> {
     public ClassType childAtIndex(final int index) {
         return children.get(index);
     }
-    
+
     /**
      * Find first ClassType matching the passed regex.
      * 
@@ -105,9 +105,9 @@ public class ClassType implements Comparable<ClassType> {
     public ClassType firstChildMatching(final String regex) {
         return (regex != null) ? firstSubTypeMatching(regex, this) : null;
     }
-    
+
     /**
-     * Inner helper method used for recursively iterating through all potential 
+     * Inner helper method used for recursively iterating through all potential
      * types to find a match.
      * 
      * @param regex the regular expression used to match.
@@ -125,9 +125,9 @@ public class ClassType implements Comparable<ClassType> {
                 }
             }
             return null;
-        }        
+        }
     }
-        
+
     /**
      * Compare this ClassType to another ClassType.
      * 
@@ -150,7 +150,7 @@ public class ClassType implements Comparable<ClassType> {
             return -1;
         }
     }
-    
+
     /**
      * Compare this ClassType to another ClassType.
      * 
@@ -170,30 +170,30 @@ public class ClassType implements Comparable<ClassType> {
         if (target != null) {
             return compare(this, target);
         } else {
-            throw new TypeMismatchException("Source type '" + this.name() 
+            throw new TypeMismatchException("Source type '" + this.name()
                     + "' cannot be comapred to NULL target type", this.name());
         }
     }
-    
+
     /**
-     * Helper method to compare 2 ClassType's against each other. Throws 
-     * RuntimeException if 2 types are not equal and can't be massaged into 
+     * Helper method to compare 2 ClassType's against each other. Throws
+     * RuntimeException if 2 types are not equal and can't be massaged into
      * one or the other (i.e. java.lang.Integer into java.lang.Object).
      * 
      * @param source ClassType to act as source.
      * @param target ClassType to act as target to compare against.
      * @return value representing comparison.
      */
-    private static int compare(final ClassType source, final ClassType target) { 
+    private static int compare(final ClassType source, final ClassType target) {
         if (source.name.equals(target.name)) {
-            
-            // All generic types get converted to 'java.lang.Object' thus if 
-            // we encounter one, or in this case 2 because of the match, then 
+
+            // All generic types get converted to 'java.lang.Object' thus if
+            // we encounter one, or in this case 2 because of the match, then
             // return 3 as don't really know what exactly these Objects are.
             if (source.name.equals(Constants.OBJECT_CLASS)) {
                 return 3;
             }
-            
+
             final int sourceSize = source.children().size();
             final int targetSize = target.children().size();
             if (sourceSize == targetSize) {
@@ -222,7 +222,7 @@ public class ClassType implements Comparable<ClassType> {
                 }
                 return counter;
             } else {
-                
+
                 final StringBuilder subTypesMessage = new StringBuilder("Source type '")
                         .append(source.name)
                         .append("' has ")
@@ -238,7 +238,7 @@ public class ClassType implements Comparable<ClassType> {
                     }
                     subTypesMessage.append(") while '");
                 }
-                
+
                 subTypesMessage.append(target.name)
                         .append("' has ")
                         .append(targetSize)
@@ -252,10 +252,10 @@ public class ClassType implements Comparable<ClassType> {
                         }
                     }
                     subTypesMessage.append(')');
-                } 
-                
-                throw new TypeMismatchException(subTypesMessage.toString(), 
-                        source.name, target.name); 
+                }
+
+                throw new TypeMismatchException(subTypesMessage.toString(),
+                        source.name, target.name);
             }
         } else {
             if (source.name.equals(Constants.OBJECT_CLASS)) {
@@ -263,15 +263,15 @@ public class ClassType implements Comparable<ClassType> {
             } else if (target.name.equals(Constants.OBJECT_CLASS)) {
                 return 2;
             } else {
-                throw new TypeMismatchException("Source type '" 
-                    + source.name + "' does not match target type '" 
+                throw new TypeMismatchException("Source type '"
+                    + source.name + "' does not match target type '"
                     + target.name + "'", source.name, target.name);
             }
-        }        
+        }
     }
-    
+
     /**
-     * Helper method to recursively print this ClassType, and all 
+     * Helper method to recursively print this ClassType, and all
      * potential children, into a StringBuilder.
      * 
      * @param classType ClassType to print
@@ -291,7 +291,7 @@ public class ClassType implements Comparable<ClassType> {
             builder.append(Constants.LESS_THAN);
         }
     }
-        
+
     /**
      * Get an toObject of the backing ClassType.
      * 
@@ -300,7 +300,7 @@ public class ClassType implements Comparable<ClassType> {
     public Object toObject() {
         return ReflectionMagic.instance(toClass());
     }
-    
+
     /**
      * Get the Class of the backing ClassType.
      * 
@@ -313,7 +313,7 @@ public class ClassType implements Comparable<ClassType> {
             return Unknown.INSTANCE.getClass();
         }
     }
-    
+
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();

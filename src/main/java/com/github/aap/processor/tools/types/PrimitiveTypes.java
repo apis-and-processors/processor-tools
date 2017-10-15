@@ -27,7 +27,7 @@ import com.github.aap.processor.tools.domain.Null;
  * @author dancc
  */
 public enum PrimitiveTypes {
-    
+
     // numbers
     SHORT("short", (short)0, short.class, Short.class, false),
     INT("int", (int)0, int.class, Integer.class, false),
@@ -35,12 +35,12 @@ public enum PrimitiveTypes {
     FLOAT("float", (float)0.0f, float.class, Float.class, false),
     DOUBLE("double", (double)0.0d, double.class, Double.class, false),
     BYTE("byte", (byte)0, byte.class, Byte.class, false),
-    
+
     // non-numbers
     CHAR("char", '\u0000', char.class, Character.class, false),
     BOOLEAN("boolean", false,  boolean.class, Boolean.class, false),
     VOID("void", null, void.class, Void.class, true),
-    
+
     // special custom primitives
     NULL("null", null, Null.class, Null.class, true);
 
@@ -49,11 +49,11 @@ public enum PrimitiveTypes {
     private final Class primitiveClass;
     private final Class boxedClass;
     private final boolean nullable;
-    
-    private PrimitiveTypes(final String name, 
-            final Object defaultValue, 
-            final Class primitiveClass, 
-            final Class boxedClass, 
+
+    private PrimitiveTypes(final String name,
+            final Object defaultValue,
+            final Class primitiveClass,
+            final Class boxedClass,
             final boolean nullable) {
         this.name = name;
         this.defaultValue = defaultValue;
@@ -61,19 +61,19 @@ public enum PrimitiveTypes {
         this.boxedClass = boxedClass;
         this.nullable = nullable;
     }
-    
+
     public String getName() {
         return this.name;
     }
-    
+
     public Object getDefaultValue() {
         return this.defaultValue;
     }
-    
+
     public Class getPrimitveClass() {
         return this.primitiveClass;
     }
-    
+
     public Class getBoxedClass() {
         return this.boxedClass;
     }
@@ -81,7 +81,7 @@ public enum PrimitiveTypes {
     public boolean isNullable() {
         return this.nullable;
     }
-    
+
     /**
      * Get the corresponding PrimitiveType of given Object.
      * 
@@ -89,13 +89,13 @@ public enum PrimitiveTypes {
      * @return PrimitiveType.
      */
     public static PrimitiveTypes from(final Object obj) {
-        return obj == null 
-                ? PrimitiveTypes.NULL 
-                : from(obj instanceof Class 
-                        ? ((Class)obj).getName() 
+        return obj == null
+                ? PrimitiveTypes.NULL
+                : from(obj instanceof Class
+                        ? ((Class)obj).getName()
                         : obj.toString());
     }
-    
+
     private static PrimitiveTypes from(final String name) {
         PrimitiveTypes possibleType = null;
         if (name == null || name.trim().equalsIgnoreCase(Constants.NULL_STRING)) {
@@ -105,9 +105,9 @@ public enum PrimitiveTypes {
             try {
                 possibleType = PrimitiveTypes.valueOf(name.toUpperCase());
             } catch (Exception e) {
-                // ignore 
+                // ignore
             }
-            
+
             if (possibleType == null) {
                 for (int i = 0; i < PrimitiveTypes.values().length; i++) {
                     final PrimitiveTypes iteration = PrimitiveTypes.values()[i];

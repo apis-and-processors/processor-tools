@@ -25,7 +25,7 @@ import static com.github.aap.processor.tools.utils.Preconditions.failIfNull;
  * @author cdancy
  */
 public class TypeMismatchException extends RuntimeException {
-    
+
     public final String source;
     public final String target;
 
@@ -40,7 +40,7 @@ public class TypeMismatchException extends RuntimeException {
         this.source = failIfNull(source, "source cannot be null");
         this.target = null;
     }
-    
+
     /**
      * Create TypeMismatchException.
      * 
@@ -53,7 +53,7 @@ public class TypeMismatchException extends RuntimeException {
         this.source = failIfNull(source, "source cannot be null");
         this.target = failIfNull(target, "target cannot be null");
     }
-    
+
     /**
      * Create TypeMismatchException.
      * 

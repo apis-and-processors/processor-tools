@@ -24,7 +24,7 @@ package com.github.aap.processor.tools.domain;
  */
 public enum Unknown {
     INSTANCE;
-    
+
     @Override
     public String toString() {
         return "";

@@ -54,7 +54,7 @@ public class StringUtils {
         }
         return count > 1 ? firstOccurence : -1;
     }
-    
+
     /**
      * Replace the first occurrence of subString, within targetString, but ONLY if
      * subString appears more than once within targetString.

@@ -23,8 +23,8 @@ package com.github.aap.processor.tools.utils;
  * @author cdancy
  */
 public class Preconditions {
-    
-    /** 
+
+    /**
      * Ensures that an object reference passed as a parameter to the calling method is not null.
      * 
      * <p>

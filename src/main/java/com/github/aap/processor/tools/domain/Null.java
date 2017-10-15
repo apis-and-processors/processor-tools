@@ -26,7 +26,7 @@ import com.github.aap.processor.tools.utils.Constants;
  */
 public enum Null {
     INSTANCE;
-    
+
     @Override
     public String toString() {
         return Constants.NULL_STRING;

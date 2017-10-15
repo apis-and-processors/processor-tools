@@ -23,36 +23,36 @@ package com.github.aap.processor.tools;
  * @author cdancy
  */
 public class ClassTypeParserOptions {
-    
+
     public static final ClassTypeParserOptions DEFAULT_PARSER_OPTIONS = ClassTypeParserOptions.instance(null, null, null, null);
-    
+
     public final String classRegex;
     public final String classParamRegex;
     public final String interfaceRegex;
     public final String interfaceParamRegex;
-    
+
     /**
      * Create a new ParserOptions for use within `Parser.parse()` calls.
-     * 
+     *
      * @param classRegex the super-classes to ignore.
      * @param classParamRegex the super-classes params/args to ignore.
      * @param interfaceRegex the interfaces to ignore.
      * @param interfaceParamRegex the interface params/args to ignore.
      */
-    public ClassTypeParserOptions(final String classRegex, 
-            final String classParamRegex, 
-            final String interfaceRegex, 
+    public ClassTypeParserOptions(final String classRegex,
+            final String classParamRegex,
+            final String interfaceRegex,
             final String interfaceParamRegex) {
-        
+
         this.classRegex = classRegex;
         this.classParamRegex = classParamRegex;
         this.interfaceRegex = interfaceRegex;
         this.interfaceParamRegex = interfaceParamRegex;
     }
-    
-    public static ClassTypeParserOptions instance(final String classRegex, 
-            final String classParamRegex, 
-            final String interfaceRegex, 
+
+    public static ClassTypeParserOptions instance(final String classRegex,
+            final String classParamRegex,
+            final String interfaceRegex,
             final String interfaceParamRegex) {
         return new ClassTypeParserOptions(classRegex, classParamRegex, interfaceRegex, interfaceParamRegex);
     }
