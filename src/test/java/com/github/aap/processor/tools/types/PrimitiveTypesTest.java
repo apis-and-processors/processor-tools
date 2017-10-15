@@ -37,7 +37,7 @@ public class PrimitiveTypesTest {
 
     @Test
     public void shortToShort() throws Exception {
-        
+
         final ClassType clazzType = ClassTypeParser.parse(short.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.SHORT.getBoxedClass().getName()));
@@ -46,10 +46,10 @@ public class PrimitiveTypesTest {
         assertNotNull(instance);
         assertTrue(instance == 0);
     }
-    
+
     @Test
     public void intToInteger() throws Exception {
-        
+
         final ClassType clazzType = ClassTypeParser.parse(int.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.INT.getBoxedClass().getName()));
@@ -58,10 +58,10 @@ public class PrimitiveTypesTest {
         assertNotNull(instance);
         assertTrue(instance == 0);
     }
-    
+
     @Test
     public void longToLong() throws Exception {
-        
+
         final ClassType clazzType = ClassTypeParser.parse(long.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.LONG.getBoxedClass().getName()));
@@ -70,10 +70,10 @@ public class PrimitiveTypesTest {
         assertNotNull(instance);
         assertTrue(instance == 0);
     }
-    
+
     @Test
     public void floatToFloat() throws Exception {
-        
+
         final ClassType clazzType = ClassTypeParser.parse(float.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.FLOAT.getBoxedClass().getName()));
@@ -82,10 +82,10 @@ public class PrimitiveTypesTest {
         assertNotNull(instance);
         assertTrue(instance == 0);
     }
-    
+
     @Test
     public void doubleToDouble() throws Exception {
-        
+
         final ClassType clazzType = ClassTypeParser.parse(double.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.DOUBLE.getBoxedClass().getName()));
@@ -94,10 +94,10 @@ public class PrimitiveTypesTest {
         assertNotNull(instance);
         assertTrue(instance == 0);
     }
-    
+
     @Test
     public void byteToByte() throws Exception {
-        
+
         final ClassType clazzType = ClassTypeParser.parse(byte.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.BYTE.getBoxedClass().getName()));
@@ -106,11 +106,10 @@ public class PrimitiveTypesTest {
         assertNotNull(instance);
         assertTrue(instance == 0);
     }
-    
-    
-    @Test 
+
+    @Test
     public void charToCharacter() throws Exception {
-        
+
         final ClassType clazzType = ClassTypeParser.parse(char.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.CHAR.getBoxedClass().getName()));
@@ -119,7 +118,7 @@ public class PrimitiveTypesTest {
         assertNotNull(instance);
         assertTrue(instance == '\u0000');
     }
-    
+
     @Test
     public void booleanToBoolean() throws Exception {
 
@@ -132,10 +131,10 @@ public class PrimitiveTypesTest {
         assertNotNull(instance);
         assertTrue(instance == false);
     }
-    
+
     @Test
     public void voidToVoid() throws Exception {
-        
+
         final ClassType clazzType = ClassTypeParser.parse(void.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.VOID.getBoxedClass().getName()));
@@ -144,10 +143,10 @@ public class PrimitiveTypesTest {
         final Void instance = Void.class.cast(clazzType.toObject());
         assertNull(instance);
     }
-    
+
     @Test
     public void nullToNull() throws Exception {
-        
+
         final ClassType clazzType = ClassTypeParser.parse(null);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.NULL.getBoxedClass().getName()));
@@ -155,10 +154,10 @@ public class PrimitiveTypesTest {
         final Null instance = Null.class.cast(clazzType.toObject());
         assertNotNull(instance);
     }
-    
+
     @Test
     public void unknownToUnknown() throws Exception {
-        
+
         final ClassType clazzType = ClassTypeParser.parse(Unknown.INSTANCE);
         assertNotNull(clazzType);
         final Unknown instance = Unknown.class.cast(clazzType.toObject());

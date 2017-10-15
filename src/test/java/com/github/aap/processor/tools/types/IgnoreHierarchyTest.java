@@ -31,27 +31,27 @@ import org.testng.annotations.Test;
  * @author cdancy
  */
 public class IgnoreHierarchyTest {
-    
+
     class Handler1 implements Function<Boolean, String> {
-        
+
         @Override
         public String apply(final Boolean object) {
             return object ? "hello" : "world";
         }
     }
-    
+
     class CustomHandler implements Function<String, AtomicReference<Integer>> {
-        
+
         @Override
         public AtomicReference<Integer> apply(final String object) {
             return null;
         }
     }
-        
+
     @Test
     public void booleanToBoolean() throws Exception {
-        String regex = ".*Serial.*";
-        ClassTypeParserOptions options = ClassTypeParserOptions.instance(null, null, regex, regex);
+        final String regex = ".*Serial.*";
+        final ClassTypeParserOptions options = ClassTypeParserOptions.instance(null, null, regex, regex);
         System.out.println("parse function: " + ClassTypeParser.parse(CustomHandler.class, options));
     }
 }

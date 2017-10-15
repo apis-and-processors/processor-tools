@@ -46,22 +46,22 @@ public class ReflectionMagicTest {
             return 0;
         }
     }
-    
-    @Test 
+
+    @Test
     public void createInnerClasses() {
         final InnerTestClass int1 = new InnerTestClass();
         assertNotNull(int1);
         final InnerTestClass int2 = ReflectionMagic.instance(InnerTestClass.class);
         assertNotNull(int2);
     }
-    
-    @Test 
+
+    @Test
     public void initPrimitiveClasses() throws Exception {
 
         final Short shortObj = ReflectionMagic.instance(short.class);
         assertNotNull(shortObj);
         assertTrue(shortObj == 0);
-        
+
         final Integer integerObj = ReflectionMagic.instance(int.class);
         assertNotNull(integerObj);
         assertTrue(integerObj == 0);
@@ -69,41 +69,41 @@ public class ReflectionMagicTest {
         final Long longObj = ReflectionMagic.instance(long.class);
         assertNotNull(longObj);
         assertTrue(longObj == 0);
-        
+
         final Float floatObj = ReflectionMagic.instance(float.class);
         assertNotNull(floatObj);
         assertTrue(floatObj == 0);
-        
+
         final Double doubleObj = ReflectionMagic.instance(double.class);
         assertNotNull(doubleObj);
         assertTrue(doubleObj == 0);
-        
+
         final Byte byteObj = ReflectionMagic.instance(byte.class);
         assertNotNull(byteObj);
         assertTrue(byteObj == 0);
-        
+
         final Character charObj = ReflectionMagic.instance(char.class);
         assertNotNull(charObj);
         assertTrue(charObj == '\u0000');
-        
+
         final Boolean booleanObj = ReflectionMagic.instance(boolean.class);
         assertNotNull(booleanObj);
         assertTrue(booleanObj == false);
-        
+
         final Void voidObj = ReflectionMagic.instance(void.class);
         assertNull(voidObj);
-        
+
         final Null nullObj = ReflectionMagic.instance(Null.class);
         assertNotNull(nullObj);
     }
-    
-    @Test 
+
+    @Test
     public void initBoxedPrimitiveClasses() throws Exception {
 
         final Short shortObj = ReflectionMagic.instance(Short.class);
         assertNotNull(shortObj);
         assertTrue(shortObj == 0);
-        
+
         final Integer integerObj = ReflectionMagic.instance(Integer.class);
         assertNotNull(integerObj);
         assertTrue(integerObj == 0);
@@ -111,70 +111,70 @@ public class ReflectionMagicTest {
         final Long longObj = ReflectionMagic.instance(Long.class);
         assertNotNull(longObj);
         assertTrue(longObj == 0);
-        
+
         final Float floatObj = ReflectionMagic.instance(Float.class);
         assertNotNull(floatObj);
         assertTrue(floatObj == 0);
-        
+
         final Double doubleObj = ReflectionMagic.instance(Double.class);
         assertNotNull(doubleObj);
         assertTrue(doubleObj == 0);
-        
+
         final Byte byteObj = ReflectionMagic.instance(Byte.class);
         assertNotNull(byteObj);
         assertTrue(byteObj == 0);
-        
+
         final Character charObj = ReflectionMagic.instance(Character.class);
         assertNotNull(charObj);
         assertTrue(charObj == '\u0000');
-        
+
         final Boolean booleanObj = ReflectionMagic.instance(Boolean.class);
         assertNotNull(booleanObj);
         assertTrue(booleanObj == false);
-        
+
         final Void voidObj = ReflectionMagic.instance(Void.class);
         assertNull(voidObj);
-        
+
         final Null nullObj = ReflectionMagic.instance(Null.class);
         assertNotNull(nullObj);
     }
-    
-    @Test 
+
+    @Test
     public void initDataStructureInterfaces() {
-        
+
         final Map<String, String> map = ReflectionMagic.instance(Map.class);
         assertNotNull(map);
         map.put("hello1", "world1");
         assertTrue(map.size() == 1);
-        
+
         final List<String> list = ReflectionMagic.instance(List.class);
         assertNotNull(list);
         list.add("hello2");
         assertTrue(list.size() == 1);
-        
+
         final Set<String> set = ReflectionMagic.instance(Set.class);
         assertNotNull(set);
         set.add("hello3");
         assertTrue(map.size() == 1);
     }
-    
-    @Test 
+
+    @Test
     public void initDataStructureTypes() {
-        
+
         final Map<String, String> map = ReflectionMagic.instance(HashMap.class);
         assertNotNull(map);
         map.put("hello4", "world2");
         assertTrue(map.size() == 1);
-        
+
         final List<String> list = ReflectionMagic.instance(ArrayList.class);
         assertNotNull(list);
         list.add("hello5");
         assertTrue(list.size() == 1);
-        
+
         final Set<String> set = ReflectionMagic.instance(HashSet.class);
         assertNotNull(set);
         set.add("hello6");
         assertTrue(map.size() == 1);
-        
+
     }
 }
