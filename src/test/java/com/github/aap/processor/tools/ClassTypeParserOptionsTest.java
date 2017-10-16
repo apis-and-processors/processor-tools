@@ -20,7 +20,6 @@ package com.github.aap.processor.tools;
 import static org.testng.Assert.assertTrue;
 
 import com.github.aap.processor.tools.domain.ClassType;
-import com.github.aap.processor.tools.utils.Constants;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -60,15 +59,15 @@ public class ClassTypeParserOptionsTest {
         final String regex = ".*" + CustomClassHandlerTwo.class.getSimpleName() + ".*";
         final ClassTypeParserOptions options = ClassTypeParserOptions.instance(regex, null, null, null);
         final ClassType classType = ClassTypeParser.parse(CustomClassHandlerThree.class, options);
-        assertTrue(classType.childCount() == 1);
-        assertTrue(classType.childAtIndex(0).name().equals(Constants.OBJECT_CLASS));
+        assertTrue(classType.children().size() == 1);
+        assertTrue(classType.childAtIndex(0).toClass() == Object.class);
     }
 
     @Test
     public void testClassParamIgnored() throws Exception {
         final ClassTypeParserOptions options = ClassTypeParserOptions.instance(null, ".*Object.*", null, null);
         final ClassType classType = ClassTypeParser.parse(CustomClassHandlerThree.class, options);
-        assertTrue(classType.childCount() == 1);
+        assertTrue(classType.children().size() == 1);
         assertTrue(classType.childAtIndex(0).name().contains(CustomClassHandlerTwo.class.getSimpleName()));
     }
 
@@ -77,13 +76,13 @@ public class ClassTypeParserOptionsTest {
         final String regex = ".*" + Serializable.class.getSimpleName() + ".*";
         final ClassTypeParserOptions options = ClassTypeParserOptions.instance(null, null, regex, null);
         final ClassType classType = ClassTypeParser.parse(CustomInterfaceHandler.class, options);
-        assertTrue(classType.childCount() == 1);
+        assertTrue(classType.children().size() == 1);
         assertTrue(classType.childAtIndex(0).name().contains(Function.class.getSimpleName()));
 
         // check that Serializable interface does not exist.
-        assertTrue(classType.childAtIndex(0).childCount() == 2);
+        assertTrue(classType.childAtIndex(0).children().size() == 2);
         assertTrue(classType.childAtIndex(0).childAtIndex(0).name().contains(AtomicReference.class.getSimpleName()));
-        assertTrue(classType.childAtIndex(0).childAtIndex(0).childCount() == 1);
+        assertTrue(classType.childAtIndex(0).childAtIndex(0).children().size() == 1);
         assertTrue(classType.childAtIndex(0).childAtIndex(0).childAtIndex(0).name().contains(Boolean.class.getSimpleName()));
         assertTrue(classType.childAtIndex(0).childAtIndex(1).name().contains(String.class.getSimpleName()));
     }
@@ -92,13 +91,13 @@ public class ClassTypeParserOptionsTest {
     public void testInterfaceParamIgnored() throws Exception {
         final ClassTypeParserOptions options = ClassTypeParserOptions.instance(null, null, null, ".*" + String.class.getSimpleName() + ".*");
         final ClassType classType = ClassTypeParser.parse(CustomInterfaceHandler.class, options);
-        assertTrue(classType.childCount() == 2);
+        assertTrue(classType.children().size() == 2);
         assertTrue(classType.childAtIndex(0).name().contains(Function.class.getSimpleName()));
 
         // check that String param within Function does not exist.
-        assertTrue(classType.childAtIndex(0).childCount() == 1);
+        assertTrue(classType.childAtIndex(0).children().size() == 1);
         assertTrue(classType.childAtIndex(0).childAtIndex(0).name().contains(AtomicReference.class.getSimpleName()));
-        assertTrue(classType.childAtIndex(0).childAtIndex(0).childCount() == 2);
+        assertTrue(classType.childAtIndex(0).childAtIndex(0).children().size() == 2);
         assertTrue(classType.childAtIndex(0).childAtIndex(0).childAtIndex(0).name().equals(Boolean.class.getName()));
         assertTrue(classType.childAtIndex(0).childAtIndex(0).childAtIndex(1).name().equals(Serializable.class.getName()));
     }

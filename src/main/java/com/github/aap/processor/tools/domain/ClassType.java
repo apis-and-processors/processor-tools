@@ -17,8 +17,6 @@
 
 package com.github.aap.processor.tools.domain;
 
-import static com.github.aap.processor.tools.utils.Preconditions.failIfNull;
-
 import com.github.aap.processor.tools.utils.ReflectionMagic;
 import com.github.aap.processor.tools.utils.Constants;
 
@@ -27,23 +25,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ClassType representing an arbitrary Object (e.g. Class, Type, etc.)
- * with potentially X number of child Type(s). This data-structure closely
+ * ClassType representing an arbitrary Class with potentially
+ * X number of child Classes/Types. This data-structure closely
  * resembles that of a typical Node.
  * 
  * @author dancc
  */
 public class ClassType implements Comparable<ClassType> {
 
-    private final String name;
+    private final Class clazz;
     private final List<ClassType> children = new ArrayList<>();
 
-    public ClassType(final String name) {
-        this.name = failIfNull(name, "ClassType name cannot be null").intern();
+    public ClassType(final Class clazz) {
+        this.clazz = clazz;
     }
 
-    public static ClassType instance(final String name) {
-        return new ClassType(name);
+    public static ClassType instance(final Class clazz) {
+        return new ClassType(clazz);
     }
 
     /**
@@ -60,12 +58,21 @@ public class ClassType implements Comparable<ClassType> {
     }
 
     /**
+     * Get the class representing this ClassType.
+     * 
+     * @return Class
+     */
+    public Class toClass() {
+        return clazz;
+    }
+
+    /**
      * Qualified Class name of this ClassType (e.g. java.lang.Integer).
      * 
      * @return name of this ClassType
      */
     public String name() {
-        return name;
+        return clazz.getName();
     }
 
     /**
@@ -73,17 +80,8 @@ public class ClassType implements Comparable<ClassType> {
      * 
      * @return list of child children or empty list if no children.
      */
-    private List<ClassType> children() {
+    public List<ClassType> children() {
         return children;
-    }
-
-    /**
-     * Number of children this parent ClassType currently has.
-     * 
-     * @return number of children.
-     */
-    public int childCount() {
-        return children.size();
     }
 
     /**
@@ -185,12 +183,12 @@ public class ClassType implements Comparable<ClassType> {
      * @return value representing comparison.
      */
     private static int compare(final ClassType source, final ClassType target) {
-        if (source.name.equals(target.name)) {
+        if (source.toClass() == target.toClass()) {
 
             // All generic types get converted to 'java.lang.Object' thus if
             // we encounter one, or in this case 2 because of the match, then
             // return 3 as don't really know what exactly these Objects are.
-            if (source.name.equals(Constants.OBJECT_CLASS)) {
+            if (source.toClass() == Object.class) {
                 return 3;
             }
 
@@ -224,14 +222,14 @@ public class ClassType implements Comparable<ClassType> {
             } else {
 
                 final StringBuilder subTypesMessage = new StringBuilder("Source type '")
-                        .append(source.name)
+                        .append(source.name())
                         .append("' has ")
                         .append(sourceSize)
                         .append(" subTypes ");
                 if (sourceSize > 0) {
                     subTypesMessage.append('(');
                     for (int index = 0; index < sourceSize; index++) {
-                        subTypesMessage.append(source.children.get(index).name);
+                        subTypesMessage.append(source.children.get(index).name());
                         if (index != sourceSize - 1) {
                             subTypesMessage.append(", ");
                         }
@@ -239,14 +237,14 @@ public class ClassType implements Comparable<ClassType> {
                     subTypesMessage.append(") while '");
                 }
 
-                subTypesMessage.append(target.name)
+                subTypesMessage.append(target.name())
                         .append("' has ")
                         .append(targetSize)
                         .append(" subTypes");
                 if (targetSize > 0) {
                     subTypesMessage.append(" (");
                     for (int index = 0; index < targetSize; index++) {
-                        subTypesMessage.append(target.children.get(index).name);
+                        subTypesMessage.append(target.children.get(index).name());
                         if (index != targetSize - 1) {
                             subTypesMessage.append(", ");
                         }
@@ -255,17 +253,17 @@ public class ClassType implements Comparable<ClassType> {
                 }
 
                 throw new TypeMismatchException(subTypesMessage.toString(),
-                        source.name, target.name);
+                        source.name(), target.name());
             }
         } else {
-            if (source.name.equals(Constants.OBJECT_CLASS)) {
+            if (source.toClass() == Object.class) {
                 return 1;
-            } else if (target.name.equals(Constants.OBJECT_CLASS)) {
+            } else if (target.toClass() == Object.class) {
                 return 2;
             } else {
                 throw new TypeMismatchException("Source type '"
-                    + source.name + "' does not match target type '"
-                    + target.name + "'", source.name, target.name);
+                    + source.name() + "' does not match target type '"
+                    + target.name() + "'", source.name(), target.name());
             }
         }
     }
@@ -278,7 +276,7 @@ public class ClassType implements Comparable<ClassType> {
      * @param builder StringBuilder to write ClassType data into
      */
     private static void print(final ClassType classType, final StringBuilder builder) {
-        builder.append(classType.name);
+        builder.append(classType.name());
         if (classType.children().size() > 0) {
             builder.append(Constants.GREATER_THAN);
             final int size = classType.children().size();
@@ -299,19 +297,6 @@ public class ClassType implements Comparable<ClassType> {
      */
     public Object toObject() {
         return ReflectionMagic.instance(toClass());
-    }
-
-    /**
-     * Get the Class of the backing ClassType.
-     * 
-     * @return Class or toObject of Unknown if type is generic (e.g. T or V).
-     */
-    public Class toClass() {
-        try {
-            return Class.forName(name());
-        } catch (ClassNotFoundException ex) {
-            return Unknown.INSTANCE.getClass();
-        }
     }
 
     @Override

@@ -17,7 +17,6 @@
 
 package com.github.aap.processor.tools;
 
-import static com.github.aap.processor.tools.utils.Constants.OBJECT_CLASS;
 import static com.github.aap.processor.tools.utils.Constants.PERIOD_CHAR;
 
 import com.github.aap.processor.tools.domain.ClassType;
@@ -119,18 +118,18 @@ public class ClassTypeParser {
             final ClassTypeParserOptions options) {
 
         // 1.) init the parent ClassType and attach any parameters as child ClassType's.
-        final ClassType parent = ClassType.instance(clazz.getName());
+        final ClassType parent = ClassType.instance(clazz);
         if (options.classParamRegex != null) {
             for (final TypeVariable childVariable : clazz.getTypeParameters()) {
-                final String properTypeName = properizeTypeName(childVariable.getTypeName());
-                if (!properTypeName.matches(options.classParamRegex)) {
+                final Class properTypeName = parseClassFromTypeName(childVariable.getTypeName());
+                if (!properTypeName.getName().matches(options.classParamRegex)) {
                     final ClassType child = ClassType.instance(properTypeName);
                     parent.child(child);
                 }
             }
         } else {
             for (final TypeVariable childVariable : clazz.getTypeParameters()) {
-                final String properTypeName = properizeTypeName(childVariable.getTypeName());
+                final Class properTypeName = parseClassFromTypeName(childVariable.getTypeName());
                 final ClassType child = ClassType.instance(properTypeName);
                 parent.child(child);
             }
@@ -145,22 +144,28 @@ public class ClassTypeParser {
     }
 
     /**
-     * Check passed type name and if valid return it otherwise return 'java.lang.Object'.
+     * Parse a Class object from the passed type name. If the passed
+     * String is truly generic then we'll return an instance of
+     * 'java.lang.Object' otherwise we'll load a class from its value.
      * 
      * @param typeName String generally gotten from Type.getTypeName().
-     * @return proper type name to use.
+     * @return Class parsed from type name.
      */
-    private static String properizeTypeName(final String typeName) {
+    private static Class parseClassFromTypeName(final String typeName) {
 
         // the idea here is that if the passed String is a reserved java name
         // or it does NOT contain a package declaration (i.e. no periods) then
         // we know it's truly generic and thus have NO idea what it is and so
         // we MUST return a generic Object, otherwise use what is given and
         // parse as per usual.
-        return (!SourceVersion.isName(typeName)
-                || typeName.indexOf(PERIOD_CHAR) == -1)
-                ? OBJECT_CLASS
-                : typeName;
+        try {
+            return (!SourceVersion.isName(typeName)
+                    || typeName.indexOf(PERIOD_CHAR) == -1)
+                    ? Object.class
+                    : Class.forName(typeName);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -178,7 +183,7 @@ public class ClassTypeParser {
 
         final Class superClass = clazz.getSuperclass();
         if (superClass != null
-                && !superClass.getName().equals(OBJECT_CLASS)
+                && !(superClass == Object.class)
                 && (options.classRegex == null
                 || !superClass.getName().matches(options.classRegex))) {
 
@@ -219,8 +224,8 @@ public class ClassTypeParser {
                             parent.child(child);
                         }
                     } else {
-                        final String properTypeName = properizeTypeName(childInterface.getTypeName());
-                        if (!properTypeName.matches(options.interfaceRegex)) {
+                        final Class properTypeName = parseClassFromTypeName(childInterface.getTypeName());
+                        if (!properTypeName.getName().matches(options.interfaceRegex)) {
                             final ClassType child = ClassType.instance(properTypeName);
                             parent.child(child);
                         }
@@ -233,7 +238,7 @@ public class ClassTypeParser {
                         final ClassType child = parseParameterizedType(childType, options);
                         parent.child(child);
                     } else {
-                        final String properTypeName = properizeTypeName(childInterface.getTypeName());
+                        final Class properTypeName = parseClassFromTypeName(childInterface.getTypeName());
                         final ClassType child = ClassType.instance(properTypeName);
                         parent.child(child);
                     }
@@ -257,7 +262,7 @@ public class ClassTypeParser {
 
         final ParameterizedType pType = (ParameterizedType)type;
         final Class clazz = (Class)pType.getRawType();
-        final ClassType parent = ClassType.instance(clazz.getName());
+        final ClassType parent = ClassType.instance(clazz);
         final Type[] childTypes = pType.getActualTypeArguments();
         if (childTypes.length > 0) {
             if (options.interfaceParamRegex != null) {
@@ -270,8 +275,8 @@ public class ClassTypeParser {
                             parent.child(child);
                         }
                     } else {
-                        final String properTypeName = properizeTypeName(childArg.getTypeName());
-                        if (!properTypeName.matches(options.interfaceParamRegex)) {
+                        final Class properTypeName = parseClassFromTypeName(childArg.getTypeName());
+                        if (!properTypeName.getName().matches(options.interfaceParamRegex)) {
                             final ClassType child = ClassType.instance(properTypeName);
                             parent.child(child);
                         }
@@ -284,7 +289,7 @@ public class ClassTypeParser {
                         final ClassType child = parseParameterizedType(childType, options);
                         parent.child(child);
                     } else {
-                        final String properTypeName = properizeTypeName(childArg.getTypeName());
+                        final Class properTypeName = parseClassFromTypeName(childArg.getTypeName());
                         final ClassType child = ClassType.instance(properTypeName);
                         parent.child(child);
                     }

@@ -24,8 +24,6 @@ package com.github.aap.processor.tools.utils;
  */
 public class Constants {
 
-    public static final String OBJECT_CLASS = "java.lang.Object";
-
     public static final String GREATER_THAN = "<";
     public static final String LESS_THAN = ">";
     public static final String COMMA_SPACE = ", ";
