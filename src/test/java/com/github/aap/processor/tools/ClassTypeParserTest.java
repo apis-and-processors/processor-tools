@@ -38,7 +38,7 @@ import org.testng.annotations.Test;
  * 
  * @author cdancy
  */
-public class ParserTest {
+public class ClassTypeParserTest {
 
     private static final String COMPARABLE_REGEX = ".*Comparable.*";
     private static final String FUNCTION_REGEX = ".*Function.*";

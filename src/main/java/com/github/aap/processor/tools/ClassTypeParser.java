@@ -122,15 +122,16 @@ public class ClassTypeParser {
         final ClassType parent = ClassType.instance(clazz.getName());
         if (options.classParamRegex != null) {
             for (final TypeVariable childVariable : clazz.getTypeParameters()) {
-                final String typeName = childVariable.getTypeName();
-                if (!typeName.matches(options.classParamRegex)) {
-                    final ClassType child = parseString(typeName);
+                final String properTypeName = properizeTypeName(childVariable.getTypeName());
+                if (!properTypeName.matches(options.classParamRegex)) {
+                    final ClassType child = ClassType.instance(properTypeName);
                     parent.child(child);
                 }
             }
         } else {
             for (final TypeVariable childVariable : clazz.getTypeParameters()) {
-                final ClassType child = parseString(childVariable.getTypeName());
+                final String properTypeName = properizeTypeName(childVariable.getTypeName());
+                final ClassType child = ClassType.instance(properTypeName);
                 parent.child(child);
             }
         }
@@ -144,12 +145,12 @@ public class ClassTypeParser {
     }
 
     /**
-     * Parse a ClassType from a given String generally gotten from Type.getTypeName().
+     * Check passed type name and if valid return it otherwise return 'java.lang.Object'.
      * 
      * @param typeName String generally gotten from Type.getTypeName().
-     * @return instantiated ClassType.
+     * @return proper type name to use.
      */
-    private static ClassType parseString(final String typeName) {
+    private static String properizeTypeName(final String typeName) {
 
         // the idea here is that if the passed String is a reserved java name
         // or it does NOT contain a package declaration (i.e. no periods) then
@@ -158,8 +159,8 @@ public class ClassTypeParser {
         // parse as per usual.
         return (!SourceVersion.isName(typeName)
                 || typeName.indexOf(PERIOD_CHAR) == -1)
-                ? ClassType.instance(OBJECT_CLASS)
-                : ClassType.instance(typeName);
+                ? OBJECT_CLASS
+                : typeName;
     }
 
     /**
@@ -218,9 +219,9 @@ public class ClassTypeParser {
                             parent.child(child);
                         }
                     } else {
-                        final String typeName = childInterface.getTypeName();
-                        if (!typeName.matches(options.interfaceRegex)) {
-                            final ClassType child = parseString(typeName);
+                        final String properTypeName = properizeTypeName(childInterface.getTypeName());
+                        if (!properTypeName.matches(options.interfaceRegex)) {
+                            final ClassType child = ClassType.instance(properTypeName);
                             parent.child(child);
                         }
                     }
@@ -232,7 +233,8 @@ public class ClassTypeParser {
                         final ClassType child = parseParameterizedType(childType, options);
                         parent.child(child);
                     } else {
-                        final ClassType child = parseString(childInterface.getTypeName());
+                        final String properTypeName = properizeTypeName(childInterface.getTypeName());
+                        final ClassType child = ClassType.instance(properTypeName);
                         parent.child(child);
                     }
                 }
@@ -268,9 +270,9 @@ public class ClassTypeParser {
                             parent.child(child);
                         }
                     } else {
-                        final String typeName = childArg.getTypeName();
-                        if (!typeName.matches(options.interfaceParamRegex)) {
-                            final ClassType child = parseString(childArg.getTypeName());
+                        final String properTypeName = properizeTypeName(childArg.getTypeName());
+                        if (!properTypeName.matches(options.interfaceParamRegex)) {
+                            final ClassType child = ClassType.instance(properTypeName);
                             parent.child(child);
                         }
                     }
@@ -282,7 +284,8 @@ public class ClassTypeParser {
                         final ClassType child = parseParameterizedType(childType, options);
                         parent.child(child);
                     } else {
-                        final ClassType child = parseString(childArg.getTypeName());
+                        final String properTypeName = properizeTypeName(childArg.getTypeName());
+                        final ClassType child = ClassType.instance(properTypeName);
                         parent.child(child);
                     }
                 }
