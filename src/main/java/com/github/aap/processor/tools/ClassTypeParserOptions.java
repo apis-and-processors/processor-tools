@@ -18,7 +18,7 @@
 package com.github.aap.processor.tools;
 
 /**
- * Options available when parsing a ClassType using the `Parser.parse` method.
+ * Options available when parsing a ClassType using the `ClassTypeParser.parse` method.
  * 
  * @author cdancy
  */
@@ -32,7 +32,7 @@ public class ClassTypeParserOptions {
     public final String interfaceParamRegex;
 
     /**
-     * Create a new ParserOptions for use within `Parser.parse()` calls.
+     * Create a new ClassTypeParserOptions for use within `ClassTypeParser.parse()` calls.
      *
      * @param classRegex the super-classes to ignore.
      * @param classParamRegex the super-classes params/args to ignore.
