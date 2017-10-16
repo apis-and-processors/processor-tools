@@ -41,7 +41,7 @@ public class PrimitiveTypesTest {
         final ClassType clazzType = ClassTypeParser.parse(short.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.SHORT.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.SHORT.getBoxedClass()));
+        assertTrue(clazzType.clazz().equals(PrimitiveTypes.SHORT.getBoxedClass()));
         final Short instance = Short.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
@@ -53,7 +53,7 @@ public class PrimitiveTypesTest {
         final ClassType clazzType = ClassTypeParser.parse(int.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.INT.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.INT.getBoxedClass()));
+        assertTrue(clazzType.clazz().equals(PrimitiveTypes.INT.getBoxedClass()));
         final Integer instance = Integer.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
@@ -65,7 +65,7 @@ public class PrimitiveTypesTest {
         final ClassType clazzType = ClassTypeParser.parse(long.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.LONG.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.LONG.getBoxedClass()));
+        assertTrue(clazzType.clazz().equals(PrimitiveTypes.LONG.getBoxedClass()));
         final Long instance = Long.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
@@ -77,7 +77,7 @@ public class PrimitiveTypesTest {
         final ClassType clazzType = ClassTypeParser.parse(float.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.FLOAT.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.FLOAT.getBoxedClass()));
+        assertTrue(clazzType.clazz().equals(PrimitiveTypes.FLOAT.getBoxedClass()));
         final Float instance = Float.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
@@ -89,7 +89,7 @@ public class PrimitiveTypesTest {
         final ClassType clazzType = ClassTypeParser.parse(double.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.DOUBLE.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.DOUBLE.getBoxedClass()));
+        assertTrue(clazzType.clazz().equals(PrimitiveTypes.DOUBLE.getBoxedClass()));
         final Double instance = Double.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
@@ -101,7 +101,7 @@ public class PrimitiveTypesTest {
         final ClassType clazzType = ClassTypeParser.parse(byte.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.BYTE.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.BYTE.getBoxedClass()));
+        assertTrue(clazzType.clazz().equals(PrimitiveTypes.BYTE.getBoxedClass()));
         final Byte instance = Byte.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
@@ -113,7 +113,7 @@ public class PrimitiveTypesTest {
         final ClassType clazzType = ClassTypeParser.parse(char.class);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.CHAR.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.CHAR.getBoxedClass()));
+        assertTrue(clazzType.clazz().equals(PrimitiveTypes.CHAR.getBoxedClass()));
         final Character instance = Character.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == '\u0000');
@@ -126,7 +126,7 @@ public class PrimitiveTypesTest {
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.BOOLEAN.getBoxedClass().getName()));
         assertTrue(clazzType.name().equals(PrimitiveTypes.BOOLEAN.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.BOOLEAN.getBoxedClass()));
+        assertTrue(clazzType.clazz().equals(PrimitiveTypes.BOOLEAN.getBoxedClass()));
         final Boolean instance = Boolean.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == false);
@@ -139,7 +139,7 @@ public class PrimitiveTypesTest {
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.VOID.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.VOID.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.VOID.getBoxedClass()));
+        assertTrue(clazzType.clazz().equals(PrimitiveTypes.VOID.getBoxedClass()));
         final Void instance = Void.class.cast(clazzType.toObject());
         assertNull(instance);
     }
@@ -150,7 +150,7 @@ public class PrimitiveTypesTest {
         final ClassType clazzType = ClassTypeParser.parse(null);
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.NULL.getBoxedClass().getName()));
-        assertTrue(clazzType.toClass().equals(PrimitiveTypes.NULL.getBoxedClass()));
+        assertTrue(clazzType.clazz().equals(PrimitiveTypes.NULL.getBoxedClass()));
         final Null instance = Null.class.cast(clazzType.toObject());
         assertNotNull(instance);
     }

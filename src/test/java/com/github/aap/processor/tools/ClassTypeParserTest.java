@@ -117,7 +117,7 @@ public class ClassTypeParserTest {
 
         final ClassType instance = ClassTypeParser.parse(null);
         assertNotNull(instance);
-        assertTrue(instance.toClass() == Null.class);
+        assertTrue(instance.clazz() == Null.class);
         assertTrue(instance.toObject().toString().equals("null"));
     }
 
@@ -126,7 +126,7 @@ public class ClassTypeParserTest {
 
         final ClassType instance = ClassTypeParser.parse("");
         assertNotNull(instance);
-        assertTrue(instance.toClass() == String.class);
+        assertTrue(instance.clazz() == String.class);
         assertTrue(instance.toObject().toString().equals(""));
     }
 
@@ -135,7 +135,7 @@ public class ClassTypeParserTest {
 
         final ClassType instance = ClassTypeParser.parse(123);
         assertNotNull(instance);
-        assertTrue(instance.toClass() == Integer.class);
+        assertTrue(instance.clazz() == Integer.class);
         assertTrue(instance.toObject().toString().equals("0"));
     }
 
@@ -148,7 +148,7 @@ public class ClassTypeParserTest {
         assertNotNull(type);
         assertTrue(type.name().equals(fullyQualifiedName));
         assertTrue(type.children().size() == 5);
-        assertTrue(type.childAtIndex(0).toClass() == Object.class);
+        assertTrue(type.children().get(0).clazz() == Object.class);
         assertTrue(type.compareTo(ClassTypeParser.parse(instance)) == 3);
 
         fullyQualifiedName = "java.util.ArrayList";
@@ -157,7 +157,7 @@ public class ClassTypeParserTest {
         assertNotNull(type);
         assertTrue(type.name().equals(fullyQualifiedName));
         assertTrue(type.children().size() == 6);
-        assertTrue(type.childAtIndex(0).toClass() == Object.class);
+        assertTrue(type.children().get(0).clazz() == Object.class);
         assertTrue(type.compareTo(ClassTypeParser.parse(instance)) == 3);
 
         fullyQualifiedName = "java.util.Properties";
@@ -174,8 +174,8 @@ public class ClassTypeParserTest {
         assertNotNull(type);
         assertTrue(type.name().equals(fullyQualifiedName));
         assertTrue(type.children().size() == 6);
-        assertTrue(type.childAtIndex(0).toClass() == Object.class);
-        assertTrue(type.childAtIndex(1).toClass() == Object.class);
+        assertTrue(type.children().get(0).clazz() == Object.class);
+        assertTrue(type.children().get(1).clazz() == Object.class);
         assertTrue(type.compareTo(ClassTypeParser.parse(instance)) == 3);
     }
 
@@ -245,7 +245,7 @@ public class ClassTypeParserTest {
         final ClassType classType = ClassTypeParser.parse(GenericClass.class);
         assertTrue(classType.name().equalsIgnoreCase(GenericClass.class.getName()));
         assertTrue(classType.children().size() == 1);
-        assertTrue(classType.childAtIndex(0).name().equalsIgnoreCase(Object.class.getName()));
+        assertTrue(classType.children().get(0).name().equalsIgnoreCase(Object.class.getName()));
     }
 
     @Test
@@ -253,11 +253,11 @@ public class ClassTypeParserTest {
         final ClassType classType = ClassTypeParser.parse(TestMultipleExtends.class);
         assertTrue(classType.name().equalsIgnoreCase(TestMultipleExtends.class.getName()));
         assertTrue(classType.children().size() == 1);
-        assertTrue(classType.childAtIndex(0).name().equalsIgnoreCase(SecondGenericClass.class.getName()));
-        assertTrue(classType.childAtIndex(0).children().size() == 3);
-        assertTrue(classType.childAtIndex(0).childAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
-        assertTrue(classType.childAtIndex(0).childAtIndex(1).name().equalsIgnoreCase(Integer.class.getName()));
-        assertTrue(classType.childAtIndex(0).childAtIndex(2).name().equalsIgnoreCase(GenericClass.class.getName()));
+        assertTrue(classType.children().get(0).name().equalsIgnoreCase(SecondGenericClass.class.getName()));
+        assertTrue(classType.children().get(0).children().size() == 3);
+        assertTrue(classType.children().get(0).children().get(0).name().equalsIgnoreCase(String.class.getName()));
+        assertTrue(classType.children().get(0).children().get(1).name().equalsIgnoreCase(Integer.class.getName()));
+        assertTrue(classType.children().get(0).children().get(2).name().equalsIgnoreCase(GenericClass.class.getName()));
     }
 
     @Test
@@ -265,12 +265,12 @@ public class ClassTypeParserTest {
         final ClassType classType = ClassTypeParser.parse(TestMultipleImplements.class);
         assertTrue(classType.name().equalsIgnoreCase(TestMultipleImplements.class.getName()));
         assertTrue(classType.children().size() == 2);
-        assertTrue(classType.childAtIndex(0).name().equalsIgnoreCase(GenericInterface.class.getName()));
-        assertTrue(classType.childAtIndex(0).children().size() == 1);
-        assertTrue(classType.childAtIndex(0).childAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
-        assertTrue(classType.childAtIndex(1).name().equalsIgnoreCase(Comparable.class.getName()));
-        assertTrue(classType.childAtIndex(1).children().size() == 1);
-        assertTrue(classType.childAtIndex(1).childAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
+        assertTrue(classType.children().get(0).name().equalsIgnoreCase(GenericInterface.class.getName()));
+        assertTrue(classType.children().get(0).children().size() == 1);
+        assertTrue(classType.children().get(0).children().get(0).name().equalsIgnoreCase(String.class.getName()));
+        assertTrue(classType.children().get(1).name().equalsIgnoreCase(Comparable.class.getName()));
+        assertTrue(classType.children().get(1).children().size() == 1);
+        assertTrue(classType.children().get(1).children().get(0).name().equalsIgnoreCase(String.class.getName()));
     }
 
     @Test
@@ -278,10 +278,10 @@ public class ClassTypeParserTest {
         final ClassType classType = ClassTypeParser.parse(ExtendingGenericInterface.class);
         assertTrue(classType.name().equalsIgnoreCase(ExtendingGenericInterface.class.getName()));
         assertTrue(classType.children().size() == 2);
-        assertTrue(classType.childAtIndex(0).name().equalsIgnoreCase(Object.class.getName()));
-        assertTrue(classType.childAtIndex(0).children().size() == 0);
-        assertTrue(classType.childAtIndex(1).name().equalsIgnoreCase(GenericInterface.class.getName()));
-        assertTrue(classType.childAtIndex(1).children().size() == 1);
-        assertTrue(classType.childAtIndex(1).childAtIndex(0).name().equalsIgnoreCase(String.class.getName()));
+        assertTrue(classType.children().get(0).name().equalsIgnoreCase(Object.class.getName()));
+        assertTrue(classType.children().get(0).children().size() == 0);
+        assertTrue(classType.children().get(1).name().equalsIgnoreCase(GenericInterface.class.getName()));
+        assertTrue(classType.children().get(1).children().size() == 1);
+        assertTrue(classType.children().get(1).children().get(0).name().equalsIgnoreCase(String.class.getName()));
     }
 }

@@ -60,7 +60,7 @@ public class ClassTypeParserOptionsTest {
         final ClassTypeParserOptions options = ClassTypeParserOptions.instance(regex, null, null, null);
         final ClassType classType = ClassTypeParser.parse(CustomClassHandlerThree.class, options);
         assertTrue(classType.children().size() == 1);
-        assertTrue(classType.childAtIndex(0).toClass() == Object.class);
+        assertTrue(classType.children().get(0).clazz() == Object.class);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class ClassTypeParserOptionsTest {
         final ClassTypeParserOptions options = ClassTypeParserOptions.instance(null, ".*Object.*", null, null);
         final ClassType classType = ClassTypeParser.parse(CustomClassHandlerThree.class, options);
         assertTrue(classType.children().size() == 1);
-        assertTrue(classType.childAtIndex(0).name().contains(CustomClassHandlerTwo.class.getSimpleName()));
+        assertTrue(classType.children().get(0).name().contains(CustomClassHandlerTwo.class.getSimpleName()));
     }
 
     @Test
@@ -77,14 +77,14 @@ public class ClassTypeParserOptionsTest {
         final ClassTypeParserOptions options = ClassTypeParserOptions.instance(null, null, regex, null);
         final ClassType classType = ClassTypeParser.parse(CustomInterfaceHandler.class, options);
         assertTrue(classType.children().size() == 1);
-        assertTrue(classType.childAtIndex(0).name().contains(Function.class.getSimpleName()));
+        assertTrue(classType.children().get(0).name().contains(Function.class.getSimpleName()));
 
         // check that Serializable interface does not exist.
-        assertTrue(classType.childAtIndex(0).children().size() == 2);
-        assertTrue(classType.childAtIndex(0).childAtIndex(0).name().contains(AtomicReference.class.getSimpleName()));
-        assertTrue(classType.childAtIndex(0).childAtIndex(0).children().size() == 1);
-        assertTrue(classType.childAtIndex(0).childAtIndex(0).childAtIndex(0).name().contains(Boolean.class.getSimpleName()));
-        assertTrue(classType.childAtIndex(0).childAtIndex(1).name().contains(String.class.getSimpleName()));
+        assertTrue(classType.children().get(0).children().size() == 2);
+        assertTrue(classType.children().get(0).children().get(0).name().contains(AtomicReference.class.getSimpleName()));
+        assertTrue(classType.children().get(0).children().get(0).children().size() == 1);
+        assertTrue(classType.children().get(0).children().get(0).children().get(0).name().contains(Boolean.class.getSimpleName()));
+        assertTrue(classType.children().get(0).children().get(1).name().contains(String.class.getSimpleName()));
     }
 
     @Test
@@ -92,13 +92,13 @@ public class ClassTypeParserOptionsTest {
         final ClassTypeParserOptions options = ClassTypeParserOptions.instance(null, null, null, ".*" + String.class.getSimpleName() + ".*");
         final ClassType classType = ClassTypeParser.parse(CustomInterfaceHandler.class, options);
         assertTrue(classType.children().size() == 2);
-        assertTrue(classType.childAtIndex(0).name().contains(Function.class.getSimpleName()));
+        assertTrue(classType.children().get(0).name().contains(Function.class.getSimpleName()));
 
         // check that String param within Function does not exist.
-        assertTrue(classType.childAtIndex(0).children().size() == 1);
-        assertTrue(classType.childAtIndex(0).childAtIndex(0).name().contains(AtomicReference.class.getSimpleName()));
-        assertTrue(classType.childAtIndex(0).childAtIndex(0).children().size() == 2);
-        assertTrue(classType.childAtIndex(0).childAtIndex(0).childAtIndex(0).name().equals(Boolean.class.getName()));
-        assertTrue(classType.childAtIndex(0).childAtIndex(0).childAtIndex(1).name().equals(Serializable.class.getName()));
+        assertTrue(classType.children().get(0).children().size() == 1);
+        assertTrue(classType.children().get(0).children().get(0).name().contains(AtomicReference.class.getSimpleName()));
+        assertTrue(classType.children().get(0).children().get(0).children().size() == 2);
+        assertTrue(classType.children().get(0).children().get(0).children().get(0).name().equals(Boolean.class.getName()));
+        assertTrue(classType.children().get(0).children().get(0).children().get(1).name().equals(Serializable.class.getName()));
     }
 }

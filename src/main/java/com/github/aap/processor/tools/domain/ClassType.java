@@ -62,7 +62,7 @@ public class ClassType implements Comparable<ClassType> {
      * 
      * @return Class
      */
-    public Class toClass() {
+    public Class clazz() {
         return clazz;
     }
 
@@ -82,16 +82,6 @@ public class ClassType implements Comparable<ClassType> {
      */
     public List<ClassType> children() {
         return children;
-    }
-
-    /**
-     * Get sub ClassType at specified index.
-     * 
-     * @param index index of subType.
-     * @return ClassType at specified index.
-     */
-    public ClassType childAtIndex(final int index) {
-        return children.get(index);
     }
 
     /**
@@ -183,12 +173,12 @@ public class ClassType implements Comparable<ClassType> {
      * @return value representing comparison.
      */
     private static int compare(final ClassType source, final ClassType target) {
-        if (source.toClass() == target.toClass()) {
+        if (source.clazz() == target.clazz()) {
 
             // All generic types get converted to 'java.lang.Object' thus if
             // we encounter one, or in this case 2 because of the match, then
             // return 3 as don't really know what exactly these Objects are.
-            if (source.toClass() == Object.class) {
+            if (source.clazz() == Object.class) {
                 return 3;
             }
 
@@ -256,9 +246,9 @@ public class ClassType implements Comparable<ClassType> {
                         source.name(), target.name());
             }
         } else {
-            if (source.toClass() == Object.class) {
+            if (source.clazz() == Object.class) {
                 return 1;
-            } else if (target.toClass() == Object.class) {
+            } else if (target.clazz() == Object.class) {
                 return 2;
             } else {
                 throw new TypeMismatchException("Source type '"
@@ -296,7 +286,7 @@ public class ClassType implements Comparable<ClassType> {
      * @return new toObject from backing ClassType
      */
     public Object toObject() {
-        return ReflectionMagic.instance(toClass());
+        return ReflectionMagic.instance(clazz());
     }
 
     @Override
