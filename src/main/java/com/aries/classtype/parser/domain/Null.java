@@ -15,25 +15,20 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools.utils;
+package com.aries.classtype.parser.domain;
+
+import com.aries.classtype.parser.utils.Constants;
 
 /**
- * Various constants used throughout library.
- * 
+ * Our attempt at creating a NULL primitive which can be used for ClassType.
+ *
  * @author dancc
  */
-public class Constants {
+public enum Null {
+    INSTANCE;
 
-    public static final String GREATER_THAN = "<";
-    public static final String LESS_THAN = ">";
-    public static final String COMMA_SPACE = ", ";
-
-    public static final String NULL_STRING = "null";
-    public static final String EMPTY_STRING = "";
-
-    public static final int PERIOD_CHAR = (int)'.';
-
-    private Constants() {
-        throw new UnsupportedOperationException("Purposely not implemented");
+    @Override
+    public String toString() {
+        return Constants.NULL_STRING;
     }
 }

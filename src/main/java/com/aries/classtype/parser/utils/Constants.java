@@ -15,18 +15,25 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools.domain;
+package com.aries.classtype.parser.utils;
 
 /**
- * Represents when a Type can't be identified (e.g. T, U, V).
+ * Various constants used throughout library.
  * 
  * @author dancc
  */
-public enum Unknown {
-    INSTANCE;
+public class Constants {
 
-    @Override
-    public String toString() {
-        return "";
+    public static final String GREATER_THAN = "<";
+    public static final String LESS_THAN = ">";
+    public static final String COMMA_SPACE = ", ";
+
+    public static final String NULL_STRING = "null";
+    public static final String EMPTY_STRING = "";
+
+    public static final int PERIOD_CHAR = (int)'.';
+
+    private Constants() {
+        throw new UnsupportedOperationException("Purposely not implemented");
     }
 }

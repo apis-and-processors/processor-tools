@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools;
+package com.aries.classtype.parser;
 
 import static org.testng.Assert.assertTrue;
 
-import com.github.aap.processor.tools.domain.ClassType;
+import com.aries.classtype.parser.domain.ClassType;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;

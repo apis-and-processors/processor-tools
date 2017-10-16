@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools.exceptions;
+package com.aries.classtype.parser.exceptions;
 
-import static com.github.aap.processor.tools.utils.Preconditions.failIfNull;
+import static com.aries.classtype.parser.utils.Preconditions.failIfNull;
 
 /**
  * Thrown when comparing 2 ClassTypes and either the source or target don't match.

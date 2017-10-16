@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools;
+package com.aries.classtype.parser;
 
-import com.github.aap.processor.tools.domain.ClassType;
-import com.github.aap.processor.tools.domain.Null;
-import com.github.aap.processor.tools.exceptions.TypeMismatchException;
+import com.aries.classtype.parser.domain.ClassType;
+import com.aries.classtype.parser.domain.Null;
+import com.aries.classtype.parser.exceptions.TypeMismatchException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

@@ -15,20 +15,18 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools.domain;
-
-import com.github.aap.processor.tools.utils.Constants;
+package com.aries.classtype.parser.domain;
 
 /**
- * Our attempt at creating a NULL primitive which can be used for ClassType.
- *
+ * Represents when a Type can't be identified (e.g. T, U, V).
+ * 
  * @author dancc
  */
-public enum Null {
+public enum Unknown {
     INSTANCE;
 
     @Override
     public String toString() {
-        return Constants.NULL_STRING;
+        return "";
     }
 }

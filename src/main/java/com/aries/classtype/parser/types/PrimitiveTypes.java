@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools.types;
+package com.aries.classtype.parser.types;
 
-import com.github.aap.processor.tools.utils.Constants;
-import com.github.aap.processor.tools.domain.Null;
+import com.aries.classtype.parser.utils.Constants;
+import com.aries.classtype.parser.domain.Null;
 
 /**
  * Java primitive types, and some of our own, along with various attributes

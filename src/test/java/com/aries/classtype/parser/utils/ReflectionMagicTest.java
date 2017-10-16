@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools.utils;
+package com.aries.classtype.parser.utils;
 
-import com.github.aap.processor.tools.domain.Null;
+import com.aries.classtype.parser.domain.Null;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools;
+package com.aries.classtype.parser;
 
 /**
  * Options available when parsing a ClassType using the `ClassTypeParser.parse` method.

@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools;
+package com.aries.classtype.parser;
 
-import static com.github.aap.processor.tools.utils.Constants.PERIOD_CHAR;
+import static com.aries.classtype.parser.utils.Constants.PERIOD_CHAR;
 
-import com.github.aap.processor.tools.domain.ClassType;
-import com.github.aap.processor.tools.types.PrimitiveTypes;
+import com.aries.classtype.parser.domain.ClassType;
+import com.aries.classtype.parser.types.PrimitiveTypes;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -32,7 +32,7 @@ import javax.lang.model.SourceVersion;
  * classes, and all interfaces attached therein on top of Type's applied to either.
  * 
  * <p>
- The algorithm involved here recursively climbs a given Classes `extend` hierarchy
+ The algorithm involved here recursively climbs a given classes `extend` hierarchy
  looking for classes and their potential types. Furthermore, and while we're
  climbing the `extend` hierarchy, we recursively climb each potential classes
  multiple interface hierarchy, and their potential extended interfaces, looking
@@ -44,7 +44,7 @@ import javax.lang.model.SourceVersion;
  This ClassTypeParser has been heavily optimized to be as fast as possible with the least
  amount of comparisons required for a given `parse` whilst taking into account
  potential options the user may have requested. Please take heed when attempting
- to optimize and/or refactor this code due to what one might consider convoluted
+ to optimize this code due to what one might consider convoluted
  and/or overly complicated. Because classes can have N number of Type's we take
  special care to not do any unneeded computations as doing so can potentially
  slow down a process which needs to be as fast as possible.
@@ -66,7 +66,7 @@ public class ClassTypeParser {
 
     /**
      * Parse a ClassType from some arbitrary Object (e.g. Class, Type, etc.) whilst
- supplying optional ClassTypeParserOptions (can be null).
+     * supplying optional ClassTypeParserOptions (can be null).
      * 
      * @param parseToClassType arbitrary Object to parse a ClassType from.
      * @param options non-null ClassTypeParserOptions the user may have optionally requested.
@@ -78,9 +78,9 @@ public class ClassTypeParser {
 
     /**
      * Parse a ClassType from some arbitrary Object (e.g. Class, Type, etc.) whilst
- supplying optional ClassTypeParserOptions (can be null). This is the internal version
- of the public method `parse` which does some initial parsing before attempting
- to recursively traverse the super-class/interface hierarchy.
+     * supplying optional ClassTypeParserOptions (can be null). This is the internal version
+     * of the public method `parse` which does some initial parsing before attempting
+     * to recursively traverse the super-class/interface hierarchy.
      * 
      * @param parseToClassType arbitrary Object to parse a ClassType from.
      * @param options non-null ClassTypeParserOptions the user may have optionally requested.

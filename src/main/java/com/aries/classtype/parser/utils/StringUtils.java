@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools.utils;
+package com.aries.classtype.parser.utils;
 
-import static com.github.aap.processor.tools.utils.Preconditions.failIfNull;
+import static com.aries.classtype.parser.utils.Preconditions.failIfNull;
 
 /**
  * Static utility methods aiding in string manipulation.

@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools.domain;
+package com.aries.classtype.parser.domain;
 
-import com.github.aap.processor.tools.utils.ReflectionMagic;
-import com.github.aap.processor.tools.utils.Constants;
+import com.aries.classtype.parser.utils.ReflectionMagic;
+import com.aries.classtype.parser.utils.Constants;
 
-import com.github.aap.processor.tools.exceptions.TypeMismatchException;
+import com.aries.classtype.parser.exceptions.TypeMismatchException;
 import java.util.ArrayList;
 import java.util.List;
 

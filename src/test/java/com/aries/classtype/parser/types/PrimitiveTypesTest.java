@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package com.github.aap.processor.tools.types;
+package com.aries.classtype.parser.types;
 
-import com.github.aap.processor.tools.ClassTypeParser;
-import com.github.aap.processor.tools.domain.ClassType;
-import com.github.aap.processor.tools.domain.Null;
-import com.github.aap.processor.tools.domain.Unknown;
+import com.aries.classtype.parser.ClassTypeParser;
+import com.aries.classtype.parser.domain.ClassType;
+import com.aries.classtype.parser.domain.Null;
+import com.aries.classtype.parser.domain.Unknown;
 
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertNotNull;
