@@ -19,7 +19,6 @@ package com.aries.classtype.parser;
 
 import static org.testng.Assert.assertTrue;
 
-import com.aries.classtype.parser.domain.ClassType;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -32,7 +31,7 @@ import org.testng.annotations.Test;
  * 
  * @author cdancy
  */
-public class ClassTypeParserOptionsTest {
+public class ParseOptionsTest {
 
     class CustomInterfaceHandler implements Function<AtomicReference<Boolean>, String>, Serializable {
 
@@ -57,16 +56,16 @@ public class ClassTypeParserOptionsTest {
     @Test
     public void testClassIgnored() throws Exception {
         final String regex = ".*" + CustomClassHandlerTwo.class.getSimpleName() + ".*";
-        final ClassTypeParserOptions options = ClassTypeParserOptions.instance(regex, null, null, null);
-        final ClassType classType = ClassTypeParser.parse(CustomClassHandlerThree.class, options);
+        final ParseOptions options = ParseOptions.instance(regex, null, null, null);
+        final ClassType classType = ClassType.parse(CustomClassHandlerThree.class, options);
         assertTrue(classType.children().size() == 1);
         assertTrue(classType.children().get(0).clazz() == Object.class);
     }
 
     @Test
     public void testClassParamIgnored() throws Exception {
-        final ClassTypeParserOptions options = ClassTypeParserOptions.instance(null, ".*Object.*", null, null);
-        final ClassType classType = ClassTypeParser.parse(CustomClassHandlerThree.class, options);
+        final ParseOptions options = ParseOptions.instance(null, ".*Object.*", null, null);
+        final ClassType classType = ClassType.parse(CustomClassHandlerThree.class, options);
         assertTrue(classType.children().size() == 1);
         assertTrue(classType.children().get(0).name().contains(CustomClassHandlerTwo.class.getSimpleName()));
     }
@@ -74,8 +73,8 @@ public class ClassTypeParserOptionsTest {
     @Test
     public void testInterfaceIgnored() throws Exception {
         final String regex = ".*" + Serializable.class.getSimpleName() + ".*";
-        final ClassTypeParserOptions options = ClassTypeParserOptions.instance(null, null, regex, null);
-        final ClassType classType = ClassTypeParser.parse(CustomInterfaceHandler.class, options);
+        final ParseOptions options = ParseOptions.instance(null, null, regex, null);
+        final ClassType classType = ClassType.parse(CustomInterfaceHandler.class, options);
         assertTrue(classType.children().size() == 1);
         assertTrue(classType.children().get(0).name().contains(Function.class.getSimpleName()));
 
@@ -89,8 +88,8 @@ public class ClassTypeParserOptionsTest {
 
     @Test
     public void testInterfaceParamIgnored() throws Exception {
-        final ClassTypeParserOptions options = ClassTypeParserOptions.instance(null, null, null, ".*" + String.class.getSimpleName() + ".*");
-        final ClassType classType = ClassTypeParser.parse(CustomInterfaceHandler.class, options);
+        final ParseOptions options = ParseOptions.instance(null, null, null, ".*" + String.class.getSimpleName() + ".*");
+        final ClassType classType = ClassType.parse(CustomInterfaceHandler.class, options);
         assertTrue(classType.children().size() == 2);
         assertTrue(classType.children().get(0).name().contains(Function.class.getSimpleName()));
 

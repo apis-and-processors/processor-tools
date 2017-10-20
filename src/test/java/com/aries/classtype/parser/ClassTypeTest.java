@@ -17,7 +17,6 @@
 
 package com.aries.classtype.parser;
 
-import com.aries.classtype.parser.domain.ClassType;
 import com.aries.classtype.parser.domain.Null;
 import com.aries.classtype.parser.exceptions.TypeMismatchException;
 import java.util.ArrayList;
@@ -33,11 +32,11 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 /**
- * Tests for exercising ClassTypeParser.
+ * Tests for exercising AbstractClassType.
  * 
  * @author cdancy
  */
-public class ClassTypeParserTest {
+public class ClassTypeTest {
 
     private static final String COMPARABLE_REGEX = ".*Comparable.*";
     private static final String FUNCTION_REGEX = ".*Function.*";
@@ -115,7 +114,7 @@ public class ClassTypeParserTest {
     @Test
     public void testNullType() {
 
-        final ClassType instance = ClassTypeParser.parse(null);
+        final ClassType instance = ClassType.parse(null);
         assertNotNull(instance);
         assertTrue(instance.clazz() == Null.class);
         assertTrue(instance.toObject().toString().equals("null"));
@@ -124,7 +123,7 @@ public class ClassTypeParserTest {
     @Test
     public void testEmptyStringType() {
 
-        final ClassType instance = ClassTypeParser.parse("");
+        final ClassType instance = ClassType.parse("");
         assertNotNull(instance);
         assertTrue(instance.clazz() == String.class);
         assertTrue(instance.toObject().toString().equals(""));
@@ -133,7 +132,7 @@ public class ClassTypeParserTest {
     @Test
     public void testPrimitiveType() {
 
-        final ClassType instance = ClassTypeParser.parse(123);
+        final ClassType instance = ClassType.parse(123);
         assertNotNull(instance);
         assertTrue(instance.clazz() == Integer.class);
         assertTrue(instance.toObject().toString().equals("0"));
@@ -144,45 +143,45 @@ public class ClassTypeParserTest {
 
         String fullyQualifiedName = "java.util.HashSet";
         Object instance = new HashSet<>();
-        ClassType type = ClassTypeParser.parse(instance);
+        ClassType type = ClassType.parse(instance);
         assertNotNull(type);
         assertTrue(type.name().equals(fullyQualifiedName));
         assertTrue(type.children().size() == 5);
         assertTrue(type.children().get(0).clazz() == Object.class);
-        assertTrue(type.compareTo(ClassTypeParser.parse(instance)) == 3);
+        assertTrue(type.compareTo(ClassType.parse(instance)) == 3);
 
         fullyQualifiedName = "java.util.ArrayList";
         instance = new ArrayList<>();
-        type = ClassTypeParser.parse(instance);
+        type = ClassType.parse(instance);
         assertNotNull(type);
         assertTrue(type.name().equals(fullyQualifiedName));
         assertTrue(type.children().size() == 6);
         assertTrue(type.children().get(0).clazz() == Object.class);
-        assertTrue(type.compareTo(ClassTypeParser.parse(instance)) == 3);
+        assertTrue(type.compareTo(ClassType.parse(instance)) == 3);
 
         fullyQualifiedName = "java.util.Properties";
         instance = new Properties();
-        type = ClassTypeParser.parse(instance);
+        type = ClassType.parse(instance);
         assertNotNull(type);
         assertTrue(type.name().equals(fullyQualifiedName));
         assertTrue(type.children().size() == 1);
-        assertTrue(type.compareTo(ClassTypeParser.parse(instance)) == 3);
+        assertTrue(type.compareTo(ClassType.parse(instance)) == 3);
 
         fullyQualifiedName = "java.util.HashMap";
         instance = new HashMap<>();
-        type = ClassTypeParser.parse(instance);
+        type = ClassType.parse(instance);
         assertNotNull(type);
         assertTrue(type.name().equals(fullyQualifiedName));
         assertTrue(type.children().size() == 6);
         assertTrue(type.children().get(0).clazz() == Object.class);
         assertTrue(type.children().get(1).clazz() == Object.class);
-        assertTrue(type.compareTo(ClassTypeParser.parse(instance)) == 3);
+        assertTrue(type.compareTo(ClassType.parse(instance)) == 3);
     }
 
     @Test
     public void testDataStructuresToClassTypes() {
 
-        final ClassType helloWorld = ClassTypeParser.parse(HelloWorld.class);
+        final ClassType helloWorld = ClassType.parse(HelloWorld.class);
         assertNotNull(helloWorld);
         assertNull(helloWorld.firstChildMatching(".*NonExistentType.*"));
         assertTrue(helloWorld.name().equals(HelloWorld.class.getName()));
@@ -214,10 +213,10 @@ public class ClassTypeParserTest {
     @Test (dependsOnMethods = "testDataStructuresToClassTypes")
     public void testDataStructuresComparison() {
 
-        final ClassType helloWorld = ClassTypeParser.parse(HelloWorld.class);
-        final ClassType helloWorld2 = ClassTypeParser.parse(HelloWorld2.class);
-        final ClassType helloWorld3 = ClassTypeParser.parse(HelloWorld3.class);
-        final ClassType helloWorld4 = ClassTypeParser.parse(HelloWorld4.class);
+        final ClassType helloWorld = ClassType.parse(HelloWorld.class);
+        final ClassType helloWorld2 = ClassType.parse(HelloWorld2.class);
+        final ClassType helloWorld3 = ClassType.parse(HelloWorld3.class);
+        final ClassType helloWorld4 = ClassType.parse(HelloWorld4.class);
 
         assertTrue(helloWorld.compareTo(helloWorld2) == -1);
         assertTrue(helloWorld.firstChildMatching(COMPARABLE_REGEX).compareTo(helloWorld3.firstChildMatching(COMPARABLE_REGEX)) == -1);
@@ -229,20 +228,20 @@ public class ClassTypeParserTest {
 
     @Test (expectedExceptions = TypeMismatchException.class)
     public void testThrowsExceptionOnCompare() {
-        final ClassType helloWorld = ClassTypeParser.parse(HelloWorld.class);
-        final ClassType helloWorld3 = ClassTypeParser.parse(HelloWorld3.class);
+        final ClassType helloWorld = ClassType.parse(HelloWorld.class);
+        final ClassType helloWorld3 = ClassType.parse(HelloWorld3.class);
         helloWorld.firstChildMatching(COMPARABLE_REGEX).compare(helloWorld3.firstChildMatching(COMPARABLE_REGEX));
     }
 
     @Test (expectedExceptions = TypeMismatchException.class)
     public void testThrowsExceptionOnCompareWithNull() {
-        final ClassType helloWorld = ClassTypeParser.parse(HelloWorld.class);
+        final ClassType helloWorld = ClassType.parse(HelloWorld.class);
         helloWorld.firstChildMatching(COMPARABLE_REGEX).compare(null);
     }
 
     @Test
     public void testGeneric() {
-        final ClassType classType = ClassTypeParser.parse(GenericClass.class);
+        final ClassType classType = ClassType.parse(GenericClass.class);
         assertTrue(classType.name().equalsIgnoreCase(GenericClass.class.getName()));
         assertTrue(classType.children().size() == 1);
         assertTrue(classType.children().get(0).name().equalsIgnoreCase(Object.class.getName()));
@@ -250,7 +249,7 @@ public class ClassTypeParserTest {
 
     @Test
     public void testMultipleExtends() {
-        final ClassType classType = ClassTypeParser.parse(TestMultipleExtends.class);
+        final ClassType classType = ClassType.parse(TestMultipleExtends.class);
         assertTrue(classType.name().equalsIgnoreCase(TestMultipleExtends.class.getName()));
         assertTrue(classType.children().size() == 1);
         assertTrue(classType.children().get(0).name().equalsIgnoreCase(SecondGenericClass.class.getName()));
@@ -262,7 +261,7 @@ public class ClassTypeParserTest {
 
     @Test
     public void testMultipleImplements() {
-        final ClassType classType = ClassTypeParser.parse(TestMultipleImplements.class);
+        final ClassType classType = ClassType.parse(TestMultipleImplements.class);
         assertTrue(classType.name().equalsIgnoreCase(TestMultipleImplements.class.getName()));
         assertTrue(classType.children().size() == 2);
         assertTrue(classType.children().get(0).name().equalsIgnoreCase(GenericInterface.class.getName()));
@@ -275,7 +274,7 @@ public class ClassTypeParserTest {
 
     @Test
     public void testExtendingGenericInterface() {
-        final ClassType classType = ClassTypeParser.parse(ExtendingGenericInterface.class);
+        final ClassType classType = ClassType.parse(ExtendingGenericInterface.class);
         assertTrue(classType.name().equalsIgnoreCase(ExtendingGenericInterface.class.getName()));
         assertTrue(classType.children().size() == 2);
         assertTrue(classType.children().get(0).name().equalsIgnoreCase(Object.class.getName()));

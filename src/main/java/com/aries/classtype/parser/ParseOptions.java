@@ -18,13 +18,13 @@
 package com.aries.classtype.parser;
 
 /**
- * Options available when parsing a ClassType using the `ClassTypeParser.parse` method.
+ * Options available when parsing a ClassType using the `ClassType.parse` method.
  * 
  * @author cdancy
  */
-public class ClassTypeParserOptions {
+public class ParseOptions {
 
-    public static final ClassTypeParserOptions DEFAULT_PARSER_OPTIONS = ClassTypeParserOptions.instance(null, null, null, null);
+    public static final ParseOptions DEFAULT_PARSER_OPTIONS = ParseOptions.instance(null, null, null, null);
 
     public final String classRegex;
     public final String classParamRegex;
@@ -32,14 +32,14 @@ public class ClassTypeParserOptions {
     public final String interfaceParamRegex;
 
     /**
-     * Create a new ClassTypeParserOptions for use within `ClassTypeParser.parse()` calls.
+     * Create a new ParseOptions for use with `ClassType.parse()` calls.
      *
      * @param classRegex the super-classes to ignore.
      * @param classParamRegex the super-classes params/args to ignore.
      * @param interfaceRegex the interfaces to ignore.
      * @param interfaceParamRegex the interface params/args to ignore.
      */
-    public ClassTypeParserOptions(final String classRegex,
+    public ParseOptions(final String classRegex,
             final String classParamRegex,
             final String interfaceRegex,
             final String interfaceParamRegex) {
@@ -50,10 +50,10 @@ public class ClassTypeParserOptions {
         this.interfaceParamRegex = interfaceParamRegex;
     }
 
-    public static ClassTypeParserOptions instance(final String classRegex,
+    public static ParseOptions instance(final String classRegex,
             final String classParamRegex,
             final String interfaceRegex,
             final String interfaceParamRegex) {
-        return new ClassTypeParserOptions(classRegex, classParamRegex, interfaceRegex, interfaceParamRegex);
+        return new ParseOptions(classRegex, classParamRegex, interfaceRegex, interfaceParamRegex);
     }
 }

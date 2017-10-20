@@ -19,11 +19,13 @@ package com.aries.classtype.parser;
 
 import static com.aries.classtype.parser.utils.Constants.PERIOD_CHAR;
 
-import com.aries.classtype.parser.domain.ClassType;
+import com.aries.classtype.parser.exceptions.TypeMismatchException;
+
 import com.aries.classtype.parser.types.PrimitiveTypes;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.List;
 import javax.lang.model.SourceVersion;
 
 /**
@@ -41,7 +43,7 @@ import javax.lang.model.SourceVersion;
  Type's themselves, if not valid (i.e. not an actual java class), will be set
  to `java.lang.Object`.
 
- This ClassTypeParser has been heavily optimized to be as fast as possible with the least
+ This AbstractClassType has been heavily optimized to be as fast as possible with the least
  amount of comparisons required for a given `parse` whilst taking into account
  potential options the user may have requested. Please take heed when attempting
  to optimize this code due to what one might consider convoluted
@@ -52,7 +54,7 @@ import javax.lang.model.SourceVersion;
  *
  * @author dancc
  */
-public class ClassTypeParser {
+public abstract class AbstractClassType implements Comparable<ClassType> {
 
     /**
      * Parse a ClassType from some arbitrary Object (e.g. Class, Type, etc.).
@@ -61,33 +63,33 @@ public class ClassTypeParser {
      * @return instantiated ClassType.
      */
     public static ClassType parse(final Object parseToClassType) {
-        return parseObject(parseToClassType, ClassTypeParserOptions.DEFAULT_PARSER_OPTIONS);
+        return parseObject(parseToClassType, ParseOptions.DEFAULT_PARSER_OPTIONS);
     }
 
     /**
      * Parse a ClassType from some arbitrary Object (e.g. Class, Type, etc.) whilst
-     * supplying optional ClassTypeParserOptions (can be null).
+     * supplying optional ParseOptions (can be null).
      * 
      * @param parseToClassType arbitrary Object to parse a ClassType from.
-     * @param options non-null ClassTypeParserOptions the user may have optionally requested.
+     * @param options non-null ParseOptions the user may have optionally requested.
      * @return instantiated ClassType.
      */
-    public static ClassType parse(final Object parseToClassType, final ClassTypeParserOptions options) {
-        return parseObject(parseToClassType, options != null ? options : ClassTypeParserOptions.DEFAULT_PARSER_OPTIONS);
+    public static ClassType parse(final Object parseToClassType, final ParseOptions options) {
+        return parseObject(parseToClassType, options != null ? options : ParseOptions.DEFAULT_PARSER_OPTIONS);
     }
 
     /**
      * Parse a ClassType from some arbitrary Object (e.g. Class, Type, etc.) whilst
-     * supplying optional ClassTypeParserOptions (can be null). This is the internal version
+     * supplying optional ParseOptions (can be null). This is the internal version
      * of the public method `parse` which does some initial parsing before attempting
      * to recursively traverse the super-class/interface hierarchy.
      * 
      * @param parseToClassType arbitrary Object to parse a ClassType from.
-     * @param options non-null ClassTypeParserOptions the user may have optionally requested.
+     * @param options non-null ParseOptions the user may have optionally requested.
      * @return instantiated ClassType.
      */
     private static ClassType parseObject(final Object parseToClassType,
-            final ClassTypeParserOptions options) {
+            final ParseOptions options) {
 
         Class potentialClazz;
         if (parseToClassType != null) {
@@ -111,11 +113,11 @@ public class ClassTypeParser {
      * optionally ignore generic types should they match a given regex.
      * 
      * @param clazz the Class to parse a ClassType from.
-     * @param options non-null ClassTypeParserOptions the user may have optionally requested.
+     * @param options non-null ParseOptions the user may have optionally requested.
      * @return instantiated ClassType.
      */
     private static ClassType parseClass(final Class clazz,
-            final ClassTypeParserOptions options) {
+            final ParseOptions options) {
 
         // 1.) init the parent ClassType and attach any parameters as child ClassType's.
         final ClassType parent = ClassType.instance(clazz);
@@ -175,11 +177,11 @@ public class ClassTypeParser {
      *
      * @param clazz the Class from whose super-classes we will parse ClassType's from and insert as children.
      * @param parent the parent ClassType we will insert potential child ClassType's into.
-     * @param options non-null ClassTypeParserOptions the user may have optionally requested.
+     * @param options non-null ParseOptions the user may have optionally requested.
      */
     private static void parseSuperClass(final Class clazz,
             final ClassType parent,
-            final ClassTypeParserOptions options) {
+            final ParseOptions options) {
 
         final Class superClass = clazz.getSuperclass();
         if (superClass != null
@@ -203,11 +205,11 @@ public class ClassTypeParser {
      *
      * @param clazz the Class from whose interfaces we will parse ClassType's from and insert as children.
      * @param parent the parent ClassType we will insert potential child ClassType's into.
-     * @param options non-null ClassTypeParserOptions the user may have optionally requested.
+     * @param options non-null ParseOptions the user may have optionally requested.
      */
     private static void parseInterfaces(final Class clazz,
             final ClassType parent,
-            final ClassTypeParserOptions options) {
+            final ParseOptions options) {
 
         // we're iterating over all interfaces and checking whether or not
         // said Type is an toObject of ParamterizedType or just a normal Type
@@ -254,11 +256,11 @@ public class ClassTypeParser {
      * match a given regex.
      *
      * @param type the ParameterizedType to parse a ClassType from.
-     * @param options non-null ClassTypeParserOptions the user may have optionally requested.
+     * @param options non-null ParseOptions the user may have optionally requested.
      * @return instantiated ClassType.
      */
     private static ClassType parseParameterizedType(final ParameterizedType type,
-            final ClassTypeParserOptions options) {
+            final ParseOptions options) {
 
         final ParameterizedType pType = (ParameterizedType)type;
         final Class clazz = (Class)pType.getRawType();
@@ -303,7 +305,152 @@ public class ClassTypeParser {
         return parent;
     }
 
-    private ClassTypeParser() {
-        throw new UnsupportedOperationException("Purposely not implemented");
+    /**
+     * Get the list of child ClassType's this ClassType has.
+     * 
+     * @return list of ClassType's or empty list if no ClassType's defined.
+     */
+    abstract List<ClassType> children();
+
+    /**
+     * Get the name of this ClassType.
+     * 
+     * @return name of this ClassType.
+     */
+    abstract String name();
+
+    /**
+     * Compare this ClassType to another ClassType.
+     * 
+     * <p>
+     * -1 == source and target do not match
+     * 0 == source and target match
+     * 1 == source has unknown Type
+     * 2 == target has unknown Type
+     * 3 == source and target both have unknown Types
+     * </p>
+     * 
+     * @param target ClassType to compare this ClassType to.
+     * @return value representing comparison.
+     * @throws TypeMismatchException if target is null or any 2 types cannot be compared
+     */
+    abstract int compare(final ClassType target);
+
+    /**
+     * Compare this ClassType to another ClassType.
+     * 
+     * <p>
+     * -1 == source and target do not match
+     * 0 == source and target match
+     * 1 == source has unknown Type
+     * 2 == target has unknown Type
+     * 3 == source and target both have unknown Types
+     * </p>
+     * 
+     * @param target ClassType to compare this ClassType to.
+     * @return value representing comparison.
+     */
+    @Override
+    public int compareTo(final ClassType target) {
+        try {
+            return compare(target);
+        } catch (TypeMismatchException e) {
+            return -1;
+        }
+    }
+
+    /**
+     * Helper method to compare 2 ClassType's against each other. Throws
+     * RuntimeException if 2 types are not equal and can't be massaged into
+     * one or the other (i.e. java.lang.Integer into java.lang.Object).
+     * 
+     * @param source ClassType to act as source.
+     * @param target ClassType to act as target to compare against.
+     * @return value representing comparison.
+     */
+    protected static int compareTypes(final ClassType source, final ClassType target) {
+        if (source.clazz() == target.clazz()) {
+
+            // All generic types get converted to 'java.lang.Object' thus if
+            // we encounter one, or in this case 2 because of the match, then
+            // return 3 as don't really know what exactly these Objects are.
+            if (source.clazz() == Object.class) {
+                return 3;
+            }
+
+            final int sourceSize = source.children().size();
+            final int targetSize = target.children().size();
+            if (sourceSize == targetSize) {
+                int counter = 0;
+                for (int i = 0; i < sourceSize; i++) {
+                    final int localCount = compareTypes(source.children().get(i), target.children().get(i));
+                    switch (localCount) {
+                    case 0:
+                        break;
+                    case 1:
+                        if (counter == 0 || counter == 2) {
+                            counter ++;
+                        }
+                        break;
+                    case 2:
+                        if (counter < 2) {
+                            counter += 2;
+                        }
+                        break;
+                    case 3:
+                        counter = 3;
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                return counter;
+            } else {
+
+                final StringBuilder subTypesMessage = new StringBuilder("Source type '")
+                        .append(source.name())
+                        .append("' has ")
+                        .append(sourceSize)
+                        .append(" subTypes ");
+                if (sourceSize > 0) {
+                    subTypesMessage.append('(');
+                    for (int index = 0; index < sourceSize; index++) {
+                        subTypesMessage.append(source.children().get(index).name());
+                        if (index != sourceSize - 1) {
+                            subTypesMessage.append(", ");
+                        }
+                    }
+                    subTypesMessage.append(") while '");
+                }
+
+                subTypesMessage.append(target.name())
+                        .append("' has ")
+                        .append(targetSize)
+                        .append(" subTypes");
+                if (targetSize > 0) {
+                    subTypesMessage.append(" (");
+                    for (int index = 0; index < targetSize; index++) {
+                        subTypesMessage.append(target.children().get(index).name());
+                        if (index != targetSize - 1) {
+                            subTypesMessage.append(", ");
+                        }
+                    }
+                    subTypesMessage.append(')');
+                }
+
+                throw new TypeMismatchException(subTypesMessage.toString(),
+                        source.name(), target.name());
+            }
+        } else {
+            if (source.clazz() == Object.class) {
+                return 1;
+            } else if (target.clazz() == Object.class) {
+                return 2;
+            } else {
+                throw new TypeMismatchException("Source type '"
+                    + source.name() + "' does not match target type '"
+                    + target.name() + "'", source.name(), target.name());
+            }
+        }
     }
 }
