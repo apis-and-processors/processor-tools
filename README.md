@@ -43,13 +43,48 @@ or use an instance of HelloWorld:
 
 The `helloWorldType` ClassType is a typical node/tree data structure which logically looks like:
 
-    ClassType:some.path.to.HelloWorld
-        ClassType:java.util.function.Function
+    ClassType:some.path.to.HelloWorld -->
+        ClassType:java.util.function.Function -->
 	        ClassType:java.lang.Integer
 	        ClassType:java.lang.Boolean
-	    ClassType:java.lang.Comparable
+	    ClassType:java.lang.Comparable -->
 	        ClassType:java.lang.String
+		
+## Examples
+
+Parsing a regular class with a generic type?
+
+    package my.hello.world
+    class HelloWord <SomeUnknownType> { }
+
+    ClassType classType = ClassType.parse(HelloWorld.class);
+    assertThat(classType.toString()).equals("my.hello.world.HelloWorld<java.lang.Object>");
+    
+Parsing a regular class which extends a generic class?
+
+    package my.hello.world
+    class HelloWordParent <SomeUnknownType> { }
+    
+    package my.hello.world
+    class HelloWord extends HelloWordParent<Integer> { }
+
+    ClassType classType = ClassType.parse(HelloWorld.class);
+    assertThat(classType.toString()).equals("my.hello.world.HelloWorld<my.hello.world.HelloWorldParent<java.lang.Integer>>");
+
+Parsing a regular class with typed interface (supports multiple interfaces as well)?
+
+    package my.hello.world
+    class HelloWord implements Comparable<String> { }
+
+    ClassType classType = ClassType.parse(HelloWorld.class);
+    assertThat(classType.toString()).equals("my.hello.world.HelloWorld<java.lang.Comparable<java.lang.String>>");
+    
+Parsing a primitive?
+
+    ClassType classType = ClassType.parse(123);
+    assertThat(classType.toString()).equals("java.lang.Integer");
 	  
+## On Comparing ClassType's
 Because `ClassType` implements comparable you can compare any node to any other and the compare process will iterate between all possible nodes checking for consistency. The possible values returned from said comparison are as follows:
 
     -1 : mismatch between any 2 nodes (i.e. java.lang.Integer does not match java.lang.Boolean) or wrong number of child nodes
