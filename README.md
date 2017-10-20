@@ -3,7 +3,7 @@
 
 # classtype-parser
 
-Parse ClassTypes (e.g. types, generics, etc) from any given Object.
+Parse ClassTypes (e.g. types, generics, etc) from any given Object into a node/tree data structure.
 
 ## Latest release
 
