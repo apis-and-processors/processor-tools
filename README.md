@@ -64,7 +64,7 @@ javadocs can be found via [github pages here](https://project-aries.github.io/cl
 
 ## Examples
 
-The [various tests](https://github.com/project-aries/classtype-parser/tree/master/src/test/java/com/aries/classtypes/parser) provide many examples that you can use in your own code.
+The [various tests](https://github.com/project-aries/classtype-parser/tree/master/src/test/java/com/aries/classtype/parser) provide many examples that you can use in your own code.
     
 ## Testing
 
