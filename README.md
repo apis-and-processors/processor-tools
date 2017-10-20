@@ -1,32 +1,30 @@
-[![Build Status](https://travis-ci.org/apis-and-processors/processor-tools.svg?branch=master)](https://travis-ci.org/apis-and-processors/processor-tools)
+[![Build Status](https://travis-ci.org/project-aries/classtype-parser.svg?branch=master)](https://travis-ci.org/project-aries/classtype-parser)
 [![Download](https://api.bintray.com/packages/apis-and-processors/java-libraries/processor-tools/images/download.svg) ](https://bintray.com/apis-and-processors/java-libraries/processor-tools/_latestVersion)
 
-# processor-tools
+# classtype-parser
 
-Utilities for dealing with generics and types
+Parse ClassTypes (e.g. types, generics, etc) from any given Object.
 
 ## Latest release
 
 Can be sourced from jcenter like so:
 
     <dependency>
-      <groupId>com.github.aap</groupId>
-      <artifactId>processor-tools</artifactId>
+      <groupId>com.aries</groupId>
+      <artifactId>classtype-parser</artifactId>
       <version>0.0.1</version>
       <classifier>sources|tests|javadoc|all</classifier> (Optional)
     </dependency>
     
 ## Motivation
 
-In designing the [api-processor](https://github.com/apis-and-processors/api-processor) I needed a way to look at a given class and resolve all of it's potential types and then compare those types to their runtime implementations passed in by the end user. While libraries like [guava](https://github.com/google/guava) and [typetools](https://github.com/jhalterman/typetools) do type-related work I required a different approach that had built in support for comparing potentially N number of types to some other class with N number of types.
+In designing the [api-processor](https://github.com/project-aries/api-processor) I needed a way to look at a given Object and resolve all of it's potential types and then compare those types to their runtime implementations passed in by the end user. While libraries like [guava](https://github.com/google/guava) and [typetools](https://github.com/jhalterman/typetools) do type-related work I required a different approach that had built in support for comparing potentially N number of types to some other class with N number of types in a node/tree structure.
 
 Futhermore I needed a way to work with primitives in a type-esque related way and to be able to convert said primitives to their boxed types and then back again with ease.
 
-While the main work horse of this library is `TypeUtils` it is by no means the only thing it does. This library is intended to house all common and generic code which can be used by the various libraries under the `apis-and-processors` umbrella.
-
 ## Setup and How to use
 
-While this library has many tools most folks will be interested in `TypeUtils` and how to convert a given class with types to a `ClassType`. Consider the following class:
+Consider the following class:
 
     abstract class HelloWorld implements Function<Integer, Boolean>, Comparable<String> {
         @Override
@@ -37,13 +35,13 @@ While this library has many tools most folks will be interested in `TypeUtils` a
 
 It implements Function with types `Integer` and `Boolean` on top of implementing Comparable with type `String`. To convert this into a `ClassType` one can either use the class definition itself:
 
-    ClassType helloWorldType = TypeUtils.parseClassType(HelloWorld.class);
+    ClassType helloWorldType = ClassType.parse(HelloWorld.class);
 
 or use an instance of HelloWorld:
 
-    ClassType helloWorldType = TypeUtils.parseClassType(new SubClassOfHelloWorld());
+    ClassType helloWorldType = ClassType.parse(new SubClassOfHelloWorld());
 
-The `helloWorldType` ClassType is a typical Node data structure which logically looks like:
+The `helloWorldType` ClassType is a typical node/tree data structure which logically looks like:
 
     ClassType:some.path.to.HelloWorld
         ClassType:java.util.function.Function
@@ -62,11 +60,11 @@ Because `ClassType` implements comparable you can compare any node to any other 
     
 ## Documentation
 
-javadocs can be found via [github pages here](https://apis-and-processors.github.io/processor-tools/docs/javadoc/)
+javadocs can be found via [github pages here](https://project-aries.github.io/classtype-parser/docs/javadoc/)
 
 ## Examples
 
-The [various tests](https://github.com/apis-and-processors/processor-tools/tree/master/src/test/java/com/github/aap/processor/tools) provide many examples that you can use in your own code.
+The [various tests](https://github.com/project-aries/classtype-parser/tree/master/src/test/java/com/aries/classtypes/parser) provide many examples that you can use in your own code.
     
 ## Testing
 
