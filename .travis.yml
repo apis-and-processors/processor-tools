@@ -1,8 +1,6 @@
 language: java
 jdk: oraclejdk8
 
-script: ./gradlew -s -Dorg.gradle.daemon=false clean build publishToMavenLocal
-
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -11,6 +9,8 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+
+script: ./gradlew -s -Dorg.gradle.daemon=false clean build publishToMavenLocal
 
 after_script:
   - bash <(curl -s https://codecov.io/bash)
