@@ -12,5 +12,5 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-after_success:
+after_script:
   - bash <(curl -s https://codecov.io/bash)
