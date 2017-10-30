@@ -4,9 +4,9 @@ Parse ClassTypes (e.g. types, generics, etc) from any given Object into a node/t
 
 ## Status
 
-| Name | Questions | CI | Codecov | Docs | Release |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| [classtype-parser](https://github.com/project-aries/classtype-parser) | [![Stack Overflow](https://img.shields.io/badge/stack-overflow-4183C4.svg)](https://stackoverflow.com/questions/tagged/classtype-parser) | [![Build Status](https://travis-ci.org/project-aries/classtype-parser.svg?branch=master)](https://travis-ci.org/project-aries/classtype-parser) | [![codecov](https://codecov.io/gh/project-aries/classtype-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/project-aries/classtype-parser) | [![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](http://htmlpreview.github.io/?https://github.com/project-aries/classtype-parser/blob/classtype-parser-gh-pages/docs/index.html) | [![Bintray](https://api.bintray.com/packages/project-aries/libs-release-local/classtype-parser/images/download.svg) ](https://bintray.com/project-aries/libs-release-local/classtype-parser/_latestVersion) |
+| Questions | CI | Codecov | Docs | Release |
+| :---: | :---: | :---: | :---: | :---: |
+| [![Stack Overflow](https://img.shields.io/badge/stack-overflow-4183C4.svg)](https://stackoverflow.com/questions/tagged/classtype-parser) | [![Build Status](https://travis-ci.org/project-aries/classtype-parser.svg?branch=master)](https://travis-ci.org/project-aries/classtype-parser) | [![codecov](https://codecov.io/gh/project-aries/classtype-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/project-aries/classtype-parser) | [![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](http://htmlpreview.github.io/?https://github.com/project-aries/classtype-parser/blob/classtype-parser-gh-pages/docs/index.html) | [![Bintray](https://api.bintray.com/packages/project-aries/libs-release-local/classtype-parser/images/download.svg) ](https://bintray.com/project-aries/libs-release-local/classtype-parser/_latestVersion) |
 
 ## Latest release
 
