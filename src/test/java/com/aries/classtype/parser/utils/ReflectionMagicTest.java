@@ -17,39 +17,52 @@
 
 package com.aries.classtype.parser.utils;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.aries.classtype.parser.domain.Null;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
-
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /**
- * Tests for invoking ReflectionMagic.
+ * Tests for exercising ReflectionMagic.
  * 
  * @author cdancy
  */
 public class ReflectionMagicTest {
 
-    private class InnerTestClass implements Comparable {
+    private static class InnerTestClass implements Comparable {
         public void noop() {}
 
         @Override
         public int compareTo(final Object object) {
             return 0;
         }
+
+        @Override
+        public boolean equals(final Object object) {
+            return object != this; // just to shut-up warnings
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 89 * hash + Objects.hashCode(this);
+            return hash;
+        }
     }
 
     @Test
     public void createInnerClasses() {
         final InnerTestClass int1 = new InnerTestClass();
+
         assertNotNull(int1);
         final InnerTestClass int2 = ReflectionMagic.instance(InnerTestClass.class);
         assertNotNull(int2);
@@ -91,7 +104,7 @@ public class ReflectionMagicTest {
         assertTrue(booleanObj == false);
 
         final Void voidObj = ReflectionMagic.instance(void.class);
-        assertNull(voidObj);
+        assertThat(voidObj).isNull();
 
         final Null nullObj = ReflectionMagic.instance(Null.class);
         assertNotNull(nullObj);
@@ -133,7 +146,7 @@ public class ReflectionMagicTest {
         assertTrue(booleanObj == false);
 
         final Void voidObj = ReflectionMagic.instance(Void.class);
-        assertNull(voidObj);
+        assertThat(voidObj).isNull();
 
         final Null nullObj = ReflectionMagic.instance(Null.class);
         assertNotNull(nullObj);

@@ -19,6 +19,7 @@ package com.aries.classtype.parser.types;
 
 import com.aries.classtype.parser.utils.Constants;
 import com.aries.classtype.parser.domain.Null;
+import java.util.Locale;
 
 /**
  * Java primitive types, and some of our own, along with various attributes
@@ -26,6 +27,7 @@ import com.aries.classtype.parser.domain.Null;
  * 
  * @author dancc
  */
+@SuppressWarnings("ImmutableEnumChecker")
 public enum PrimitiveTypes {
 
     // numbers
@@ -103,12 +105,8 @@ public enum PrimitiveTypes {
         } else {
 
             try {
-                possibleType = PrimitiveTypes.valueOf(name.toUpperCase());
-            } catch (Exception e) {
-                // ignore
-            }
-
-            if (possibleType == null) {
+                possibleType = PrimitiveTypes.valueOf(name.toUpperCase(Locale.US));
+            } catch (final Exception e) {
                 for (int i = 0; i < PrimitiveTypes.values().length; i++) {
                     final PrimitiveTypes iteration = PrimitiveTypes.values()[i];
                     if (name.equalsIgnoreCase(iteration.getPrimitveClass().getName()) || name.equalsIgnoreCase(iteration.getBoxedClass().getName())) {

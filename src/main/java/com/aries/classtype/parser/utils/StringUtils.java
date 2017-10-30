@@ -70,4 +70,8 @@ public class StringUtils {
         }
         return targetString;
     }
+
+    private StringUtils() {
+        throw new UnsupportedOperationException("Purposely not implemented");
+    }
 }

@@ -28,9 +28,9 @@
         <property name="format" value="^(?!\s+\* $).*?\s+$"/>
         <property name="message" value="Line has trailing spaces."/>
     </module>
-        
+
     <module name="Header"> 
-        <property name="headerFile" value="config/header/java.header"/>
+        <property name="headerFile" value="gradle/config/header/java.header"/>
     </module>
         
     <module name="TreeWalker">
@@ -155,7 +155,7 @@
         </module>
         <module name="AbbreviationAsWordInName">
             <property name="ignoreFinal" value="false"/>
-            <property name="allowedAbbreviationLength" value="5"/>
+            <!-- property name="allowedAbbreviationLength" value="1"/ -->
         </module>
         <module name="OverloadMethodsDeclarationOrder"/>
         <module name="VariableDeclarationUsageDistance"/>

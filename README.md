@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/project-aries/classtype-parser.svg?branch=master)](https://travis-ci.org/project-aries/classtype-parser)
-[![Download](https://api.bintray.com/packages/apis-and-processors/java-libraries/processor-tools/images/download.svg) ](https://bintray.com/apis-and-processors/java-libraries/processor-tools/_latestVersion)
-
 # classtype-parser
 
 Parse ClassTypes (e.g. types, generics, etc) from any given Object into a node/tree data structure.
@@ -93,10 +90,6 @@ Because `ClassType` implements comparable you can compare any node to any other 
      2 : when target has an unknown type (e.g. java.lang.Object) when comparing to source
      3 : when source or target both have unknown types when comparing to their counterparts
     
-## Documentation
-
-javadocs can be found via [github pages here](https://project-aries.github.io/classtype-parser/docs/javadoc/)
-
 ## Examples
 
 The [various tests](https://github.com/project-aries/classtype-parser/tree/master/src/test/java/com/aries/classtype/parser) provide many examples that you can use in your own code.
@@ -109,5 +102,7 @@ Running tests can be done like so:
 	
 # Additional Resources
 
+* Project was built using the model provided by [gradle-multi-project-example](https://github.com/project-aries/gradle-multi-project-example)
 * [Guava](https://github.com/google/guava/wiki)
 * [typetools](https://github.com/jhalterman/typetools)
+

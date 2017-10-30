@@ -44,4 +44,8 @@ public class Preconditions {
         }
         return reference;
     }
+
+    private Preconditions() {
+        throw new UnsupportedOperationException("Purposely not implemented");
+    }
 }

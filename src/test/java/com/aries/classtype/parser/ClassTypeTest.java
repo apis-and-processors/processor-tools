@@ -17,22 +17,21 @@
 
 package com.aries.classtype.parser;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.aries.classtype.parser.domain.Null;
-import com.aries.classtype.parser.exceptions.TypeMismatchException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.function.Function;
-
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /**
- * Tests for exercising AbstractClassType.
+ * Tests for exercising ClassType.
  * 
  * @author cdancy
  */
@@ -42,28 +41,28 @@ public class ClassTypeTest {
     private static final String FUNCTION_REGEX = ".*Function.*";
 
     // inner classes used primarily for testing purposes
-    abstract class HelloWorld implements Function<Integer, Boolean>, Comparable<String> {
+    abstract static class HelloWorld implements Function<Integer, Boolean>, Comparable<String> {
         @Override
         public Boolean apply(final Integer instance) {
-            return null;
+            return true;
         }
     }
 
-    abstract class HelloWorld2 implements Comparable<String>, Function<Integer, Boolean> {
+    abstract static class HelloWorld2 implements Comparable<String>, Function<Integer, Boolean> {
         @Override
         public Boolean apply(final Integer instance) {
-            return null;
+            return true;
         }
     }
 
-    abstract class HelloWorld3 implements Comparable<Character>, Function<Object, Boolean> {
+    abstract static class HelloWorld3 implements Comparable<Character>, Function<Object, Boolean> {
         @Override
         public Boolean apply(final Object instance) {
-            return null;
+            return true;
         }
     }
 
-    abstract class HelloWorld4 implements Comparable<Character>, Function<String, Object> {
+    abstract static class HelloWorld4 implements Comparable<Character>, Function<String, Object> {
         @Override
         public Object apply(final String instance) {
             return null;
@@ -78,25 +77,25 @@ public class ClassTypeTest {
 
     }
 
-    class GenericClass<R> {
+    static class GenericClass<R> {
 
     }
 
-    class SecondGenericClass<T, V> extends GenericClass {
+    static class SecondGenericClass<T, V> extends GenericClass {
 
     }
 
-    class TestGenericClass extends GenericClass<String> {
+    static class TestGenericClass extends GenericClass<String> {
 
     }
 
-    class TestGenericInterface implements GenericInterface<String> {
+    static class TestGenericInterface implements GenericInterface<String> {
 
         @Override
         public void bears(final String obj){}
     }
 
-    class TestMultipleImplements implements GenericInterface<String>, Comparable<String> {
+    static class TestMultipleImplements implements GenericInterface<String>, Comparable<String> {
 
         @Override
         public void bears(final String obj){}
@@ -105,9 +104,21 @@ public class ClassTypeTest {
         public int compareTo(final String object) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
+
+        @Override
+        public boolean equals(final Object object) {
+            return object != this; // just to shut-up warnings
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 89 * hash + Objects.hashCode(this);
+            return hash;
+        }
     }
 
-    class TestMultipleExtends extends SecondGenericClass<String, Integer> {
+    static class TestMultipleExtends extends SecondGenericClass<String, Integer> {
 
     }
 
@@ -116,6 +127,7 @@ public class ClassTypeTest {
 
         final ClassType instance = ClassType.parse(null);
         assertNotNull(instance);
+
         assertTrue(instance.clazz() == Null.class);
         assertTrue(instance.toObject().toString().equals("null"));
     }
@@ -183,13 +195,13 @@ public class ClassTypeTest {
 
         final ClassType helloWorld = ClassType.parse(HelloWorld.class);
         assertNotNull(helloWorld);
-        assertNull(helloWorld.firstChildMatching(".*NonExistentType.*"));
+        assertThat(helloWorld.firstChildMatching(".*NonExistentType.*")).isNull();
         assertTrue(helloWorld.name().equals(HelloWorld.class.getName()));
         assertTrue(helloWorld.children().size() == 2);
 
         final ClassType functionType = helloWorld.firstChildMatching(FUNCTION_REGEX);
         assertNotNull(functionType);
-        assertNull(functionType.firstChildMatching(".*NonExistentType.*"));
+        assertThat(functionType.firstChildMatching(".*NonExistentType.*")).isNull();
         assertTrue(functionType.children().size() == 2);
 
         final ClassType functionTypeBoolean = functionType.firstChildMatching(".*Boolean.*");
@@ -202,7 +214,7 @@ public class ClassTypeTest {
 
         final ClassType comparableType = helloWorld.firstChildMatching(COMPARABLE_REGEX);
         assertNotNull(comparableType);
-        assertNull(helloWorld.firstChildMatching(".*NonExistentType.*"));
+        assertThat(helloWorld.firstChildMatching(".*NonExistentType.*")).isNull();
         assertTrue(comparableType.children().size() == 1);
 
         final ClassType comparableTypeString = comparableType.firstChildMatching(".*String.*");
@@ -210,7 +222,7 @@ public class ClassTypeTest {
         assertTrue(comparableTypeString.children().size() == 0);
     }
 
-    @Test (dependsOnMethods = "testDataStructuresToClassTypes")
+    @Test
     public void testDataStructuresComparison() {
 
         final ClassType helloWorld = ClassType.parse(HelloWorld.class);
@@ -226,17 +238,17 @@ public class ClassTypeTest {
         assertTrue(helloWorld3.firstChildMatching(FUNCTION_REGEX).compareTo(helloWorld4.firstChildMatching(FUNCTION_REGEX)) == 3);
     }
 
-    @Test (expectedExceptions = TypeMismatchException.class)
+    @Test
     public void testThrowsExceptionOnCompare() {
         final ClassType helloWorld = ClassType.parse(HelloWorld.class);
         final ClassType helloWorld3 = ClassType.parse(HelloWorld3.class);
-        helloWorld.firstChildMatching(COMPARABLE_REGEX).compare(helloWorld3.firstChildMatching(COMPARABLE_REGEX));
+        assertThat(helloWorld.firstChildMatching(COMPARABLE_REGEX).compareTo(helloWorld3.firstChildMatching(COMPARABLE_REGEX))).isEqualTo(-1);
     }
 
-    @Test (expectedExceptions = TypeMismatchException.class)
+    @Test
     public void testThrowsExceptionOnCompareWithNull() {
         final ClassType helloWorld = ClassType.parse(HelloWorld.class);
-        helloWorld.firstChildMatching(COMPARABLE_REGEX).compare(null);
+        assertThat(helloWorld.firstChildMatching(COMPARABLE_REGEX).compareTo(null)).isEqualTo(-1);
     }
 
     @Test
@@ -278,7 +290,7 @@ public class ClassTypeTest {
         assertTrue(classType.name().equalsIgnoreCase(ExtendingGenericInterface.class.getName()));
         assertTrue(classType.children().size() == 2);
         assertTrue(classType.children().get(0).name().equalsIgnoreCase(Object.class.getName()));
-        assertTrue(classType.children().get(0).children().size() == 0);
+        assertTrue(classType.children().get(0).children().isEmpty());
         assertTrue(classType.children().get(1).name().equalsIgnoreCase(GenericInterface.class.getName()));
         assertTrue(classType.children().get(1).children().size() == 1);
         assertTrue(classType.children().get(1).children().get(0).name().equalsIgnoreCase(String.class.getName()));

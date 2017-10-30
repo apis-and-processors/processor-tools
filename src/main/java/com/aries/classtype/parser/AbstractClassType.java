@@ -102,7 +102,7 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
                 potentialClazz = parseToClassType.getClass();
             }
         } else {
-            potentialClazz = PrimitiveTypes.from(parseToClassType).getBoxedClass();
+            potentialClazz = PrimitiveTypes.NULL.getBoxedClass();
         }
 
         return parseClass(potentialClazz, options);
@@ -453,4 +453,10 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
             }
         }
     }
+
+    @Override
+    public abstract boolean equals(final Object classType);
+
+    @Override
+    public abstract int hashCode();
 }

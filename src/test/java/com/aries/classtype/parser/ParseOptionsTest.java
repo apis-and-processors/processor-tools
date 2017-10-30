@@ -17,14 +17,13 @@
 
 package com.aries.classtype.parser;
 
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
-
-
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /**
  * Tests for exercising ClassType parsing with options.
@@ -33,23 +32,42 @@ import org.testng.annotations.Test;
  */
 public class ParseOptionsTest {
 
-    class CustomInterfaceHandler implements Function<AtomicReference<Boolean>, String>, Serializable {
+    static class CustomInterfaceHandler implements Function<AtomicReference<Boolean>, String>, Comparable {
+
+        static final long serialVersionUID = 1L; //assign a long value
 
         @Override
         public String apply(final AtomicReference<Boolean> object) {
             return object.get().toString();
         }
+
+        @Override
+        public int compareTo(final Object object) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public boolean equals(final Object object) {
+            return object != this; // just to shut-up warnings
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 89 * hash + Objects.hashCode(this);
+            return hash;
+        }
     }
 
-    class CustomClassHandlerOne <A> {
+    static class CustomClassHandlerOne <A> {
 
     }
 
-    class CustomClassHandlerTwo <B> extends CustomClassHandlerOne {
+    static class CustomClassHandlerTwo <B> extends CustomClassHandlerOne {
 
     }
 
-    class CustomClassHandlerThree <C> extends CustomClassHandlerTwo {
+    static class CustomClassHandlerThree <C> extends CustomClassHandlerTwo {
 
     }
 
@@ -72,17 +90,18 @@ public class ParseOptionsTest {
 
     @Test
     public void testInterfaceIgnored() throws Exception {
-        final String regex = ".*" + Serializable.class.getSimpleName() + ".*";
+        final String regex = ".*" + Comparable.class.getSimpleName() + ".*";
         final ParseOptions options = ParseOptions.instance(null, null, regex, null);
         final ClassType classType = ClassType.parse(CustomInterfaceHandler.class, options);
         assertTrue(classType.children().size() == 1);
         assertTrue(classType.children().get(0).name().contains(Function.class.getSimpleName()));
 
-        // check that Serializable interface does not exist.
+        // check that Comparable interface does not exist.
         assertTrue(classType.children().get(0).children().size() == 2);
         assertTrue(classType.children().get(0).children().get(0).name().contains(AtomicReference.class.getSimpleName()));
-        assertTrue(classType.children().get(0).children().get(0).children().size() == 1);
+        assertTrue(classType.children().get(0).children().get(0).children().size() == 2);
         assertTrue(classType.children().get(0).children().get(0).children().get(0).name().contains(Boolean.class.getSimpleName()));
+        assertTrue(classType.children().get(0).children().get(0).children().get(1).name().contains(Serializable.class.getSimpleName()));
         assertTrue(classType.children().get(0).children().get(1).name().contains(String.class.getSimpleName()));
     }
 

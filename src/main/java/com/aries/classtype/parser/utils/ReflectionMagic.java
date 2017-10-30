@@ -38,6 +38,8 @@ import java.util.Set;
  */
 public class ReflectionMagic {
 
+    private static final Class [] EMPTY_CLASS_ARRAY = new Class[0];
+    private static final Object [] BEAN_ARG_OBJECT_ARRAY = new Object[0];
     private static final Object [] EMPTY_OBJECT_ARRAY = new Object[1];
     private static final Constructor OBJECT_CONSTRUCTOR = Object.class.getDeclaredConstructors()[0];
 
@@ -91,11 +93,28 @@ public class ReflectionMagic {
 
                 // second attempt at creating generic object from class
                 try {
-                    return clazz.newInstance();
-                } catch (IllegalAccessException | InstantiationException ex2) {
+                    return (T) clazz.getDeclaredConstructor(EMPTY_CLASS_ARRAY).newInstance(BEAN_ARG_OBJECT_ARRAY);
+                } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex2) {
+
+                    final Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+                    for (int i = 0; i < constructors.length; i++) {
+                        final Constructor possibleConstructor = constructors[i];
+                        if (possibleConstructor.getParameterCount() == 1) {
+                            possibleConstructor.setAccessible(true);
+                            try {
+                                return (T) possibleConstructor.newInstance(EMPTY_OBJECT_ARRAY);
+                            } catch (IllegalAccessException | InstantiationException | InvocationTargetException ite) {
+                                throw new RuntimeException(ite);
+                            }
+                        }
+                    }
                     throw new RuntimeException(ex2);
                 }
             }
         }
+    }
+
+    private ReflectionMagic() {
+        throw new UnsupportedOperationException("Purposely not implemented");
     }
 }

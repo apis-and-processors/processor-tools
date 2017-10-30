@@ -17,15 +17,14 @@
 
 package com.aries.classtype.parser.types;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.aries.classtype.parser.ClassType;
 import com.aries.classtype.parser.domain.Null;
 import com.aries.classtype.parser.domain.Unknown;
-
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /**
  * Tests for parsing and using PrimitiveTypes.
@@ -140,7 +139,7 @@ public class PrimitiveTypesTest {
         assertTrue(clazzType.toString().equals(PrimitiveTypes.VOID.getBoxedClass().getName()));
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.VOID.getBoxedClass()));
         final Void instance = Void.class.cast(clazzType.toObject());
-        assertNull(instance);
+        assertThat(instance).isNull();
     }
 
     @Test

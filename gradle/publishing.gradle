@@ -1,44 +1,70 @@
+/*
+ * Allows for publishing artifacts either to Bintray or to Artifactory. Bintray is
+ * the default choice but this can be configured within <root-project>/gradle.properties.
+ */
+
 buildscript {
     repositories {
+        mavenLocal()
         jcenter()
-    }
-
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
-    }
-}
-
-apply plugin: 'maven-publish'
-apply plugin: com.jfrog.bintray.gradle.BintrayPlugin
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-            artifact shadowJar
-            artifact testsJar
-
-            pom.withXml {
-                def root = asNode()
-                root.appendNode('name', "${project.name}")
-                root.appendNode('description', "${project.description}")
-                root.appendNode('url', "https://github.com/${project.organization}/${project.name}")
-                root.appendNode('inceptionYear', '2016')
-
-                def scm = root.appendNode('scm')
-                scm.appendNode('url', "https://github.com/${project.organization}/${project.name}")
-                scm.appendNode('connection', "scm:https://${project.organization}@github.com/${project.organization}/${project.name}.git")
-                scm.appendNode('developerConnection', "scm:git://github.com/${project.organization}/${project.name}.git")
-
-                def license = root.appendNode('licenses').appendNode('license')
-                license.appendNode('name', 'The Apache Software License, Version 2.0')
-                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
-                license.appendNode('distribution', 'repo')
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven { 
+            url artifactoryURL
+            credentials {
+                username = artifactoryUser
+                password = artifactoryPassword
             }
         }
     }
+    dependencies {
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.5.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+        classpath 'org.ajoberstar:gradle-git-publish:0.3.1'
+    }
+}
+
+// properties MUST be applied PRIOR to applying publish plugin or they won't take effect.
+System.setProperty('org.ajoberstar.grgit.auth.username', resolveProperty('releaseUsername'))
+System.setProperty('org.ajoberstar.grgit.auth.password', resolveProperty('releasePassword'))
+System.setProperty('org.ajoberstar.grgit.auth.interactive.allow', 'false')
+    
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: org.jfrog.gradle.plugin.artifactory.ArtifactoryPlugin
+apply plugin: com.jfrog.bintray.gradle.BintrayPlugin
+apply plugin: org.ajoberstar.gradle.git.publish.GitPublishPlugin
+
+publishing {
+    publications {
+        mavenJava (MavenPublication) {
+            from components.java             
+            artifact sourcesJar
+            artifact docsJar
+            artifact testsJar
+            artifact shadowJar
+        }
+    }
+}
+
+artifactory {
+    contextUrl = artifactoryURL
+    publish {
+        repository {
+            repoKey = rootProject.findProperty('release.stage') == 'final' ? releaseRepository : snapshotRepository
+            username = artifactoryUser
+            password = artifactoryPassword
+            mavenCompatible = true
+        }
+        defaults {
+            publications ('mavenJava')
+        }
+    }
+}
+
+ext {
+    githubSite = 'https://github.com'
 }
 
 bintray {
@@ -49,23 +75,22 @@ bintray {
     publish = true
 
     pkg {
-        userOrg = "${project.bintrayUserOrg}"
-        repo = "${project.repository}"
-        name = "${project.name}"
-        desc = "${project.description}"
-        websiteUrl = "https://github.com/${project.organization}/${project.name}"
-        issueTrackerUrl = "https://github.com/${project.organization}/${project.name}/issues"
-        vcsUrl = "https://github.com/${project.organization}/${project.name}.git"
+        def orgName = rootProject.findProperty('organization')
+        
+        userOrg = orgName
+        repo = rootProject.findProperty('release.stage') == 'final' ? releaseRepository : snapshotRepository
+        name = project.name
+        websiteUrl = "${githubSite}/${orgName}/${project.name}"
+        issueTrackerUrl = "${githubSite}/${orgName}/${project.name}/issues"
+        vcsUrl = "${githubSite}/${orgName}/${project.name}.git"
         licenses = ['Apache-2.0']
-        labels = ['java', 'library']
         publicDownloadNumbers = true
-        githubRepo = "${project.organization}/${project.name}"
+        githubRepo = "${orgName}/${project.name}"
         githubReleaseNotesFile = 'RELEASE_NOTES.md'
 
         version {
             released  = new Date()
             vcsTag = "v${project.version}"
-            attributes = ["${project.name}": ["${project.group}:${project.name}:${project.version}"]]
 
             gpg {
                 sign = true
@@ -75,9 +100,22 @@ bintray {
     }
 }
 
+gitPublish {
+    repoUri = "${githubSite}/${rootProject.findProperty('organization')}/${project.rootProject.name}.git"
+    branch = "${project.name}-gh-pages"
+    contents {
+        from zipTree(docsJar.archivePath)
+        into 'docs'
+    }
+}
+gitPublishPush.dependsOn docsJar
+
+/*
+ * Check environment for property and if that fails 
+ * ask gradle to find the property somewhere within
+ * the project hierarchy.
+ */
 String resolveProperty(String propKey) {
     String propValue = System.getenv()[propKey]
-    if (propValue) { return propValue }
-    hasProperty(propKey) ? getProperty(propKey) : null
+    return propValue ?: findProperty(propKey)
 }
-

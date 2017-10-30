@@ -23,6 +23,7 @@ import com.aries.classtype.parser.utils.Constants;
 import com.aries.classtype.parser.exceptions.TypeMismatchException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * ClassType representing an arbitrary Class with potentially
@@ -154,5 +155,21 @@ public class ClassType extends AbstractClassType {
         final StringBuilder builder = new StringBuilder();
         print(this, builder);
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(final Object classType) {
+        if (classType instanceof ClassType) {
+            return (this.compareTo((ClassType)classType) == 0);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.children);
+        return hash;
     }
 }
