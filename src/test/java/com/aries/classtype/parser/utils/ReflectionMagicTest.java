@@ -22,6 +22,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.aries.classtype.parser.domain.Null;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -189,5 +192,17 @@ public class ReflectionMagicTest {
         set.add("hello6");
         assertTrue(map.size() == 1);
 
+    }
+
+    @Test
+    public void testConstructorIsPrivate() throws NoSuchMethodException, IllegalAccessException, InstantiationException {
+        final Constructor<ReflectionMagic> constructor = ReflectionMagic.class.getDeclaredConstructor();
+        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+        constructor.setAccessible(true);
+        try {
+            constructor.newInstance();
+        } catch (final Exception e) {
+            assertThat(e).isInstanceOf(InvocationTargetException.class);
+        }
     }
 }

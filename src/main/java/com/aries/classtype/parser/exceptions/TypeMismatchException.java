@@ -17,7 +17,7 @@
 
 package com.aries.classtype.parser.exceptions;
 
-import static com.aries.classtype.parser.utils.Preconditions.failIfNull;
+import java.util.Objects;
 
 /**
  * Thrown when comparing 2 ClassTypes and either the source or target don't match.
@@ -37,7 +37,7 @@ public class TypeMismatchException extends RuntimeException {
      */
     public TypeMismatchException(final String message, final String source) {
         super(message);
-        this.source = failIfNull(source, "source cannot be null");
+        this.source = Objects.requireNonNull(source, "source cannot be null");
         this.target = null;
     }
 
@@ -50,8 +50,8 @@ public class TypeMismatchException extends RuntimeException {
      */
     public TypeMismatchException(final String message, final String source, final String target) {
         super(message);
-        this.source = failIfNull(source, "source cannot be null");
-        this.target = failIfNull(target, "target cannot be null");
+        this.source = Objects.requireNonNull(source, "source cannot be null");
+        this.target = Objects.requireNonNull(target, "target cannot be null");
     }
 
     /**
@@ -64,7 +64,7 @@ public class TypeMismatchException extends RuntimeException {
      */
     public TypeMismatchException(final String message, final String source, final String target, final Throwable throwable) {
         super(message, throwable);
-        this.source = failIfNull(source, "source cannot be null");
-        this.target = failIfNull(target, "target cannot be null");
+        this.source = Objects.requireNonNull(source, "source cannot be null");
+        this.target = Objects.requireNonNull(target, "target cannot be null");
     }
 }

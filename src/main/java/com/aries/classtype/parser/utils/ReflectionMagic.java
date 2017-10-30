@@ -17,8 +17,6 @@
 
 package com.aries.classtype.parser.utils;
 
-import static com.aries.classtype.parser.utils.Preconditions.failIfNull;
-
 import com.aries.classtype.parser.domain.Null;
 import com.aries.classtype.parser.types.PrimitiveTypes;
 import com.aries.classtype.parser.domain.Unknown;
@@ -29,6 +27,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -51,7 +50,7 @@ public class ReflectionMagic {
      * @return new instance of arbitrary class.
      */
     public static <T> T instance(final Class<T> clazz) {
-        failIfNull(clazz, "clazz cannot be null");
+        Objects.requireNonNull(clazz, "clazz cannot be null");
         if (clazz.isInterface()) {
             try {
 
