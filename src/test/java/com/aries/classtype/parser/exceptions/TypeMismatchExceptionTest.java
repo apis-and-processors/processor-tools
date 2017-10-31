@@ -19,6 +19,8 @@ package com.aries.classtype.parser.exceptions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.UUID;
+
 import org.junit.Test;
 
 /**
@@ -28,28 +30,53 @@ import org.junit.Test;
  */
 public class TypeMismatchExceptionTest {
 
+    private static final String RANDOM_STRING = UUID.randomUUID().toString();
+
+    @Test
+    public void testCreateWithSource() {
+        final TypeMismatchException tme = new TypeMismatchException(RANDOM_STRING, RANDOM_STRING);
+        assertThat(tme).isNotNull();
+    }
+
     @Test
     public void testExceptionOnNullSource() {
         try {
-            throw new TypeMismatchException("Hello, World!", null);
+            throw new TypeMismatchException(RANDOM_STRING, null);
         } catch (final Exception e) {
             assertThat(e).isInstanceOf(NullPointerException.class);
         }
+    }
+
+    @Test
+    public void testCreateWithSourceAndTarget() {
+        final TypeMismatchException tme = new TypeMismatchException(RANDOM_STRING,
+                RANDOM_STRING,
+                RANDOM_STRING);
+        assertThat(tme).isNotNull();
     }
 
     @Test
     public void testExceptionOnNullSourceAndTarget() {
         try {
-            throw new TypeMismatchException("Hello, World!", null, null);
+            throw new TypeMismatchException(RANDOM_STRING, null, null);
         } catch (final Exception e) {
             assertThat(e).isInstanceOf(NullPointerException.class);
         }
     }
 
     @Test
+    public void testCreateWithSourceAndTargetAndThrowable() {
+        final TypeMismatchException tme = new TypeMismatchException(RANDOM_STRING,
+                RANDOM_STRING,
+                RANDOM_STRING,
+                new Exception(RANDOM_STRING));
+        assertThat(tme).isNotNull();
+    }
+
+    @Test
     public void testExceptionOnNullSourceAndTargetAndThrowable() {
         try {
-            throw new TypeMismatchException("Hello, World!", null, null, null);
+            throw new TypeMismatchException(RANDOM_STRING, null, null, null);
         } catch (final Exception e) {
             assertThat(e).isInstanceOf(NullPointerException.class);
         }
