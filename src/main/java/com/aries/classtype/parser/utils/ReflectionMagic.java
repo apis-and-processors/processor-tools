@@ -19,16 +19,9 @@ package com.aries.classtype.parser.utils;
 
 import com.aries.classtype.parser.domain.Null;
 import com.aries.classtype.parser.types.PrimitiveTypes;
-import com.aries.classtype.parser.domain.Unknown;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Various static utilities surrounding the use of reflection.
@@ -54,14 +47,6 @@ public class ReflectionMagic {
         if (clazz.isInterface()) {
             try {
 
-                if (Map.class.isAssignableFrom(clazz)) {
-                    return (T) new HashMap();
-                } else if (List.class.isAssignableFrom(clazz)) {
-                    return (T) new ArrayList();
-                } else if (Set.class.isAssignableFrom(clazz)) {
-                    return (T) new HashSet();
-                }
-
                 final Constructor genericConstructor = sun.reflect.ReflectionFactory
                         .getReflectionFactory()
                         .newConstructorForSerialization(clazz, OBJECT_CONSTRUCTOR);
@@ -73,9 +58,7 @@ public class ReflectionMagic {
         } else {
             try {
 
-                if (clazz.isAssignableFrom(Unknown.class)) {
-                    return (T) Unknown.INSTANCE;
-                } else if (clazz.isAssignableFrom(Null.class)) {
+                if (clazz.isAssignableFrom(Null.class)) {
                     return (T) Null.INSTANCE;
                 }
 

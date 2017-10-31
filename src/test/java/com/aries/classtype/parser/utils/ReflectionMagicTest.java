@@ -156,25 +156,6 @@ public class ReflectionMagicTest {
     }
 
     @Test
-    public void initDataStructureInterfaces() {
-
-        final Map<String, String> map = ReflectionMagic.instance(Map.class);
-        assertNotNull(map);
-        map.put("hello1", "world1");
-        assertTrue(map.size() == 1);
-
-        final List<String> list = ReflectionMagic.instance(List.class);
-        assertNotNull(list);
-        list.add("hello2");
-        assertTrue(list.size() == 1);
-
-        final Set<String> set = ReflectionMagic.instance(Set.class);
-        assertNotNull(set);
-        set.add("hello3");
-        assertTrue(map.size() == 1);
-    }
-
-    @Test
     public void initDataStructureTypes() {
 
         final Map<String, String> map = ReflectionMagic.instance(HashMap.class);

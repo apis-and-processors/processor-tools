@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.aries.classtype.parser.ClassType;
 import com.aries.classtype.parser.domain.Null;
-import com.aries.classtype.parser.domain.Unknown;
 import org.junit.Test;
 
 /**
@@ -154,12 +153,20 @@ public class PrimitiveTypesTest {
     }
 
     @Test
-    public void unknownToUnknown() throws Exception {
+    public void fromNulltoNull() {
+        final PrimitiveTypes type = PrimitiveTypes.from(null);
+        assertNotNull(type);
+        assertThat(type).isEqualByComparingTo(PrimitiveTypes.NULL);
+        assertThat(type.getName()).isEqualTo("null");
+        assertThat(type.isNullable()).isTrue();
+    }
 
-        final ClassType clazzType = ClassType.parse(Unknown.INSTANCE);
-        assertNotNull(clazzType);
-        final Unknown instance = Unknown.class.cast(clazzType.toObject());
-        assertNotNull(instance);
-        assertTrue(instance.toString().equals(""));
+    @Test
+    public void fromNullStringtoNull() {
+        final PrimitiveTypes type = PrimitiveTypes.from("null");
+        assertNotNull(type);
+        assertThat(type).isEqualByComparingTo(PrimitiveTypes.NULL);
+        assertThat(type.getName()).isEqualTo("null");
+        assertThat(type.isNullable()).isTrue();
     }
 }
