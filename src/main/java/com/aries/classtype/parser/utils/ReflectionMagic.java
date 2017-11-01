@@ -17,11 +17,9 @@
 
 package com.aries.classtype.parser.utils;
 
-import com.aries.classtype.parser.domain.Null;
 import com.aries.classtype.parser.types.PrimitiveTypes;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Objects;
 
 /**
  * Various static utilities surrounding the use of reflection.
@@ -32,8 +30,15 @@ public class ReflectionMagic {
 
     private static final Class [] EMPTY_CLASS_ARRAY = new Class[0];
     private static final Object [] BEAN_ARG_OBJECT_ARRAY = new Object[0];
-    private static final Object [] EMPTY_OBJECT_ARRAY = new Object[1];
-    private static final Constructor OBJECT_CONSTRUCTOR = Object.class.getDeclaredConstructors()[0];
+    private static final Constructor OBJECT_CONST;
+
+    static {
+        try {
+            OBJECT_CONST = Object.class.getDeclaredConstructor(EMPTY_CLASS_ARRAY);
+        } catch (NoSuchMethodException | SecurityException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
     /**
      * Create a new instance from some arbitrary class type.
@@ -43,55 +48,26 @@ public class ReflectionMagic {
      * @return new instance of arbitrary class.
      */
     public static <T> T instance(final Class<T> clazz) {
-        Objects.requireNonNull(clazz, "clazz cannot be null");
-        if (clazz.isInterface()) {
-            try {
 
-                final Constructor genericConstructor = sun.reflect.ReflectionFactory
-                        .getReflectionFactory()
-                        .newConstructorForSerialization(clazz, OBJECT_CONSTRUCTOR);
-
-                return clazz.cast(genericConstructor.newInstance());
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | SecurityException | IllegalArgumentException ex) {
-                throw new RuntimeException(ex);
-            }
+        // if non-boxed primitive then return default value
+        if (clazz.isPrimitive()) {
+            return (T) PrimitiveTypes.from(clazz).getDefaultValue();
         } else {
+
+            Constructor constructor;
             try {
+                constructor = clazz.getDeclaredConstructor();
+                constructor.setAccessible(true);
+            } catch (NoSuchMethodException nsme) {
+                constructor = sun.reflect.ReflectionFactory
+                        .getReflectionFactory()
+                        .newConstructorForSerialization(clazz, OBJECT_CONST);
+            }
 
-                if (clazz.isAssignableFrom(Null.class)) {
-                    return (T) Null.INSTANCE;
-                }
-
-                final PrimitiveTypes found = PrimitiveTypes.from(clazz);
-                if (found != null) {
-                    return (T) found.getDefaultValue();
-                } else {
-                    final Constructor noArgConstructor = clazz.getDeclaredConstructors()[clazz.getDeclaredConstructors().length - 1];
-                    noArgConstructor.setAccessible(true);
-                    return clazz.cast(noArgConstructor.newInstance(EMPTY_OBJECT_ARRAY));
-                }
-
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | SecurityException | IllegalArgumentException ex) {
-
-                // second attempt at creating generic object from class
-                try {
-                    return (T) clazz.getDeclaredConstructor(EMPTY_CLASS_ARRAY).newInstance(BEAN_ARG_OBJECT_ARRAY);
-                } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex2) {
-
-                    final Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-                    for (int i = 0; i < constructors.length; i++) {
-                        final Constructor possibleConstructor = constructors[i];
-                        if (possibleConstructor.getParameterCount() == 1) {
-                            possibleConstructor.setAccessible(true);
-                            try {
-                                return (T) possibleConstructor.newInstance(EMPTY_OBJECT_ARRAY);
-                            } catch (IllegalAccessException | InstantiationException | InvocationTargetException ite) {
-                                throw new RuntimeException(ite);
-                            }
-                        }
-                    }
-                    throw new RuntimeException(ex2);
-                }
+            try {
+                return (T) constructor.newInstance(BEAN_ARG_OBJECT_ARRAY);
+            } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException e) {
+                throw new RuntimeException(e);
             }
         }
     }

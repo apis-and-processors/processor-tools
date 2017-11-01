@@ -78,9 +78,10 @@ public class ReflectionMagicTest {
         assertNotNull(shortObj);
         assertTrue(shortObj == 0);
 
-        final Integer integerObj = ReflectionMagic.instance(int.class);
+        int integerObj = ReflectionMagic.instance(int.class);
         assertNotNull(integerObj);
         assertTrue(integerObj == 0);
+        integerObj = 78;
 
         final Long longObj = ReflectionMagic.instance(long.class);
         assertNotNull(longObj);
@@ -149,7 +150,7 @@ public class ReflectionMagicTest {
         assertTrue(booleanObj == false);
 
         final Void voidObj = ReflectionMagic.instance(Void.class);
-        assertThat(voidObj).isNull();
+        assertThat(voidObj).isNotNull();
 
         final Null nullObj = ReflectionMagic.instance(Null.class);
         assertNotNull(nullObj);
