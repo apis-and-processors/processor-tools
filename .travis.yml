@@ -10,6 +10,8 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+install: true
+
 script: ./gradlew -s -Dorg.gradle.daemon=false clean build publishToMavenLocal
 
 after_script:
