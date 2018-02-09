@@ -109,7 +109,7 @@ public enum PrimitiveTypes {
             } catch (final Exception e) {
                 for (int i = 0; i < PrimitiveTypes.values().length; i++) {
                     final PrimitiveTypes iteration = PrimitiveTypes.values()[i];
-                    if (name.equalsIgnoreCase(iteration.getPrimitveClass().getName()) || name.equalsIgnoreCase(iteration.getBoxedClass().getName())) {
+                    if (name.equalsIgnoreCase(iteration.getPrimitveClass().getName())) {
                         possibleType = iteration;
                         break;
                     }

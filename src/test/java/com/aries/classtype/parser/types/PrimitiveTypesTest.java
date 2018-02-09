@@ -17,12 +17,15 @@
 
 package com.aries.classtype.parser.types;
 
+import static com.aries.classtype.parser.utils.Constants.NULL_STRING;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.aries.classtype.parser.ClassType;
 import com.aries.classtype.parser.domain.Null;
+import java.util.UUID;
 import org.junit.Test;
 
 /**
@@ -42,6 +45,13 @@ public class PrimitiveTypesTest {
         final Short instance = Short.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
+
+        final PrimitiveTypes first = PrimitiveTypes.from("SHORT");
+        assertThat(first).isNotNull();
+        assertThat(first).isEqualTo(PrimitiveTypes.SHORT);
+        final PrimitiveTypes second = PrimitiveTypes.from("short");
+        assertThat(second).isNotNull();
+        assertThat(second).isEqualTo(PrimitiveTypes.SHORT);
     }
 
     @Test
@@ -54,6 +64,13 @@ public class PrimitiveTypesTest {
         final Integer instance = Integer.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
+
+        final PrimitiveTypes first = PrimitiveTypes.from("INT");
+        assertThat(first).isNotNull();
+        assertThat(first).isEqualTo(PrimitiveTypes.INT);
+        final PrimitiveTypes second = PrimitiveTypes.from("int");
+        assertThat(second).isNotNull();
+        assertThat(second).isEqualTo(PrimitiveTypes.INT);
     }
 
     @Test
@@ -66,6 +83,13 @@ public class PrimitiveTypesTest {
         final Long instance = Long.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
+
+        final PrimitiveTypes first = PrimitiveTypes.from("LONG");
+        assertThat(first).isNotNull();
+        assertThat(first).isEqualTo(PrimitiveTypes.LONG);
+        final PrimitiveTypes second = PrimitiveTypes.from("long");
+        assertThat(second).isNotNull();
+        assertThat(second).isEqualTo(PrimitiveTypes.LONG);
     }
 
     @Test
@@ -78,6 +102,13 @@ public class PrimitiveTypesTest {
         final Float instance = Float.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
+
+        final PrimitiveTypes first = PrimitiveTypes.from("FLOAT");
+        assertThat(first).isNotNull();
+        assertThat(first).isEqualTo(PrimitiveTypes.FLOAT);
+        final PrimitiveTypes second = PrimitiveTypes.from("float");
+        assertThat(second).isNotNull();
+        assertThat(second).isEqualTo(PrimitiveTypes.FLOAT);
     }
 
     @Test
@@ -90,6 +121,13 @@ public class PrimitiveTypesTest {
         final Double instance = Double.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
+
+        final PrimitiveTypes first = PrimitiveTypes.from("DOUBLE");
+        assertThat(first).isNotNull();
+        assertThat(first).isEqualTo(PrimitiveTypes.DOUBLE);
+        final PrimitiveTypes second = PrimitiveTypes.from("double");
+        assertThat(second).isNotNull();
+        assertThat(second).isEqualTo(PrimitiveTypes.DOUBLE);
     }
 
     @Test
@@ -102,6 +140,13 @@ public class PrimitiveTypesTest {
         final Byte instance = Byte.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == 0);
+
+        final PrimitiveTypes first = PrimitiveTypes.from("BYTE");
+        assertThat(first).isNotNull();
+        assertThat(first).isEqualTo(PrimitiveTypes.BYTE);
+        final PrimitiveTypes second = PrimitiveTypes.from("byte");
+        assertThat(second).isNotNull();
+        assertThat(second).isEqualTo(PrimitiveTypes.BYTE);
     }
 
     @Test
@@ -114,6 +159,13 @@ public class PrimitiveTypesTest {
         final Character instance = Character.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == '\u0000');
+
+        final PrimitiveTypes first = PrimitiveTypes.from("CHAR");
+        assertThat(first).isNotNull();
+        assertThat(first).isEqualTo(PrimitiveTypes.CHAR);
+        final PrimitiveTypes second = PrimitiveTypes.from("char");
+        assertThat(second).isNotNull();
+        assertThat(second).isEqualTo(PrimitiveTypes.CHAR);
     }
 
     @Test
@@ -127,6 +179,20 @@ public class PrimitiveTypesTest {
         final Boolean instance = Boolean.class.cast(clazzType.toObject());
         assertNotNull(instance);
         assertTrue(instance == false);
+
+        final PrimitiveTypes first = PrimitiveTypes.from("BOOLEAN");
+        assertThat(first).isNotNull();
+        assertThat(first).isEqualTo(PrimitiveTypes.BOOLEAN);
+        final PrimitiveTypes second = PrimitiveTypes.from("boolean");
+        assertThat(second).isNotNull();
+        assertThat(second).isEqualTo(PrimitiveTypes.BOOLEAN);
+
+        final PrimitiveTypes third = PrimitiveTypes.from("BooLEAn");
+        assertThat(third).isNotNull();
+        assertThat(third).isEqualTo(PrimitiveTypes.BOOLEAN);
+        final PrimitiveTypes fourth = PrimitiveTypes.from("boOleaN");
+        assertThat(fourth).isNotNull();
+        assertThat(fourth).isEqualTo(PrimitiveTypes.BOOLEAN);
     }
 
     @Test
@@ -139,6 +205,13 @@ public class PrimitiveTypesTest {
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.VOID.getBoxedClass()));
         final Void instance = Void.class.cast(clazzType.toObject());
         assertThat(instance).isNotNull();
+
+        final PrimitiveTypes first = PrimitiveTypes.from("VOID");
+        assertThat(first).isNotNull();
+        assertThat(first).isEqualTo(PrimitiveTypes.VOID);
+        final PrimitiveTypes second = PrimitiveTypes.from("void");
+        assertThat(second).isNotNull();
+        assertThat(second).isEqualTo(PrimitiveTypes.VOID);
     }
 
     @Test
@@ -150,23 +223,64 @@ public class PrimitiveTypesTest {
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.NULL.getBoxedClass()));
         final Null instance = Null.class.cast(clazzType.toObject());
         assertNotNull(instance);
+
+        final PrimitiveTypes first = PrimitiveTypes.from("NULL");
+        assertThat(first).isNotNull();
+        assertThat(first).isEqualTo(PrimitiveTypes.NULL);
+        final PrimitiveTypes second = PrimitiveTypes.from(NULL_STRING);
+        assertThat(second).isNotNull();
+        assertThat(second).isEqualTo(PrimitiveTypes.NULL);
+        final PrimitiveTypes third = PrimitiveTypes.from(NULL_STRING + "     ");
+        assertThat(third).isNotNull();
+        assertThat(third).isEqualTo(PrimitiveTypes.NULL);
     }
 
     @Test
     public void fromNulltoNull() {
         final PrimitiveTypes type = PrimitiveTypes.from(null);
         assertNotNull(type);
+        assertThat(type).isEqualTo(PrimitiveTypes.NULL);
         assertThat(type).isEqualByComparingTo(PrimitiveTypes.NULL);
-        assertThat(type.getName()).isEqualTo("null");
+        assertThat(type.getName()).isEqualTo(NULL_STRING);
         assertThat(type.isNullable()).isTrue();
     }
 
     @Test
     public void fromNullStringtoNull() {
-        final PrimitiveTypes type = PrimitiveTypes.from("null");
+        final PrimitiveTypes type = PrimitiveTypes.from(NULL_STRING);
         assertNotNull(type);
         assertThat(type).isEqualByComparingTo(PrimitiveTypes.NULL);
-        assertThat(type.getName()).isEqualTo("null");
+        assertThat(type.getName()).isEqualTo(NULL_STRING);
         assertThat(type.isNullable()).isTrue();
+    }
+
+    @Test
+    public void testPrimitiveClassesOfPrimitiveTypes() {
+        final PrimitiveTypes possibleShort = PrimitiveTypes.SHORT;
+        assertThat(possibleShort.getPrimitveClass()).isEqualTo(short.class);
+        final PrimitiveTypes possibleInt = PrimitiveTypes.INT;
+        assertThat(possibleInt.getPrimitveClass()).isEqualTo(int.class);
+        final PrimitiveTypes possibleLong = PrimitiveTypes.LONG;
+        assertThat(possibleLong.getPrimitveClass()).isEqualTo(long.class);
+
+        final PrimitiveTypes possibleFloat = PrimitiveTypes.FLOAT;
+        assertThat(possibleFloat.getPrimitveClass()).isEqualTo(float.class);
+        final PrimitiveTypes possibleDouble = PrimitiveTypes.DOUBLE;
+        assertThat(possibleDouble.getPrimitveClass()).isEqualTo(double.class);
+        final PrimitiveTypes possibleByte = PrimitiveTypes.BYTE;
+        assertThat(possibleByte.getPrimitveClass()).isEqualTo(byte.class);
+
+        final PrimitiveTypes possibleChar = PrimitiveTypes.CHAR;
+        assertThat(possibleChar.getPrimitveClass()).isEqualTo(char.class);
+        final PrimitiveTypes possibleBoolean = PrimitiveTypes.BOOLEAN;
+        assertThat(possibleBoolean.getPrimitveClass()).isEqualTo(boolean.class);
+        final PrimitiveTypes possibleVoid = PrimitiveTypes.VOID;
+        assertThat(possibleVoid.getPrimitveClass()).isEqualTo(void.class);
+    }
+
+    @Test
+    public void testPrimitiveTypesFromErroneousData() {
+        final PrimitiveTypes type = PrimitiveTypes.from(UUID.randomUUID().toString());
+        assertThat(type).isNull();;
     }
 }
