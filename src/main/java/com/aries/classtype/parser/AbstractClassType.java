@@ -22,10 +22,13 @@ import static com.aries.classtype.parser.utils.Constants.PERIOD_CHAR;
 import com.aries.classtype.parser.exceptions.TypeMismatchException;
 
 import com.aries.classtype.parser.types.PrimitiveTypes;
+import com.aries.classtype.parser.utils.SuppressFBWarnings;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.lang.model.SourceVersion;
 
 /**
@@ -55,6 +58,13 @@ import javax.lang.model.SourceVersion;
  * @author dancc
  */
 public abstract class AbstractClassType implements Comparable<ClassType> {
+
+    protected final Class clazz;
+    protected final List<ClassType> children = new ArrayList<>();
+
+    public AbstractClassType(final Class clazz) {
+        this.clazz = clazz;
+    }
 
     /**
      * Parse a ClassType from some arbitrary Object (e.g. Class, Type, etc.).
@@ -454,9 +464,20 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
         }
     }
 
+    @SuppressFBWarnings(value = "EQ_UNUSUAL", justification = "I know what I'm doing")
     @Override
-    public abstract boolean equals(final Object classType);
+    public boolean equals(final Object classType) {
+        if (classType instanceof ClassType) {
+            return (this.compareTo((ClassType)classType) == 0);
+        } else {
+            return false;
+        }
+    }
 
     @Override
-    public abstract int hashCode();
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.children);
+        return hash;
+    }
 }

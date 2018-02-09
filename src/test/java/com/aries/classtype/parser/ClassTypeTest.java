@@ -133,6 +133,41 @@ public class ClassTypeTest {
     }
 
     @Test
+    public void testFirstChildMatchingWithNullRegexReturnsNull() {
+
+        final ClassType instance = ClassType.parse(String.class);
+        assertThat(instance.firstChildMatching(null)).isNull();
+    }
+
+    @Test
+    public void testAddingChild() {
+
+        final ClassType instance = ClassType.parse(String.class);
+        final ClassType childInstance = ClassType.parse(Integer.class);
+        assertThat(instance.child(childInstance)).isEqualTo(instance);
+        assertThat(instance.child(null)).isEqualTo(instance);
+    }
+
+    @Test
+    public void testUniqueHashCodes() {
+
+        final ClassType first = ClassType.parse(String.class);
+        final ClassType second = ClassType.parse(Integer.class);
+        assertThat(first.hashCode()).isGreaterThan(0);
+        assertThat(second.hashCode()).isGreaterThan(0);
+        assertThat(first.hashCode()).isNotEqualTo(second.hashCode());
+    }
+
+    @Test
+    public void testBasicEqualityTest() {
+
+        final ClassType first = ClassType.parse(String.class);
+        final ClassType second = ClassType.parse(Integer.class);
+        assertThat(first.equals(second)).isFalse();
+        assertThat(first.equals(ClassType.parse(String.class))).isTrue();
+    }
+
+    @Test
     public void testEmptyStringType() {
 
         final ClassType instance = ClassType.parse("");
@@ -148,6 +183,15 @@ public class ClassTypeTest {
         assertNotNull(instance);
         assertTrue(instance.clazz() == Integer.class);
         assertTrue(instance.toObject().toString().equals("0"));
+    }
+
+    @Test
+    public void testToStringWithChildren() {
+
+        final ClassType first = ClassType.parse(String.class);
+        final ClassType second = ClassType.parse(Integer.class);
+        first.child(second);
+        assertThat(first.toString()).isNotNull();
     }
 
     @Test
