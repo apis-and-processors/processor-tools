@@ -104,7 +104,8 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
      * @return instantiated ClassType.
      */
     public static ClassType parse(final Object parseToClassType, final ParseOptions options) {
-        return parseObject(parseToClassType, options != null ? options : ParseOptions.DEFAULT_PARSER_OPTIONS);
+        Objects.requireNonNull(options, "If supplied 'options' cannot be NULL");
+        return parseObject(parseToClassType, options);
     }
 
     /**
