@@ -146,7 +146,16 @@ public class ClassTypeTest {
         final ClassType instance = ClassType.parse(String.class);
         final ClassType childInstance = ClassType.parse(Integer.class);
         assertThat(instance.child(childInstance)).isEqualTo(instance);
-        assertThat(instance.child(null)).isEqualTo(instance);
+    }
+
+    @Test
+    public void testAddingNullChild() {
+        try {
+            final ClassType instance = ClassType.parse(String.class);
+            instance.child(null);
+        } catch (final Exception e) {
+            assertThat(e).isInstanceOf(NullPointerException.class);
+        }
     }
 
     @Test

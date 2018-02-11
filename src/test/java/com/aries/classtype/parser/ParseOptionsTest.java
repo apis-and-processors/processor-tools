@@ -72,7 +72,7 @@ public class ParseOptionsTest {
     }
 
     @Test
-    public void testClassIgnored() throws Exception {
+    public void testClassIgnored() {
         final String regex = ".*" + CustomClassHandlerTwo.class.getSimpleName() + ".*";
         final ParseOptions options = ParseOptions.instance(regex, null, null, null);
         final ClassType classType = ClassType.parse(CustomClassHandlerThree.class, options);
@@ -89,7 +89,7 @@ public class ParseOptionsTest {
     }
 
     @Test
-    public void testInterfaceIgnored() throws Exception {
+    public void testInterfaceIgnored() {
         final String regex = ".*" + Comparable.class.getSimpleName() + ".*";
         final ParseOptions options = ParseOptions.instance(null, null, regex, null);
         final ClassType classType = ClassType.parse(CustomInterfaceHandler.class, options);
@@ -106,7 +106,7 @@ public class ParseOptionsTest {
     }
 
     @Test
-    public void testInterfaceParamIgnored() throws Exception {
+    public void testInterfaceParamIgnored() {
         final ParseOptions options = ParseOptions.instance(null, null, null, ".*" + String.class.getSimpleName() + ".*");
         final ClassType classType = ClassType.parse(CustomInterfaceHandler.class, options);
         assertTrue(classType.children().size() == 2);
@@ -118,5 +118,10 @@ public class ParseOptionsTest {
         assertTrue(classType.children().get(0).children().get(0).children().size() == 2);
         assertTrue(classType.children().get(0).children().get(0).children().get(0).name().equals(Boolean.class.getName()));
         assertTrue(classType.children().get(0).children().get(0).children().get(1).name().equals(Serializable.class.getName()));
+    }
+
+    @Test (expected = NullPointerException.class)
+    public void testExceptionThrownWhenPassingNullParseOptions() {
+        ClassType.parse(CustomInterfaceHandler.class, null);
     }
 }
