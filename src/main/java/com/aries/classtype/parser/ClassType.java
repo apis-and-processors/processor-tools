@@ -17,7 +17,6 @@
 
 package com.aries.classtype.parser;
 
-import com.aries.classtype.parser.utils.ReflectionMagic;
 import com.aries.classtype.parser.utils.Constants;
 
 import com.aries.classtype.parser.exceptions.TypeMismatchException;
@@ -47,20 +46,6 @@ public class ClassType extends AbstractClassType {
             children.add(classType);
         }
         return this;
-    }
-
-    /**
-     * Get the class representing this ClassType.
-     * 
-     * @return Class
-     */
-    public Class clazz() {
-        return clazz;
-    }
-
-    @Override
-    public String name() {
-        return clazz.getName();
     }
 
     @Override
@@ -108,15 +93,6 @@ public class ClassType extends AbstractClassType {
             throw new TypeMismatchException("Source type '" + this.name()
                     + "' cannot be comapred to NULL target type", this.name());
         }
-    }
-
-    /**
-     * Get an toObject of the backing ClassType.
-     * 
-     * @return new toObject from backing ClassType
-     */
-    public Object toObject() {
-        return ReflectionMagic.instance(clazz());
     }
 
     /**

@@ -24,6 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.aries.classtype.parser.ClassType;
+import com.aries.classtype.parser.ReflectionMagic;
 import com.aries.classtype.parser.domain.Null;
 import java.util.UUID;
 import org.junit.Test;
@@ -42,7 +43,9 @@ public class PrimitiveTypesTest {
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.SHORT.getBoxedClass().getName()));
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.SHORT.getBoxedClass()));
-        final Short instance = Short.class.cast(clazzType.toObject());
+        final Object parsedObject = ReflectionMagic.instance(clazzType.clazz());
+
+        final Short instance = Short.class.cast(parsedObject);
         assertNotNull(instance);
         assertTrue(instance == 0);
 
@@ -61,7 +64,9 @@ public class PrimitiveTypesTest {
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.INT.getBoxedClass().getName()));
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.INT.getBoxedClass()));
-        final Integer instance = Integer.class.cast(clazzType.toObject());
+        final Object parsedObject = ReflectionMagic.instance(clazzType.clazz());
+
+        final Integer instance = Integer.class.cast(parsedObject);
         assertNotNull(instance);
         assertTrue(instance == 0);
 
@@ -80,7 +85,9 @@ public class PrimitiveTypesTest {
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.LONG.getBoxedClass().getName()));
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.LONG.getBoxedClass()));
-        final Long instance = Long.class.cast(clazzType.toObject());
+        final Object parsedObject = ReflectionMagic.instance(clazzType.clazz());
+
+        final Long instance = Long.class.cast(parsedObject);
         assertNotNull(instance);
         assertTrue(instance == 0);
 
@@ -99,7 +106,9 @@ public class PrimitiveTypesTest {
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.FLOAT.getBoxedClass().getName()));
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.FLOAT.getBoxedClass()));
-        final Float instance = Float.class.cast(clazzType.toObject());
+        final Object parsedObject = ReflectionMagic.instance(clazzType.clazz());
+
+        final Float instance = Float.class.cast(parsedObject);
         assertNotNull(instance);
         assertTrue(instance == 0);
 
@@ -118,7 +127,9 @@ public class PrimitiveTypesTest {
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.DOUBLE.getBoxedClass().getName()));
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.DOUBLE.getBoxedClass()));
-        final Double instance = Double.class.cast(clazzType.toObject());
+        final Object parsedObject = ReflectionMagic.instance(clazzType.clazz());
+
+        final Double instance = Double.class.cast(parsedObject);
         assertNotNull(instance);
         assertTrue(instance == 0);
 
@@ -137,7 +148,9 @@ public class PrimitiveTypesTest {
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.BYTE.getBoxedClass().getName()));
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.BYTE.getBoxedClass()));
-        final Byte instance = Byte.class.cast(clazzType.toObject());
+        final Object parsedObject = ReflectionMagic.instance(clazzType.clazz());
+
+        final Byte instance = Byte.class.cast(parsedObject);
         assertNotNull(instance);
         assertTrue(instance == 0);
 
@@ -156,7 +169,9 @@ public class PrimitiveTypesTest {
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.CHAR.getBoxedClass().getName()));
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.CHAR.getBoxedClass()));
-        final Character instance = Character.class.cast(clazzType.toObject());
+        final Object parsedObject = ReflectionMagic.instance(clazzType.clazz());
+
+        final Character instance = Character.class.cast(parsedObject);
         assertNotNull(instance);
         assertTrue(instance == '\u0000');
 
@@ -176,7 +191,9 @@ public class PrimitiveTypesTest {
         assertTrue(clazzType.name().equals(PrimitiveTypes.BOOLEAN.getBoxedClass().getName()));
         assertTrue(clazzType.name().equals(PrimitiveTypes.BOOLEAN.getBoxedClass().getName()));
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.BOOLEAN.getBoxedClass()));
-        final Boolean instance = Boolean.class.cast(clazzType.toObject());
+        final Object parsedObject = ReflectionMagic.instance(clazzType.clazz());
+
+        final Boolean instance = Boolean.class.cast(parsedObject);
         assertNotNull(instance);
         assertTrue(instance == false);
 
@@ -203,7 +220,9 @@ public class PrimitiveTypesTest {
         assertTrue(clazzType.name().equals(PrimitiveTypes.VOID.getBoxedClass().getName()));
         assertTrue(clazzType.toString().equals(PrimitiveTypes.VOID.getBoxedClass().getName()));
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.VOID.getBoxedClass()));
-        final Void instance = Void.class.cast(clazzType.toObject());
+        final Object parsedObject = ReflectionMagic.instance(clazzType.clazz());
+
+        final Void instance = Void.class.cast(parsedObject);
         assertThat(instance).isNotNull();
 
         final PrimitiveTypes first = PrimitiveTypes.from("VOID");
@@ -221,7 +240,9 @@ public class PrimitiveTypesTest {
         assertNotNull(clazzType);
         assertTrue(clazzType.name().equals(PrimitiveTypes.NULL.getBoxedClass().getName()));
         assertTrue(clazzType.clazz().equals(PrimitiveTypes.NULL.getBoxedClass()));
-        final Null instance = Null.class.cast(clazzType.toObject());
+        final Object parsedObject = ReflectionMagic.instance(clazzType.clazz());
+
+        final Null instance = Null.class.cast(parsedObject);
         assertNotNull(instance);
 
         final PrimitiveTypes first = PrimitiveTypes.from("NULL");

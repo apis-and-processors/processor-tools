@@ -128,8 +128,9 @@ public class ClassTypeTest {
         final ClassType instance = ClassType.parse(null);
         assertNotNull(instance);
 
+        final Object parsedObject = ReflectionMagic.instance(instance.clazz());
         assertTrue(instance.clazz() == Null.class);
-        assertTrue(instance.toObject().toString().equals("null"));
+        assertTrue(parsedObject.toString().equals("null"));
     }
 
     @Test
@@ -173,7 +174,8 @@ public class ClassTypeTest {
         final ClassType instance = ClassType.parse("");
         assertNotNull(instance);
         assertTrue(instance.clazz() == String.class);
-        assertTrue(instance.toObject().toString().equals(""));
+        final Object parsedObject = ReflectionMagic.instance(instance.clazz());
+        assertTrue(parsedObject.toString().equals(""));
     }
 
     @Test
@@ -182,7 +184,8 @@ public class ClassTypeTest {
         final ClassType instance = ClassType.parse(123);
         assertNotNull(instance);
         assertTrue(instance.clazz() == Integer.class);
-        assertTrue(instance.toObject().toString().equals("0"));
+        final Object parsedObject = ReflectionMagic.instance(instance.clazz());
+        assertTrue(parsedObject.toString().equals("0"));
     }
 
     @Test

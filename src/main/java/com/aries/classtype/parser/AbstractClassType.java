@@ -60,11 +60,29 @@ import javax.lang.model.SourceVersion;
 @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
 public abstract class AbstractClassType implements Comparable<ClassType> {
 
-    protected final Class clazz;
+    private final Class clazz;
     protected final List<ClassType> children = new ArrayList<>();
 
     public AbstractClassType(final Class clazz) {
         this.clazz = clazz;
+    }
+
+    /**
+     * Get the class representing this ClassType.
+     * 
+     * @return Class
+     */
+    public Class clazz() {
+        return clazz;
+    }
+
+    /**
+     * Get the name of this ClassType.
+     * 
+     * @return name of this ClassType.
+     */
+    public String name() {
+        return clazz.getName();
     }
 
     /**
@@ -322,13 +340,6 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
      * @return list of ClassType's or empty list if no ClassType's defined.
      */
     abstract List<ClassType> children();
-
-    /**
-     * Get the name of this ClassType.
-     * 
-     * @return name of this ClassType.
-     */
-    abstract String name();
 
     /**
      * Compare this ClassType to another ClassType.

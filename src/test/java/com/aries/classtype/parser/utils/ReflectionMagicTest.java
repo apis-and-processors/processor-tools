@@ -21,6 +21,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.aries.classtype.parser.ReflectionMagic;
+
 import com.aries.classtype.parser.domain.Null;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

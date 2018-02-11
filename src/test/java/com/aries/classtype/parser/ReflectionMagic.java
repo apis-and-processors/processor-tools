@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.aries.classtype.parser.utils;
+package com.aries.classtype.parser;
 
 import com.aries.classtype.parser.types.PrimitiveTypes;
 import java.lang.reflect.Constructor;
