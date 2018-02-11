@@ -57,6 +57,7 @@ import javax.lang.model.SourceVersion;
  *
  * @author dancc
  */
+@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
 public abstract class AbstractClassType implements Comparable<ClassType> {
 
     protected final Class clazz;
@@ -67,7 +68,7 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
     }
 
     /**
-     * Parse a ClassType from some arbitrary Object (e.g. Class, Type, etc.).
+     * Parse a ClassType from some arbitrary Object (e.g. Class, Type, primitive, etc.).
      * 
      * @param parseToClassType arbitrary Object to parse a ClassType from.
      * @return instantiated ClassType.
@@ -77,7 +78,7 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
     }
 
     /**
-     * Parse a ClassType from some arbitrary Object (e.g. Class, Type, etc.) whilst
+     * Parse a ClassType from some arbitrary Object (e.g. Class, Type, primitive, etc.) whilst
      * supplying optional ParseOptions (can be null).
      * 
      * @param parseToClassType arbitrary Object to parse a ClassType from.
@@ -130,19 +131,19 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
             final ParseOptions options) {
 
         // 1.) init the parent ClassType and attach any parameters as child ClassType's.
-        final ClassType parent = ClassType.instance(clazz);
+        final ClassType parent = new ClassType(clazz);
         if (options.classParamRegex != null) {
             for (final TypeVariable childVariable : clazz.getTypeParameters()) {
                 final Class properTypeName = parseClassFromTypeName(childVariable.getTypeName());
                 if (!properTypeName.getName().matches(options.classParamRegex)) {
-                    final ClassType child = ClassType.instance(properTypeName);
+                    final ClassType child = new ClassType(properTypeName);
                     parent.child(child);
                 }
             }
         } else {
             for (final TypeVariable childVariable : clazz.getTypeParameters()) {
                 final Class properTypeName = parseClassFromTypeName(childVariable.getTypeName());
-                final ClassType child = ClassType.instance(properTypeName);
+                final ClassType child = new ClassType(properTypeName);
                 parent.child(child);
             }
         }
@@ -238,7 +239,7 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
                     } else {
                         final Class properTypeName = parseClassFromTypeName(childInterface.getTypeName());
                         if (!properTypeName.getName().matches(options.interfaceRegex)) {
-                            final ClassType child = ClassType.instance(properTypeName);
+                            final ClassType child = new ClassType(properTypeName);
                             parent.child(child);
                         }
                     }
@@ -251,7 +252,7 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
                         parent.child(child);
                     } else {
                         final Class properTypeName = parseClassFromTypeName(childInterface.getTypeName());
-                        final ClassType child = ClassType.instance(properTypeName);
+                        final ClassType child = new ClassType(properTypeName);
                         parent.child(child);
                     }
                 }
@@ -274,7 +275,7 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
 
         final ParameterizedType pType = (ParameterizedType)type;
         final Class clazz = (Class)pType.getRawType();
-        final ClassType parent = ClassType.instance(clazz);
+        final ClassType parent = new ClassType(clazz);
         final Type[] childTypes = pType.getActualTypeArguments();
         if (childTypes.length > 0) {
             if (options.interfaceParamRegex != null) {
@@ -289,7 +290,7 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
                     } else {
                         final Class properTypeName = parseClassFromTypeName(childArg.getTypeName());
                         if (!properTypeName.getName().matches(options.interfaceParamRegex)) {
-                            final ClassType child = ClassType.instance(properTypeName);
+                            final ClassType child = new ClassType(properTypeName);
                             parent.child(child);
                         }
                     }
@@ -302,7 +303,7 @@ public abstract class AbstractClassType implements Comparable<ClassType> {
                         parent.child(child);
                     } else {
                         final Class properTypeName = parseClassFromTypeName(childArg.getTypeName());
-                        final ClassType child = ClassType.instance(properTypeName);
+                        final ClassType child = new ClassType(properTypeName);
                         parent.child(child);
                     }
                 }

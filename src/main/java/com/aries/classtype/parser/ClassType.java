@@ -32,12 +32,8 @@ import java.util.List;
  */
 public class ClassType extends AbstractClassType {
 
-    private ClassType(final Class clazz) {
+    protected ClassType(final Class clazz) {
         super(clazz);
-    }
-
-    protected static ClassType instance(final Class clazz) {
-        return new ClassType(clazz);
     }
 
     /**
