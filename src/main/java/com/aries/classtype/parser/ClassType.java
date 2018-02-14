@@ -353,8 +353,8 @@ public class ClassType implements Comparable<ClassType> {
      * @param regex the regular expression used to match.
      * @return found ClassType or null if regex is null or none found.
      */
-    public ClassType firstChildMatching(final String regex) {
-        return (regex != null) ? firstSubTypeMatching(regex, this) : null;
+    public ClassType firstTypeMatching(final String regex) {
+        return (regex != null) ? _firstTypeMatching(regex, this) : null;
     }
 
     /**
@@ -365,12 +365,12 @@ public class ClassType implements Comparable<ClassType> {
      * @param classType ClassType to check it, and its children, for match.
      * @return found ClassType or null if regex is null or none found.
      */
-    private ClassType firstSubTypeMatching(final String regex, final ClassType classType) {
+    private ClassType _firstTypeMatching(final String regex, final ClassType classType) {
         if (classType.name().matches(regex)) {
             return classType;
         } else {
             for (int i = 0; i < classType.children().size(); i++) {
-                final ClassType innerClassType = firstSubTypeMatching(regex, classType.children().get(i));
+                final ClassType innerClassType = _firstTypeMatching(regex, classType.children().get(i));
                 if (innerClassType != null) {
                     return innerClassType;
                 }

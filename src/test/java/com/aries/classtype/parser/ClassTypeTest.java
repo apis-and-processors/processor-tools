@@ -137,7 +137,7 @@ public class ClassTypeTest {
     public void testFirstChildMatchingWithNullRegexReturnsNull() {
 
         final ClassType instance = ClassType.parse(String.class);
-        assertThat(instance.firstChildMatching(null)).isNull();
+        assertThat(instance.firstTypeMatching(null)).isNull();
     }
 
     @Test
@@ -251,29 +251,29 @@ public class ClassTypeTest {
 
         final ClassType helloWorld = ClassType.parse(HelloWorld.class);
         assertNotNull(helloWorld);
-        assertThat(helloWorld.firstChildMatching(".*NonExistentType.*")).isNull();
+        assertThat(helloWorld.firstTypeMatching(".*NonExistentType.*")).isNull();
         assertTrue(helloWorld.name().equals(HelloWorld.class.getName()));
         assertTrue(helloWorld.children().size() == 2);
 
-        final ClassType functionType = helloWorld.firstChildMatching(FUNCTION_REGEX);
+        final ClassType functionType = helloWorld.firstTypeMatching(FUNCTION_REGEX);
         assertNotNull(functionType);
-        assertThat(functionType.firstChildMatching(".*NonExistentType.*")).isNull();
+        assertThat(functionType.firstTypeMatching(".*NonExistentType.*")).isNull();
         assertTrue(functionType.children().size() == 2);
 
-        final ClassType functionTypeBoolean = functionType.firstChildMatching(".*Boolean.*");
+        final ClassType functionTypeBoolean = functionType.firstTypeMatching(".*Boolean.*");
         assertNotNull(functionTypeBoolean);
         assertTrue(functionTypeBoolean.children().size() == 0);
 
-        final ClassType functionTypeInteger = functionType.firstChildMatching(".*Integer.*");
+        final ClassType functionTypeInteger = functionType.firstTypeMatching(".*Integer.*");
         assertNotNull(functionTypeInteger);
         assertTrue(functionTypeInteger.children().size() == 0);
 
-        final ClassType comparableType = helloWorld.firstChildMatching(COMPARABLE_REGEX);
+        final ClassType comparableType = helloWorld.firstTypeMatching(COMPARABLE_REGEX);
         assertNotNull(comparableType);
-        assertThat(helloWorld.firstChildMatching(".*NonExistentType.*")).isNull();
+        assertThat(helloWorld.firstTypeMatching(".*NonExistentType.*")).isNull();
         assertTrue(comparableType.children().size() == 1);
 
-        final ClassType comparableTypeString = comparableType.firstChildMatching(".*String.*");
+        final ClassType comparableTypeString = comparableType.firstTypeMatching(".*String.*");
         assertNotNull(comparableTypeString);
         assertTrue(comparableTypeString.children().size() == 0);
     }
@@ -287,24 +287,24 @@ public class ClassTypeTest {
         final ClassType helloWorld4 = ClassType.parse(HelloWorld4.class);
 
         assertTrue(helloWorld.compareTo(helloWorld2) == -1);
-        assertTrue(helloWorld.firstChildMatching(COMPARABLE_REGEX).compareTo(helloWorld3.firstChildMatching(COMPARABLE_REGEX)) == -1);
-        assertTrue(helloWorld.firstChildMatching(COMPARABLE_REGEX).compareTo(helloWorld2.firstChildMatching(COMPARABLE_REGEX)) == 0);
-        assertTrue(helloWorld3.firstChildMatching(FUNCTION_REGEX).compareTo(helloWorld2.firstChildMatching(FUNCTION_REGEX)) == 1);
-        assertTrue(helloWorld2.firstChildMatching(FUNCTION_REGEX).compareTo(helloWorld3.firstChildMatching(FUNCTION_REGEX)) == 2);
-        assertTrue(helloWorld3.firstChildMatching(FUNCTION_REGEX).compareTo(helloWorld4.firstChildMatching(FUNCTION_REGEX)) == 3);
+        assertTrue(helloWorld.firstTypeMatching(COMPARABLE_REGEX).compareTo(helloWorld3.firstTypeMatching(COMPARABLE_REGEX)) == -1);
+        assertTrue(helloWorld.firstTypeMatching(COMPARABLE_REGEX).compareTo(helloWorld2.firstTypeMatching(COMPARABLE_REGEX)) == 0);
+        assertTrue(helloWorld3.firstTypeMatching(FUNCTION_REGEX).compareTo(helloWorld2.firstTypeMatching(FUNCTION_REGEX)) == 1);
+        assertTrue(helloWorld2.firstTypeMatching(FUNCTION_REGEX).compareTo(helloWorld3.firstTypeMatching(FUNCTION_REGEX)) == 2);
+        assertTrue(helloWorld3.firstTypeMatching(FUNCTION_REGEX).compareTo(helloWorld4.firstTypeMatching(FUNCTION_REGEX)) == 3);
     }
 
     @Test
     public void testThrowsExceptionOnCompare() {
         final ClassType helloWorld = ClassType.parse(HelloWorld.class);
         final ClassType helloWorld3 = ClassType.parse(HelloWorld3.class);
-        assertThat(helloWorld.firstChildMatching(COMPARABLE_REGEX).compareTo(helloWorld3.firstChildMatching(COMPARABLE_REGEX))).isEqualTo(-1);
+        assertThat(helloWorld.firstTypeMatching(COMPARABLE_REGEX).compareTo(helloWorld3.firstTypeMatching(COMPARABLE_REGEX))).isEqualTo(-1);
     }
 
     @Test
     public void testThrowsExceptionOnCompareWithNull() {
         final ClassType helloWorld = ClassType.parse(HelloWorld.class);
-        assertThat(helloWorld.firstChildMatching(COMPARABLE_REGEX).compareTo(null)).isEqualTo(-1);
+        assertThat(helloWorld.firstTypeMatching(COMPARABLE_REGEX).compareTo(null)).isEqualTo(-1);
     }
 
     @Test
